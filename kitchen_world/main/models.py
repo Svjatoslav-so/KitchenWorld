@@ -6,51 +6,79 @@ class LikedRecipe(models.Model):
         ('L', 'Like'),
         ('B', 'Bookmark'),
     )
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
-    liked_type = models.CharField(max_length=1, choices=LIKED_TYPES)
-    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Пользователь")
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, verbose_name="Рецепт")
+    liked_type = models.CharField(max_length=1, choices=LIKED_TYPES, verbose_name="Тип")
+    date = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
+
+    class Meta:
+        verbose_name = 'понравившийся рецепт'
+        verbose_name_plural = 'понравившиеся рецепты'
+        ordering = ['user', 'recipe']
+
+    def __str__(self):
+        return f"{str(self.user)} - {str(self.recipe)}"
 
 
 class User(models.Model):
-    first_name = models.CharField(max_length=500)
-    last_name = models.CharField(max_length=500, blank=True, null=True)
-    fathers_name = models.CharField(max_length=500, blank=True, null=True)
-    login = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    photo = models.ImageField(upload_to="photos/users/%Y/%m/%d/", blank=True, null=True)
-    registration_date = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=500, verbose_name="Имя")
+    last_name = models.CharField(max_length=500, blank=True, null=True, verbose_name="Фамилия")
+    fathers_name = models.CharField(max_length=500, blank=True, null=True, verbose_name="Отчество")
+    login = models.CharField(max_length=255, unique=True, verbose_name="Login")
+    password = models.CharField(max_length=255, verbose_name="Пароль")
+    email = models.EmailField(verbose_name="Email")
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Телефон")
+    description = models.TextField(blank=True, null=True, verbose_name="О себе")
+    photo = models.ImageField(upload_to="photos/users/%Y/%m/%d/", blank=True, null=True, verbose_name="Фото")
+    registration_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     slug = models.SlugField(max_length=255, unique=True)
-    liked_recipes = models.ManyToManyField('Recipe', through=LikedRecipe, related_name='liked')
-    my_exceptions = models.ManyToManyField('Product')
-    liked_authors = models.ManyToManyField('self')
+    liked_recipes = models.ManyToManyField('Recipe', through=LikedRecipe, related_name='liked',
+                                           verbose_name="Понравившиеся рецепты")
+    my_exceptions = models.ManyToManyField('Product', blank=True, verbose_name="Исключения")
+    liked_authors = models.ManyToManyField('self', blank=True, verbose_name="Любимые авторы")
+
+    class Meta:
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
+        ordering = ['registration_date', 'first_name']
+
+    def __str__(self):
+        return f"{self.last_name} {self.first_name} {self.fathers_name}"
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, verbose_name="Название")
     slug = models.SlugField(max_length=255, unique=True)
-    description = models.TextField()
-    cooking_time = models.DurationField()
-    calories = models.PositiveIntegerField()
-    num_of_servings = models.PositiveSmallIntegerField()
-    finished_product_weight = models.PositiveSmallIntegerField()
-    status = models.BooleanField(default=False)
-    date_of_creation = models.DateTimeField(auto_now_add=True)
-    edit_date = models.DateTimeField(auto_now=True)
-    num_of_stars = models.PositiveIntegerField()
-    num_of_comments = models.PositiveIntegerField()
-    num_of_bookmarks = models.PositiveIntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    categories = models.ManyToManyField('Category')
+    description = models.TextField(verbose_name="Описание")
+    cooking_time = models.DurationField(verbose_name="Время приготовления")
+    calories = models.PositiveIntegerField(verbose_name="Калории")
+    num_of_servings = models.PositiveSmallIntegerField(verbose_name="Кол-во порций")
+    finished_product_weight = models.PositiveSmallIntegerField(verbose_name="Итоговый вес")
+    status = models.BooleanField(default=False, verbose_name="Опубликован")
+    date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    edit_date = models.DateTimeField(auto_now=True, verbose_name="Дата редактирования")
+    num_of_stars = models.PositiveIntegerField(default=0, verbose_name="Звезд")
+    num_of_comments = models.PositiveIntegerField(default=0, verbose_name="Коментариев")
+    num_of_bookmarks = models.PositiveIntegerField(default=0, verbose_name="Закладок")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    categories = models.ManyToManyField('Category', verbose_name="Категория")
+
+    class Meta:
+        verbose_name = 'рецепт'
+        verbose_name_plural = 'рецепты'
+        ordering = ['id']
+
+    def __str__(self):
+        return self.title
 
 
 class RecipePhoto(models.Model):
     photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/")
     index = models.PositiveSmallIntegerField()
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.index} - {self.photo}"
 
 
 class RecipeStep(models.Model):
@@ -60,13 +88,25 @@ class RecipeStep(models.Model):
     description = models.TextField()
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/")
-    parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=255, unique=True, verbose_name="Название")
+    description = models.TextField(verbose_name="Описание")
+    photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/", verbose_name="Фото")
+    parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True,
+                                        verbose_name="Родительская категория")
     slug = models.SlugField(max_length=255, unique=True)
+
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'категории'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class RecipeIngredient(models.Model):
@@ -80,11 +120,19 @@ class RecipeIngredient(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/")
-    product_type = models.ForeignKey('ProductType', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, unique=True, verbose_name="Название")
+    description = models.TextField(verbose_name="Описание")
+    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
+    product_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, verbose_name="Тип продукта")
     slug = models.SlugField(max_length=255, unique=True)
+
+    class Meta:
+        verbose_name = 'продукт'
+        verbose_name_plural = 'продукты'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class ProductType(models.Model):
@@ -92,6 +140,14 @@ class ProductType(models.Model):
     description = models.TextField()
     photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/")
     slug = models.SlugField(max_length=255, unique=True)
+
+    class Meta:
+        verbose_name = 'тип продукта'
+        verbose_name_plural = 'типы продуктов'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class RecipeComment(models.Model):
