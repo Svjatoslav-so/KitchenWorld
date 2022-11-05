@@ -77,7 +77,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('id', 'name')
     prepopulated_fields = {'slug': ('name',)}
-    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo', 'product_type')
+    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo', 'product_type', 'calories', 'fat',
+              'proteins', 'carbohydrates')
     readonly_fields = ('id', 'get_html_photo')
 
     def get_html_photo(self, obj):
@@ -94,7 +95,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('id', 'name')
     prepopulated_fields = {'slug': ('name',)}
-    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo')
+    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo', 'parent_type')
     readonly_fields = ('id', 'get_html_photo')
 
     def get_html_photo(self, obj):

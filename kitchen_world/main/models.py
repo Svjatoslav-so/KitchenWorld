@@ -73,23 +73,23 @@ class Recipe(models.Model):
 
 
 class RecipePhoto(models.Model):
-    photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/")
-    index = models.PositiveSmallIntegerField()
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/", verbose_name="Фото")
+    index = models.PositiveSmallIntegerField(verbose_name="Номер")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
 
     def __str__(self):
         return f"{self.index} - {self.photo}"
 
 
 class RecipeStep(models.Model):
-    title = models.CharField(max_length=255)
-    index = models.PositiveSmallIntegerField()
-    photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/")
-    description = models.TextField()
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    index = models.PositiveSmallIntegerField(verbose_name="Номер")
+    photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/", verbose_name="Фото")
+    description = models.TextField(verbose_name="Описание")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
 
     def __str__(self):
-        return self.title
+        return f"{self.index}. {self.title}"
 
 
 class Category(models.Model):
@@ -98,7 +98,7 @@ class Category(models.Model):
     photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/", verbose_name="Фото")
     parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True,
                                         verbose_name="Родительская категория")
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True,)
 
     class Meta:
         verbose_name = 'категория'
@@ -110,13 +110,17 @@ class Category(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    comment = models.TextField(blank=True, null=True)
-    is_essential = models.BooleanField(default=True)
-    quantity = models.PositiveSmallIntegerField()
-    index = models.PositiveSmallIntegerField()
-    main_ingredient = models.ForeignKey('RecipeIngredient', on_delete=models.CASCADE, blank=True, null=True)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    comment = models.TextField(blank=True, null=True, verbose_name="Комментарий")
+    is_essential = models.BooleanField(default=True, verbose_name="Основной")
+    quantity = models.PositiveSmallIntegerField(verbose_name="Количество")
+    index = models.PositiveSmallIntegerField(verbose_name="Номер в списке")
+    main_ingredient = models.ForeignKey('RecipeIngredient', on_delete=models.CASCADE, blank=True, null=True,
+                                        verbose_name="Главный ингридиент")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name="Продукт")
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"
 
 
 class Product(models.Model):
@@ -125,6 +129,10 @@ class Product(models.Model):
     photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
     product_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, verbose_name="Тип продукта")
     slug = models.SlugField(max_length=255, unique=True)
+    calories = models.PositiveIntegerField(verbose_name="Калории")
+    fat = models.PositiveIntegerField(verbose_name="Жиры")
+    proteins = models.PositiveIntegerField(verbose_name="Белки")
+    carbohydrates = models.PositiveIntegerField(verbose_name="Углеводы")
 
     class Meta:
         verbose_name = 'продукт'
@@ -136,10 +144,12 @@ class Product(models.Model):
 
 
 class ProductType(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/")
+    name = models.CharField(max_length=255, unique=True, verbose_name="Название")
+    description = models.TextField(verbose_name="Описание")
+    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
     slug = models.SlugField(max_length=255, unique=True)
+    parent_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, blank=True, null=True,
+                                    verbose_name="Родительский тип")
 
     class Meta:
         verbose_name = 'тип продукта'
@@ -152,9 +162,13 @@ class ProductType(models.Model):
 
 class RecipeComment(models.Model):
     text = models.TextField()
-    date_of_creation = models.DateTimeField(auto_now_add=True)
-    edit_date = models.DateTimeField(auto_now=True)
-    index = models.PositiveSmallIntegerField()
-    parent_comment = models.ForeignKey('RecipeComment', on_delete=models.CASCADE, blank=True, null=True)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    edit_date = models.DateTimeField(auto_now=True, verbose_name="Дата редактирования")
+    index = models.PositiveSmallIntegerField(verbose_name="Номер")
+    parent_comment = models.ForeignKey('RecipeComment', on_delete=models.CASCADE, blank=True, null=True,
+                                       verbose_name="Родительский комментарий")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор комментария")
+
+    def __str__(self):
+        return f"{self.index}. {self.text[:15]} - {self.user}"
