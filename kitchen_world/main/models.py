@@ -77,8 +77,13 @@ class RecipePhoto(models.Model):
     index = models.PositiveSmallIntegerField(verbose_name="Номер")
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
 
+    class Meta:
+        verbose_name = 'Фото рецепта'
+        verbose_name_plural = 'Фото рецепта'
+        ordering = ['recipe']
+
     def __str__(self):
-        return f"{self.index} - {self.photo}"
+        return f"id({self.pk}) {self.index} - {self.photo}"
 
 
 class RecipeStep(models.Model):
@@ -88,8 +93,13 @@ class RecipeStep(models.Model):
     description = models.TextField(verbose_name="Описание")
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
 
+    class Meta:
+        verbose_name = 'Шаг рецепта'
+        verbose_name_plural = 'Шаги рецепта'
+        ordering = ['recipe']
+
     def __str__(self):
-        return f"{self.index}. {self.title}"
+        return f"id({self.pk}) {self.index}. {self.title}"
 
 
 class Category(models.Model):
@@ -119,6 +129,11 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Рецепт")
     product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name="Продукт")
 
+    class Meta:
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
+        ordering = ['recipe']
+
     def __str__(self):
         return f"{self.product.name} - {self.quantity}"
 
@@ -130,9 +145,9 @@ class Product(models.Model):
     product_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, verbose_name="Тип продукта")
     slug = models.SlugField(max_length=255, unique=True)
     calories = models.PositiveIntegerField(verbose_name="Калории")
-    fat = models.PositiveIntegerField(verbose_name="Жиры")
-    proteins = models.PositiveIntegerField(verbose_name="Белки")
-    carbohydrates = models.PositiveIntegerField(verbose_name="Углеводы")
+    fat = models.FloatField(verbose_name="Жиры")
+    proteins = models.FloatField(verbose_name="Белки")
+    carbohydrates = models.FloatField(verbose_name="Углеводы")
 
     class Meta:
         verbose_name = 'продукт'
