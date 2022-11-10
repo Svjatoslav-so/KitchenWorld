@@ -51,7 +51,7 @@ class Recipe(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(verbose_name="Описание")
     cooking_time = models.DurationField(verbose_name="Время приготовления")
-    calories = models.PositiveIntegerField(verbose_name="Калории")
+    calories = models.PositiveIntegerField(default=0, verbose_name="Калории")
     num_of_servings = models.PositiveSmallIntegerField(verbose_name="Кол-во порций")
     finished_product_weight = models.PositiveSmallIntegerField(verbose_name="Итоговый вес")
     status = models.BooleanField(default=False, verbose_name="Опубликован")
@@ -108,7 +108,7 @@ class Category(models.Model):
     photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/", verbose_name="Фото")
     parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True,
                                         verbose_name="Родительская категория")
-    slug = models.SlugField(max_length=255, unique=True,)
+    slug = models.SlugField(max_length=255, unique=True)
 
     class Meta:
         verbose_name = 'категория'

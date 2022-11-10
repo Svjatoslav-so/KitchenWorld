@@ -63,11 +63,11 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('title', 'id')
     prepopulated_fields = {'slug': ('title',)}
     fields = ('id', 'title', 'slug', 'get_all_recipe_photo', 'description', ('cooking_time', 'calories',
-              'num_of_servings', 'finished_product_weight'), 'status', 'user', 'categories', 'get_all_recipe_ingredient',
-              'get_all_recipe_step', ('date_of_creation', 'edit_date'), ('num_of_stars',
+              'num_of_servings', 'finished_product_weight'), 'status', 'user', 'categories',
+              'get_all_recipe_ingredient', 'get_all_recipe_step', ('date_of_creation', 'edit_date'), ('num_of_stars',
               'num_of_comments', 'num_of_bookmarks'))
-    readonly_fields = ('id', 'date_of_creation', 'edit_date', 'calories', 'num_of_stars', 'num_of_comments', 'num_of_bookmarks',
-                       'user', 'get_all_recipe_photo', 'get_all_recipe_ingredient', 'get_all_recipe_step')
+    readonly_fields = ('id', 'date_of_creation', 'edit_date', 'get_all_recipe_photo', 'get_all_recipe_ingredient',
+                       'get_all_recipe_step')
 
     def get_all_recipe_photo(self, obj):
         photos_html = ''
