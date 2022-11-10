@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -6,7 +7,7 @@ class LikedRecipe(models.Model):
         ('L', 'Like'),
         ('B', 'Bookmark'),
     )
-    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Пользователь")
+    user = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Пользователь")
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, verbose_name="Рецепт")
     liked_type = models.CharField(max_length=1, choices=LIKED_TYPES, verbose_name="Тип")
     date = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
@@ -20,17 +21,12 @@ class LikedRecipe(models.Model):
         return f"{str(self.user)} - {str(self.recipe)}"
 
 
-class User(models.Model):
-    first_name = models.CharField(max_length=500, verbose_name="Имя")
-    last_name = models.CharField(max_length=500, blank=True, null=True, verbose_name="Фамилия")
+class Author(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     fathers_name = models.CharField(max_length=500, blank=True, null=True, verbose_name="Отчество")
-    login = models.CharField(max_length=255, unique=True, verbose_name="Login")
-    password = models.CharField(max_length=255, verbose_name="Пароль")
-    email = models.EmailField(verbose_name="Email")
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Телефон")
     description = models.TextField(blank=True, null=True, verbose_name="О себе")
     photo = models.ImageField(upload_to="photos/users/%Y/%m/%d/", blank=True, null=True, verbose_name="Фото")
-    registration_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     slug = models.SlugField(max_length=255, unique=True)
     liked_recipes = models.ManyToManyField('Recipe', through=LikedRecipe, related_name='liked',
                                            verbose_name="Понравившиеся рецепты")
@@ -38,12 +34,12 @@ class User(models.Model):
     liked_authors = models.ManyToManyField('self', blank=True, verbose_name="Любимые авторы")
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
-        ordering = ['registration_date', 'first_name']
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+        ordering = ['user']
 
     def __str__(self):
-        return f"{self.last_name} {self.first_name} {self.fathers_name}"
+        return f"{self.user} {self.slug}"
 
 
 class Recipe(models.Model):

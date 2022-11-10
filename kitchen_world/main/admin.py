@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import User, Recipe, Product, ProductType, Category, LikedRecipe, RecipePhoto, RecipeStep, RecipeIngredient
+from .models import Recipe, Product, ProductType, Category, LikedRecipe, RecipePhoto, RecipeStep, RecipeIngredient, \
+    Author
 
 # Register your models here.
 
@@ -9,15 +12,15 @@ admin.site.site_title = 'Kitchen World'
 admin.site.site_header = 'Админ-панель Kitchen World'
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'get_html_photo', 'login', 'password', 'email', 'registration_date')
-    list_display_links = ('id', 'first_name')
-    search_fields = ('first_name', 'login')
-    prepopulated_fields = {'slug': ('first_name', 'last_name', 'fathers_name')}
-    fields = ('id', 'last_name', 'first_name', 'fathers_name', 'slug', 'login', 'password', 'email', 'phone',
-              'description', 'get_html_photo', 'photo', 'registration_date', 'my_exceptions', 'liked_authors',
-              'get_my_recipe', 'get_liked_recipe', 'get_bookmark_recipe')
-    readonly_fields = ('id', 'get_html_photo', 'registration_date', 'liked_recipes', 'my_exceptions', 'liked_authors',
+class AuthorInline(admin.StackedInline):
+    model = Author
+    can_delete = False
+    verbose_name = "Автор"
+    verbose_name_plural = 'Авторы'
+
+    fields = ('id', 'fathers_name', 'slug', 'phone', 'description', 'get_html_photo', 'photo', 'my_exceptions',
+              'liked_authors', 'get_my_recipe', 'get_liked_recipe', 'get_bookmark_recipe')
+    readonly_fields = ('id', 'get_html_photo', 'liked_recipes', 'my_exceptions', 'liked_authors',
                        'get_my_recipe', 'get_liked_recipe', 'get_bookmark_recipe')
 
     def get_html_photo(self, obj):
@@ -27,7 +30,7 @@ class UserAdmin(admin.ModelAdmin):
     get_html_photo.short_description = "Фото"
 
     def get_my_recipe(self, obj):
-        all_recipe = obj.recipe_set.all()
+        all_recipe = obj.user.recipe_set.all()
         recipes_str = ''
         for r in all_recipe:
             recipes_str += str(r) + '\n'
@@ -54,6 +57,13 @@ class UserAdmin(admin.ModelAdmin):
     get_bookmark_recipe.short_description = "Закладки"
 
 
+# Define a new User admin
+class UserAdmin(BaseUserAdmin):
+    inlines = (AuthorInline,)
+
+
+# Re-register UserAdmin
+admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
@@ -62,10 +72,10 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     search_fields = ('title', 'id')
     prepopulated_fields = {'slug': ('title',)}
-    fields = ('id', 'title', 'slug', 'get_all_recipe_photo', 'description', ('cooking_time', 'calories',
-              'num_of_servings', 'finished_product_weight'), 'status', 'user', 'categories',
-              'get_all_recipe_ingredient', 'get_all_recipe_step', ('date_of_creation', 'edit_date'), ('num_of_stars',
-              'num_of_comments', 'num_of_bookmarks'))
+    fields = ('id', 'title', 'slug', 'get_all_recipe_photo', 'description',
+              ('cooking_time', 'calories', 'num_of_servings', 'finished_product_weight'), 'status', 'user',
+              'categories', 'get_all_recipe_ingredient', 'get_all_recipe_step', ('date_of_creation', 'edit_date'),
+              ('num_of_stars', 'num_of_comments', 'num_of_bookmarks'))
     readonly_fields = ('id', 'date_of_creation', 'edit_date', 'get_all_recipe_photo', 'get_all_recipe_ingredient',
                        'get_all_recipe_step')
 
@@ -75,6 +85,7 @@ class RecipeAdmin(admin.ModelAdmin):
             photos_html += f'<a href="/admin/main/recipephoto/{p.id}/change/"><img style="margin: 5px"' \
                            f' src="{p.photo.url}" height=50></a>'
         return mark_safe(photos_html)
+
     get_all_recipe_photo.short_description = "Фото рецепта"
 
     def get_all_recipe_ingredient(self, obj):
@@ -87,6 +98,7 @@ class RecipeAdmin(admin.ModelAdmin):
                                 f'<p>{i.main_ingredient}</p>' \
                                 f'</div><hr>'
         return mark_safe(ingredients_html)
+
     get_all_recipe_ingredient.short_description = "Ингредиенты"
 
     def get_all_recipe_step(self, obj):
@@ -98,6 +110,7 @@ class RecipeAdmin(admin.ModelAdmin):
                           f'<p>{s.description}</p>' \
                           f'</div>'
         return mark_safe(steps_html)
+
     get_all_recipe_step.short_description = "Шаги рецепта"
 
 

@@ -33,10 +33,10 @@
         <nav class="nav">
             <div class="container">
                 <div class="nav__wrapper">
-                    <a href="#" class="logo"></a>
+                    <a href="{% url 'home'%}" class="logo"></a>
                     <ul class="menu">
                         <li class="menu__item active">
-                            <a href="#">Главная</a>
+                            <a href="{% url 'home'%}">Главная</a>
                         </li>
                         <li class="menu__item">
                             <a href="#">Каталог</a>
@@ -105,10 +105,9 @@
                         <div class="card">
                             <div class="card__header">
                                 <div class="card__recipe-autor">
-                                    <img src="{{ recipe.user.photo.url }}" alt="" class="card__recipe-autor-avatar">
+                                    <img src="{{ recipe.user.author.photo.url }}" alt="" class="card__recipe-autor-avatar">
                                     <div class="card__recipe-inner">
-<!--                                        <h3 class="card__recipe-autor-named">User name</h3>-->
-                                        <h3 class="card__recipe-autor-named">{{ recipe.user.first_name|title }}</h3>
+                                        <h3 class="card__recipe-autor-named">{{ recipe.user.username|title }}</h3>
 <!--                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>-->
                                         <span class="card__recipe-time">{{ recipe.date_of_creation }}</span>
                                     </div>

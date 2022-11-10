@@ -3,10 +3,12 @@ import os
 
 import django
 
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kitchen_world.settings")
 django.setup()
 
-from main.models import Product, ProductType, Category, User, Recipe, RecipePhoto, RecipeStep, RecipeIngredient, \
+from django.contrib.auth.models import User
+from main.models import Product, ProductType, Category, Author, Recipe, RecipePhoto, RecipeStep, RecipeIngredient, \
     RecipeComment
 
 print('hello')
@@ -62,19 +64,33 @@ def get_all_categories() -> list:
 def get_all_users() -> list:
     all_users = User.objects.all()
     arr = []
-    for c in all_users:
-        arr.append({'id': c.id,
-                    'first_name': c.first_name,
-                    'last_name': c.last_name,
-                    'fathers_name': c.fathers_name,
-                    'login': c.login,
-                    'password': c.password,
-                    'email': c.email,
-                    'phone': c.phone,
-                    'description': c.description,
-                    'photo': c.photo.name,
-                    'registration_date': str(c.registration_date),
-                    'slug': c.slug,
+    for u in all_users:
+        arr.append({'id': u.id,
+                    'password': u.password,
+                    'last_login': str(u.last_login) if not(u.last_login is None) else None,
+                    'is_superuser': u.is_superuser,
+                    'username': u.username,
+                    'last_name': u.last_name,
+                    'email': u.email,
+                    'is_staff': u.is_staff,
+                    'is_active': u.is_active,
+                    'date_joined': str(u.date_joined),
+                    'first_name': u.first_name,
+                    })
+    return arr
+
+
+def get_all_authors() -> list:
+    all_authors = Author.objects.all()
+    arr = []
+    for a in all_authors:
+        arr.append({'id': a.id,
+                    'user': a.user.id,
+                    'fathers_name': a.fathers_name,
+                    'phone': a.phone,
+                    'description': a.description,
+                    'photo': a.photo.name,
+                    'slug': a.slug,
                     })
     return arr
 
@@ -177,6 +193,7 @@ if __name__ == '__main__':
     write_to_jsonfile(get_all_products(), "../temp/products.json")
     write_to_jsonfile(get_all_product_types(), "../temp/product_types.json")
     write_to_jsonfile(get_all_users(), "../temp/users.json")
+    write_to_jsonfile(get_all_authors(), "../temp/authors.json")
     write_to_jsonfile(get_all_recipes(), "../temp/recipes.json")
     write_to_jsonfile(get_all_recipe_comments(), "../temp/recipe_comments.json")
     write_to_jsonfile(get_all_recipe_photos(), "../temp/recipe_photos.json")

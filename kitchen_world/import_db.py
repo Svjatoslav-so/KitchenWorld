@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 from datetime import timedelta
@@ -7,7 +8,8 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kitchen_world.settings")
 django.setup()
 
-from main.models import Category, Product, ProductType, User, Recipe, RecipePhoto, RecipeStep, RecipeIngredient, \
+from django.contrib.auth.models import User
+from main.models import Category, Product, ProductType, Author, Recipe, RecipePhoto, RecipeStep, RecipeIngredient, \
     RecipeComment
 
 
@@ -80,18 +82,34 @@ def import_users():
             users = json.load(fr)
         for u in users:
             user = User(id=u['id'],
-                        first_name=u['first_name'],
-                        last_name=u['last_name'],
-                        fathers_name=u['fathers_name'],
-                        login=u['login'],
                         password=u['password'],
+                        last_login=u['last_login'],
+                        is_superuser=u['is_superuser'],
+                        username=u['username'],
+                        last_name=u['last_name'],
                         email=u['email'],
-                        phone=u['phone'],
-                        description=u['description'],
-                        photo=u['photo'],
-                        registration_date=u['registration_date'],
-                        slug=u['slug'])
+                        is_staff=u['is_staff'],
+                        is_active=u['is_active'],
+                        date_joined=u['date_joined'],
+                        first_name=u['first_name'], )
             user.save()
+    except Exception as e:
+        print(e)
+
+
+def import_authors():
+    try:
+        with open('temp/authors.json', 'r') as fr:
+            authors = json.load(fr)
+        for a in authors:
+            author = Author(id=a['id'],
+                            user=User.objects.get(pk=a['user']),
+                            fathers_name=a['fathers_name'],
+                            phone=a['phone'],
+                            description=a['description'],
+                            photo=a['photo'],
+                            slug=a['slug'])
+            author.save()
     except Exception as e:
         print(e)
 
@@ -210,6 +228,7 @@ def import_recipe_comments():
 if __name__ == '__main__':
     print("Please wait...")
     import_users()
+    import_authors()
     import_categories()
     import_recipes()
     import_recipe_comments()
