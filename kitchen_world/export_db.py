@@ -72,7 +72,7 @@ def get_all_users() -> list:
                     'email': c.email,
                     'phone': c.phone,
                     'description': c.description,
-                    'photo': c.photo.url,
+                    'photo': c.photo.name,
                     'registration_date': str(c.registration_date),
                     'slug': c.slug,
                     })
@@ -112,7 +112,7 @@ def get_all_recipe_photos() -> list:
     arr = []
     for rp in all_recipe_photos:
         arr.append({'id': rp.id,
-                    'photo': rp.photo.url,
+                    'photo': rp.photo.name,
                     'index': rp.index,
                     'recipe': rp.recipe.id,
                     })
@@ -126,7 +126,7 @@ def get_all_recipe_steps() -> list:
         arr.append({'id': rs.id,
                     'title': rs.title,
                     'index': rs.index,
-                    'photo': rs.photo.url,
+                    'photo': rs.photo.name,
                     'description': rs.description,
                     'recipe': rs.recipe.id,
                     })
