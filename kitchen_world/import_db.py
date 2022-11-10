@@ -208,6 +208,7 @@ def import_recipe_comments():
 
 
 if __name__ == '__main__':
+    print("Please wait...")
     import_users()
     import_categories()
     import_recipes()
@@ -217,3 +218,4 @@ if __name__ == '__main__':
     import_product_types()  # Важно, что сначала тип продукта, а потом уже сам продукт
     import_products()
     import_recipe_ingredients()
+    print("Successfully imported!")
