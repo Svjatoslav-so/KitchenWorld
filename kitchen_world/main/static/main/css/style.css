@@ -91,7 +91,7 @@ p, span {
 
 .header {
   background: linear-gradient(105.89deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%), url("../images/headerbg.jpg") no-repeat center top/cover;
-  padding-bottom: 180px;
+  padding-bottom: 10px;
 }
 .header__img {
   display: block;
@@ -157,7 +157,7 @@ p, span {
   transform: translateY(-50%);
 }
 
-.login-btn {
+.login-btn, .login-btn:visited {
   color: #DE8443;
   font-weight: 700;
   font-size: 20px;
@@ -173,10 +173,11 @@ p, span {
 .profile {
   display: block;
   border-radius: 50px;
-  width: 61px;
-  height: 61px;
-  //background: url("../images/user.png") no-repeat center center/contain;
+  width: 50px;
+  height: 50px;
+  /* background: url("../images/user.png") no-repeat center center/contain; */
 }
+
 
 .login-form {
   display: block;

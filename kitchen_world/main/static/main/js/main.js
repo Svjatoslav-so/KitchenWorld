@@ -7,6 +7,7 @@ const swiper = new Swiper('.new__swiper', {
   
     autoplay: {
         delay: 3000,
+        pauseOnMouseEnter: true,
       },
 
   });

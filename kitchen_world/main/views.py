@@ -1,4 +1,4 @@
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
@@ -38,15 +38,7 @@ def index(request):
     return render(request, 'main/index.html', context=context)
 
 
-def login(request):
-    context = {
-        'action': 'login'
-    }
-    return render(request, 'main/login.html', context=context)
-
-
 class LoginUser(LoginView):
-    # form_class = AuthenticationForm
     form_class = LoginUserForm
     template_name = 'main/login.html'
     extra_context = {
@@ -61,7 +53,8 @@ def registration(request):
     if request.method == 'POST':
         form = RegistrationUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             return redirect('home')
     else:
         form = RegistrationUserForm()

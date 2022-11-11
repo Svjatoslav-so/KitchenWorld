@@ -189,14 +189,14 @@ def write_to_jsonfile(values: list, file_name: str = "values.json"):
 
 
 if __name__ == '__main__':
-    write_to_jsonfile(get_all_categories(), "../temp/categories.json")
-    write_to_jsonfile(get_all_products(), "../temp/products.json")
-    write_to_jsonfile(get_all_product_types(), "../temp/product_types.json")
-    write_to_jsonfile(get_all_users(), "../temp/users.json")
-    write_to_jsonfile(get_all_authors(), "../temp/authors.json")
-    write_to_jsonfile(get_all_recipes(), "../temp/recipes.json")
-    write_to_jsonfile(get_all_recipe_comments(), "../temp/recipe_comments.json")
-    write_to_jsonfile(get_all_recipe_photos(), "../temp/recipe_photos.json")
-    write_to_jsonfile(get_all_recipe_steps(), "../temp/recipe_steps.json")
-    write_to_jsonfile(get_all_recipe_ingredients(), "../temp/recipe_ingredients.json")
+    write_to_jsonfile(get_all_categories(), "temp/categories.json")
+    write_to_jsonfile(get_all_products(), "temp/products.json")
+    write_to_jsonfile(get_all_product_types(), "temp/product_types.json")
+    write_to_jsonfile(get_all_users(), "temp/users.json")
+    write_to_jsonfile(get_all_authors(), "temp/authors.json")
+    write_to_jsonfile(get_all_recipes(), "temp/recipes.json")
+    write_to_jsonfile(get_all_recipe_comments(), "temp/recipe_comments.json")
+    write_to_jsonfile(get_all_recipe_photos(), "temp/recipe_photos.json")
+    write_to_jsonfile(get_all_recipe_steps(), "temp/recipe_steps.json")
+    write_to_jsonfile(get_all_recipe_ingredients(), "temp/recipe_ingredients.json")
 

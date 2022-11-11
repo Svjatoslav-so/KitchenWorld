@@ -52,10 +52,9 @@
 
                 {% if request.user.is_authenticated %}
                 <a href="#">
-                    {{ user.username }}
-                    <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.png' %} {% endif %}">
+                    <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.svg' %} {% endif %}">
                 </a>
-                <a href="{% url 'logout' %}">Выйти</a>
+                <a href="{% url 'logout' %}" class="login-btn active">Выйти</a>
                 {% else %}
                 <a href="{% url 'login' %}" class="login-btn active">Войти</a>
                 {% endif %}
