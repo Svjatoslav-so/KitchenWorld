@@ -171,15 +171,11 @@ p, span {
 }
 
 .profile {
-  display: none;
+  display: block;
   border-radius: 50px;
   width: 61px;
   height: 61px;
-  background: url("../images/user.png") no-repeat center center/contain;
-}
-
-.profile.active {
-  display: block;
+  //background: url("../images/user.png") no-repeat center center/contain;
 }
 
 .login-form {
@@ -204,6 +200,9 @@ p, span {
 }
 .login-form__input {
   margin-bottom: 20px;
+}
+.login-form__errors{
+    color: red;
 }
 
 .btn-wrapper {
