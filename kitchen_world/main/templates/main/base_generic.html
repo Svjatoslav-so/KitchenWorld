@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Рецепты">
+    <meta name="keywords" content="рецепт">
+
+    {% block title %} <!--== Title ==--> {% endblock %}
+
+    <!-- Og tags -->
+    <meta property="og:title" content="Kitchen World">
+    <meta property="og:description" content="Let's coock">
+    <meta property="og:type" content="article">
+    <!-- <meta property="og:image" content="https://site-name.ua/img/preview.jpg"> -->
+    <meta property="og:site-name" content="KitchenWorld">
+
+    <!-- Styling -->
+    <!-- <meta name="theme-color" content="#FF7629">
+    <link rel="apple-touch-icon" href="{% static 'main/images/apple-touch-icon.png' %}">
+    <link rel="shortcut icon" href="{% static 'main/images/favicon.svg"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+
+</head>
+
+<body>
+<!--== Start Header ==-->
+<header class="header" id="header">
+    <nav class="nav">
+        <div class="container">
+            <div class="nav__wrapper">
+                <a href="{% url 'home'%}" class="logo"></a>
+                <ul class="menu">
+                    <li class="menu__item active">
+                        <a href="{% url 'home'%}">Главная</a>
+                    </li>
+                    <li class="menu__item">
+                        <a href="#">Каталог</a>
+                    </li>
+                    <li class="menu__item">
+                        <a href="#">О нас</a>
+                    </li>
+                </ul>
+                <form class="search" action="#" method="get">
+                    <input class="input" type="text" name="search-input" placeholder="Найти" id="search-input">
+                    <button class="search-btn" type="submit"></button>
+                </form>
+
+                {% if request.user.is_authenticated %}
+                <a href="#">
+                    {{ user.username }}
+                    <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.png' %} {% endif %}">
+                </a>
+                <a href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="login-btn active">Войти</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </nav>
+
+    {% block extends_header %} <!--== ExtendsHeader ==--> {% endblock %}
+
+    </header>
+<!--== End Header ==-->
+
+{% block main_content %} <!--== MainContent ==-->    {% endblock %}
+
+<!--== Start Footer ==-->
+<footer class="footer" id="footer">
+    <div class="container">
+        FOOTER
+    </div>
+</footer>
+<!--== End Footer ==-->
+
+<!--==  JAVASCRIPT  ==-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script src="{% static 'main/js/main.js' %}"></script>
+
+</body>
+
+</html>
