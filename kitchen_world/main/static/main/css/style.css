@@ -91,7 +91,7 @@ p, span {
 
 .header {
   background: linear-gradient(105.89deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%), url("../images/headerbg.jpg") no-repeat center top/cover;
-  padding-bottom: 10px;
+  padding: 10px 0;
 }
 .header__img {
   display: block;

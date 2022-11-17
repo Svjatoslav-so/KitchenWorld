@@ -28,9 +28,8 @@
 </head>
 
 <body>
-<!--== Start Header ==-->
-<header class="header" id="header">
-    <nav class="nav">
+
+<nav class="nav" id="nav">
         <div class="container">
             <div class="nav__wrapper">
                 <a href="{% url 'home'%}" class="logo"></a>
@@ -60,13 +59,14 @@
                 {% endif %}
 
             </div>
-
         </div>
-    </nav>
-
+</nav>
+<!--== Start Header ==-->
+<header class="header" id="header">
+    <div class="container">
     {% block extends_header %} <!--== ExtendsHeader ==--> {% endblock %}
-
-    </header>
+    </div>
+</header>
 <!--== End Header ==-->
 
 {% block main_content %} <!--== MainContent ==-->    {% endblock %}
