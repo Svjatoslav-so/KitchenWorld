@@ -114,20 +114,20 @@ p, span {
   background: url("../images/logo.svg") no-repeat center center/contain;
 }
 
-.menu {
+.nav__list {
   display: flex;
   color: #DE8443;
   font-weight: 700;
   font-size: 20px;
   line-height: 1.45em;
 }
-.menu__item:not(:last-child) {
+.nav__item:not(:last-child) {
   margin-right: 50px;
 }
-.menu__item a, .menu__item a:visited {
+.nav__item a, .nav__item a:visited {
   color: inherit;
 }
-.menu__item.active {
+.nav__item.active {
   color: #EB452E;
   text-decoration: underline;
 }
