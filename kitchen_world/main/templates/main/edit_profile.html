@@ -1,0 +1,44 @@
+
+{% extends "main/base_generic.html" %}
+{% block title %} <title>Профиль</title> {% endblock %}
+
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'main/css/edit_profile_style.css' %}">
+{% endblock %}
+
+
+
+
+
+{% block main_content %}
+    <section class="section profile-section">
+        <div class="profile__wrapper">
+            <img src="{% static 'main/images/user.png' %}" alt="avatar" class="profile__avatar">
+            <form action="{% url 'edit_profile'%}" class="profile__form" method="post">
+                {% csrf_token %}
+                <div class="login-form__errors">{{ form.non_field_errors }}</div>
+                {% for field in form%}
+                {{field}}
+                {% if field.errors %}
+                    <ul>
+                        {% for error in field.errors %}
+                        <li class="login-form__errors">{{ error|escape }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endfor %}
+<!--                <input type="text" class="input" placeholder="Имя пользователя">-->
+<!--                <input type="text" class="input" placeholder="Логин">-->
+<!--                <input type="text" class="input" placeholder="Электронная почта">-->
+<!--                <input type="text" class="input big-input" placeholder="О себе">-->
+                <div class="btns-wrapper">
+                    <button type="button" class="btn">Изменить пароль</button>
+                    <button type="submit" class="btn active">Сохранить</button>
+                </div>
+            </form>
+        </div>
+
+    </section>
+{% endblock %}

@@ -5,6 +5,10 @@
 {% block title %} <title>{{action|title}} | Kitchen World</title> {% endblock %}
 
 {% block extends_header %}
+<!--== Start Header ==-->
+<header class="header" id="header">
+    <div class="container">
+
     <!--== Start Welcome ==-->
     <div class="container">
         <img src="{% static 'main/images/welcome.svg' %}" alt="" class="header__img">
@@ -38,5 +42,8 @@
         </form>
     </div>
     <!--== End Welcome ==-->
-{% endblock %}
 
+           </div>
+</header>
+<!--== End Header ==-->
+{% endblock %}

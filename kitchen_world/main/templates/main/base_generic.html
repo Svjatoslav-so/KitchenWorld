@@ -24,7 +24,7 @@
     <link rel="shortcut icon" href="{% static 'main/images/favicon.svg"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
-
+   {% block css %} <!--== Title ==--> {% endblock %}
 </head>
 
 <body>
@@ -61,13 +61,9 @@
             </div>
         </div>
 </nav>
-<!--== Start Header ==-->
-<header class="header" id="header">
-    <div class="container">
+
     {% block extends_header %} <!--== ExtendsHeader ==--> {% endblock %}
-    </div>
-</header>
-<!--== End Header ==-->
+
 
 {% block main_content %} <!--== MainContent ==-->    {% endblock %}
 

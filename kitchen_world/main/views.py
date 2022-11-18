@@ -6,8 +6,18 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse_lazy
 
-from .forms import RegistrationUserForm, LoginUserForm
+from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
 from .models import Recipe, RecipePhoto
+
+
+def is_auth(func):
+    def check(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return func(request, *args, **kwargs)
+        else:
+            return redirect('login')
+
+    return check
 
 
 def combine_recipes_and_photos(recipes) -> list[tuple]:
@@ -68,3 +78,37 @@ def registration(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+
+@is_auth
+def edit_profile(request):
+    if request.method == "POST":
+        print("POST", request.POST)
+        form = EditProfileForm(request.POST)
+        print('form', form)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            description = form.cleaned_data['description']
+            user = request.user
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.author.description = description
+            user.save()
+            user.author.save()
+    else:
+        print("GET", request)
+        form = EditProfileForm(
+            {'first_name': request.user.first_name,
+             'username': request.user.username,
+             'email': request.user.email,
+             'description': request.user.author.description,
+             'last_name': request.user.last_name})
+    context = {
+        'form': form
+    }
+    return render(request, 'main/edit_profile.html', context=context)
