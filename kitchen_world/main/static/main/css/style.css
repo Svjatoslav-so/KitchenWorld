@@ -107,6 +107,13 @@ p, span {
   justify-content: space-between;
   align-items: center;
 }
+.Nav__wrapper {
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
 
 .logo {
   width: 187px;
@@ -136,6 +143,15 @@ p, span {
   display: block;
   position: relative;
   width: 420px;
+}
+.Search {
+  display: block;
+  position: relative;
+  width: 1120px;
+}
+.Nav {
+  padding: 15px 0;
+  background: #ffebcd;
 }
 
 .input {

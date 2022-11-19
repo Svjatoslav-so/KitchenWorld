@@ -20,7 +20,7 @@ def is_auth(func):
     return check
 
 
-def combine_recipes_and_photos(recipes) -> list[tuple]:
+def combine_recipes_and_photos(recipes):
     combined_array = []
     for r in recipes:
         try:
@@ -112,3 +112,8 @@ def edit_profile(request):
         'form': form
     }
     return render(request, 'main/edit_profile.html', context=context)
+
+
+def catalog(request):
+    logout(request)
+    return render(request, 'main/catalogue.html')
