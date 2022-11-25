@@ -7,7 +7,7 @@
     <!-- Recipe title start -->
     <section class="section recipe-name" id="recipe-name">
         <div class="container">
-            <h1 class="recipe-name__title">Strawberry sponge cake with plum cream</h1>
+            <h1 class="recipe-name__title">{{recipe.title}}</h1>
         </div>
     </section>
     <!-- Recipe title end -->
@@ -19,7 +19,9 @@
             <div class="recipe-images__swiper">
                 <div class="swiper-wrapper">
                     <!-- Slides -->
-                    <div class="swiper-slide"><img src="{% static 'main/images/photo-of-recipe-1.png' %}" alt="photo-of-recipe"></div>
+                    {% for p in recipe.recipephoto_set.all %}
+                        <div class="swiper-slide"><img src="{{ p.photo.url }}" alt="photo-of-recipe"></div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -34,10 +36,10 @@
                 <div class="recipe-info-inner">
                     <!-- Link to autor -->
                     <a href="#" class="card__recipe-autor ">
-                        <img src="{% static 'main/images/avatar.png' %}" alt="Autor" class="card__recipe-autor-avatar">
+                        <img src="{{ recipe.user.author.photo.url }}" alt="Autor" class="card__recipe-autor-avatar">
                         <div class="card__recipe-inner">
-                            <h3 class="card__recipe-autor-name card__recipe-autor-name_light">User name</h3>
-                            <span class="card__recipe-time card__recipe-time_light">20.10.2022 в 15:58</span>
+                            <h3 class="card__recipe-autor-name card__recipe-autor-name_light">{{ recipe.user.username|title }}</h3>
+                            <span class="card__recipe-time card__recipe-time_light">{{ recipe.date_of_creation }}</span>
                         </div>
                     </a>
 
@@ -46,25 +48,25 @@
                         <div class="card__interaction-wrapper">
                             <div class="card__interaction">
                                 <button type="button" class="card__stars card__stars_light"></button>
-                                999
+                                {{ recipe.num_of_stars }}
                             </div>
                             <div class="card__interaction">
                                 <button type="button" class="card__comments card__comments_light"></button>
-                                999
+                                {{ recipe.num_of_comments }}
                             </div>
                             <div class="card__interaction">
                                 <button type="button" class="card__bookmarks card__bookmarks_light"></button>
-                                999
+                                {{ recipe.num_of_bookmarks }}
                             </div>
                         </div>
                         <div class="card__statistics-wrapper">
                             <div class="card__statistic">
                                 <button type="button" class="card__time card__time_light"></button>
-                                999
+                                {{ recipe.cooking_time }}
                             </div>
                             <div class="card__statistic">
                                 <button type="button" class="card__calories card__calories_light"></button>
-                                999
+                                {{ recipe.calories }}
                             </div>
                         </div>
                     </div>
@@ -72,9 +74,9 @@
 
                 <!-- Tags -->
                 <div class="card__categories-wrapper">
-                    <a href="#" class="category category_light">#тегиблюда</a>
-                    <a href="#" class="category category_light">#категории</a>
-                    <a href="#" class="category category_light"> #категоряи2</a>
+                    {% for c in recipe.categories.all %}
+                    <a href="#" class="category category_light">#{{ c.name|lower }}</a>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -94,14 +96,14 @@
                             <h2 class="section-title section-title_left">Ингредиенты</h2>
                             <div class="total-wrapper">
                                 <!-- Number of servings -->
-                                <input size="3" type="text" value="5.5" name="c" class="input small-input"
+                                <input size="3" type="text" value="{{recipe.num_of_servings}}" name="c" class="input small-input"
                                     id="servings">
                                 <label for="servings">Порций</label>
                                 <!-- kcal -->
-                                <input size="3" type="text" value="999" name="kcal" class="input small-input" id="kcal">
+                                <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input" id="kcal">
                                 <label for="kcal">ккал</label>
                                 <!-- weight -->
-                                <input size="3" type="text" value="2.5" name="total-weight" class="input small-input"
+                                <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input"
                                     id="total-weight">
                                 <select name="total-weight-units" id="total-weight-units"
                                     class="input small-input small-select">
@@ -112,144 +114,55 @@
                         </div>
 
                         <!-- First ingredient (with analogs) start -->
+                        {% for ingredient in recipe.recipeingredient_set.all %}
+                        {% if not ingredient.main_ingredient %}
                         <div class="ingredient-wrapper">
                             <!-- Ingredient / analog. If analog, append class analog -->
                             <div class="ingredient">
-                                <div class="ingredient-number">1</div>
+                                <div class="ingredient-number">{{ ingredient.index }}</div>
                                 <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
+                                    <h3 class="ingredient-title">{{ ingredient.product.name }}</h3>
                                     <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                        {{ ingredient.comment }}
                                     </p>
                                 </div>
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
                                 <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}">
                                 <select name="id-units" id="id-units" class=" input small-input small-select">
                                     <option value="1000">кг</option>
                                     <option value="1">г</option>
                                 </select>
                             </div>
-
+                            {% for analog in ingredient.recipeingredient_set.all %}
                             <div class="ingredient ingredient_analog">
-                                <div class="ingredient-number">1</div>
+                                <div class="ingredient-number">{{analog.index}}</div>
                                 <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
+                                    <h3 class="ingredient-title">{{analog.product.name}}</h3>
                                     <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                        {{ analog.comment }}
                                     </p>
                                 </div>
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
                                 <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                <input type="text" value="{{ analog.quantity }}" name="id" class="input small-input" id="{{ analog.id }}">
                                 <select name="id-units" id="id-units" class=" input small-input small-select">
                                     <option value="1000">кг</option>
                                     <option value="1">г</option>
                                 </select>
                             </div>
+                            {% endfor %}
                         </div>
-                        <!-- ########################## -->
-                        <div class="ingredient-wrapper">
-                            <!-- Ingredient start -->
-                            <div class="ingredient">
-                                <div class="ingredient-number">1</div>
-                                <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
-                                    <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
-                                    </p>
-                                </div>
-                                <button type="button" class="list-arrow"></button>
-                                <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
-                                </select>
-                            </div>
-                            <!-- Ingredient end -->
-
-                            <!-- Ingredient analog start -->
-                            <div class="ingredient ingredient_analog">
-                                <div class="ingredient-number">1</div>
-                                <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
-                                    <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
-                                    </p>
-                                </div>
-                                <button type="button" class="list-arrow"></button>
-                                <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
-                                </select>
-                            </div>
-                            <!-- Ingredient analog end -->
-
-                        </div>
-                        <!-- ########################## -->
-                        <div class="ingredient-wrapper">
-                            <!-- Ingredient start -->
-                            <div class="ingredient">
-                                <div class="ingredient-number">1</div>
-                                <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
-                                    <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
-                                    </p>
-                                </div>
-                                <button type="button" class="list-arrow"></button>
-                                <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
-                                </select>
-                            </div>
-                            <!-- Ingredient end -->
-
-                            <!-- Ingredient analog start -->
-                            <div class="ingredient ingredient_analog">
-                                <div class="ingredient-number">1</div>
-                                <div class="ingredient-inner">
-                                    <h3 class="ingredient-title">Мука пшеничная</h3>
-                                    <p class="ingredient-desc">
-                                        (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
-                                    </p>
-                                </div>
-                                <button type="button" class="list-arrow"></button>
-                                <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="2.5" name="id" class="input small-input" id="id">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
-                                </select>
-                            </div>
-                            <!-- Ingredient analog end -->
-
-                        </div>
-                        <!-- Ingredients list (with analogs) end -->
+                        {% endif %}
+                        {% endfor %}
 
                     </form>
                     <!-- Ingredients end -->
 
-
                     <p class="paragraph recipe-desc__desc">
-                        Главный секрет идеальных сырников — а точнее творожников, — творог нужно протереть через мелкое
-                        сито и отжать от влаги. Жирность предпочтительна не больше и не меньше 9%. Тесто должно
-                        получиться эластичным, чтобы при надавливании сырник не треснул на сковородке, а сохранил форму.
-                        Если все сделать правильно, получатся нежные однородные кругляшки под плотной румяной корочкой.
-                        Сырники можно запекать в духовке или готовить на пару. В рецепте не исключаются эксперименты с
-                        начинкой — сухофрукты, орехи, свежие фрукты и даже картофель лишними не будут. Приятного
-                        аппетита!
+                        {{ recipe.description }}
                     </p>
                 </div>
             </div>
@@ -263,60 +176,24 @@
         <div class="container">
             <div class="recipe-color-wrapper">
                 <h2 class="section-title section-title_left">
-                    Рецепт приготовления Strawberry sponge cake with plum cream
+                    Рецепт приготовления {{ recipe.title }}
                 </h2>
                 <div class="recipe-steps-wrapper">
 
+                    {% for step in recipe.recipestep_set.all %}
                     <!-- Step start -->
                     <div class="recipe-step">
                         <div class="recipe-step__desc">
-                            <h2 class="section-title section-title_left">Шаг 1</h2>
+                            <h2 class="section-title section-title_left">{{ step.title }}</h2>
                             <p class="paragraph recipe-step__text">
-                                Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не осталось
-                                крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте. Лучше
-                                не
-                                использовать слишком сухой или слишком влажный творог, иначе сырники будут разваливаться
-                                в
-                                процессе приготовления.
+                                {{ step.description }}
                             </p>
                         </div>
-                        <img src="{% static 'main/images/step-of-recipe.png' %}" alt="#" class="recipe-step__img">
+                        <img src="{{ step.photo.url }}" alt="#" class="recipe-step__img">
                     </div>
                     <!-- Step end -->
+                    {% endfor %}
 
-                    <!-- Step start -->
-                    <div class="recipe-step">
-                        <div class="recipe-step__desc">
-                            <h2 class="section-title section-title_left">Шаг 1</h2>
-                            <p class="paragraph recipe-step__text">
-                                Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не осталось
-                                крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте. Лучше
-                                не
-                                использовать слишком сухой или слишком влажный творог, иначе сырники будут разваливаться
-                                в
-                                процессе приготовления.
-                            </p>
-                        </div>
-                        <img src="{% static 'main/images/step-of-recipe.png' %}" alt="#" class="recipe-step__img">
-                    </div>
-                    <!-- Step end -->
-
-                    <!-- Step start -->
-                    <div class="recipe-step">
-                        <div class="recipe-step__desc">
-                            <h2 class="section-title section-title_left">Шаг 1</h2>
-                            <p class="paragraph recipe-step__text">
-                                Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не осталось
-                                крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте. Лучше
-                                не
-                                использовать слишком сухой или слишком влажный творог, иначе сырники будут разваливаться
-                                в
-                                процессе приготовления.
-                            </p>
-                        </div>
-                        <img src="{% static 'main/images/step-of-recipe.png' %}" alt="#" class="recipe-step__img">
-                    </div>
-                    <!-- Step end -->
                 </div>
             </div>
         </div>

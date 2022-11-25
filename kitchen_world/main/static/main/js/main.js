@@ -7,7 +7,7 @@ const swiper = new Swiper('.new__swiper', {
   
     autoplay: {
         delay: 3000,
-        pauseOnMouseEnter: true,
+        pauseOnMouseEnter: false,
       },
 
   });
@@ -20,7 +20,7 @@ slidesPerView: 1,
 
 autoplay: {
     delay: 3000,
-    pauseOnMouseEnter: true,
+    pauseOnMouseEnter: false,
   },
 
 });

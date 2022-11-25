@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
@@ -113,6 +113,8 @@ def edit_profile(request):
     }
     return render(request, 'main/edit_profile.html', context=context)
 
-@is_auth
-def recipe(request):
-    return render(request, 'main/recipe.html')
+
+def recipe(request, recipe_slug):
+    recp = get_object_or_404(Recipe, slug=recipe_slug)
+    context = {'recipe': recp}
+    return render(request, 'main/recipe.html', context=context)

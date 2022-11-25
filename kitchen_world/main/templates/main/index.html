@@ -43,7 +43,7 @@
                                 </a>
                                 <button type="button" class="card__dots"></button>
                             </div>
-                            <a href="#" class="card-link">
+                            <a href="{{ recipe.get_absolute_url }}" class="card-link">
                                 <img src="{{ r_photo.photo.url }}" alt="" class="card__img">
                             </a>
 
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="card__title"><a href="#" class="card-link">{{ recipe.title }}</a> </h3>
+                            <h3 class="card__title"><a href="{{ recipe.get_absolute_url }}" class="card-link">{{ recipe.title }}</a> </h3>
                             <p class="card__description">{{ recipe.description|truncatechars:100 }}<span
                                     class="card__more">ещё</span></p>
                             <div class="card__categories-wrapper">
