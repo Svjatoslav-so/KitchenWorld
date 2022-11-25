@@ -112,3 +112,7 @@ def edit_profile(request):
         'form': form
     }
     return render(request, 'main/edit_profile.html', context=context)
+
+@is_auth
+def recipe(request):
+    return render(request, 'main/recipe.html')
