@@ -33,17 +33,20 @@
                     <div class="swiper-slide">
                         <div class="card" data-recipeId="{{ recipe.id }}">
                             <div class="card__header">
-                                <div class="card__recipe-autor">
+                                <a href="#" class="card__recipe-autor">
                                     <img src="{{ recipe.user.author.photo.url }}" alt="" class="card__recipe-autor-avatar">
                                     <div class="card__recipe-inner">
                                         <h3 class="card__recipe-autor-named">{{ recipe.user.username|title }}</h3>
 <!--                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>-->
                                         <span class="card__recipe-time">{{ recipe.date_of_creation }}</span>
                                     </div>
-                                </div>
+                                </a>
                                 <button type="button" class="card__dots"></button>
                             </div>
-                            <img src="{{ r_photo.photo.url }}" alt="" class="card__img">
+                            <a href="#" class="card-link">
+                                <img src="{{ r_photo.photo.url }}" alt="" class="card__img">
+                            </a>
+
                             <div class="card__info">
                                 <div class="card__interaction-wrapper">
                                     <div class="card__interaction">
@@ -70,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="card__title">{{ recipe.title }}</h3>
+                            <h3 class="card__title"><a href="#" class="card-link">{{ recipe.title }}</a> </h3>
                             <p class="card__description">{{ recipe.description|truncatechars:100 }}<span
                                     class="card__more">ещё</span></p>
                             <div class="card__categories-wrapper">
@@ -93,178 +96,7 @@
     <!--== End New Section ==-->
     {% endfor %}
 
-    <!--== Start New Section ==-->
-    <section class="section best" id="new">
-        <div class="container">
-            <h2 class="section-title">New</h2>
-            <div class="new__swiper">
-                <div class="swiper-wrapper">
-                    <!-- Slides -->
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <div class="card__header">
-                                <div class="card__recipe-autor">
-                                    <img src="{% static 'main/images/avatar.png' %}" alt="" class="card__recipe-autor-avatar">
-                                    <div class="card__recipe-inner">
-                                        <h3 class="card__recipe-autor-name">User name</h3>
-                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>
-                                    </div>
-                                </div>
-                                <button type="button" class="card__dots"></button>
-                            </div>
-                            <img src="{% static 'main/images/dish.jpg' %}" alt="" class="card__img">
-                            <div class="card__info">
-                                <div class="card__interaction-wrapper">
-                                    <div class="card__interaction">
-                                        <button class="card__stars"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__comments"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__bookmarks"></button>
-                                        999
-                                    </div>
-                                </div>
-                                <div class="card__statistics-wrapper">
-                                    <div class="card__statistic">
-                                        <button class="card__time"></button>
-                                        999
-                                    </div>
-                                    <div class="card__statistic">
-                                        <button class="card__calories"></button>
-                                        999
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="card__title">Название может быть длинным. </h3>
-                            <p class="card__description">Простое, но достаточно интересное блюдо - запечённая картошка с
-                                сосисками, помидорами и сыром. Ломтики картофеля в духовке... <span
-                                    class="card__more">ещё</span></p>
-                            <div class="card__categories-wrapper">
-                                <a class="category">#тегиблюда</a>
-                                <a class="category">#категории</a>
-                                <a class="category"> #категоряи2</a>
-                            </div>
 
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <div class="card__header">
-                                <div class="card__recipe-autor">
-                                    <img src="{% static 'main/images/avatar.png' %}" alt="" class="card__recipe-autor-avatar">
-                                    <div class="card__recipe-inner">
-                                        <h3 class="card__recipe-autor-name">User name</h3>
-                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>
-                                    </div>
-                                </div>
-                                <button type="button" class="card__dots"></button>
-                            </div>
-                            <img src="{% static 'main/images/dish.jpg' %}" alt="" class="card__img">
-                            <div class="card__info">
-                                <div class="card__interaction-wrapper">
-                                    <div class="card__interaction">
-                                        <button class="card__stars"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__comments"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__bookmarks"></button>
-                                        999
-                                    </div>
-                                </div>
-                                <div class="card__statistics-wrapper">
-                                    <div class="card__statistic">
-                                        <button class="card__time"></button>
-                                        999
-                                    </div>
-                                    <div class="card__statistic">
-                                        <button class="card__calories"></button>
-                                        999
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="card__title">Название может быть длинным. </h3>
-                            <p class="card__description">Простое, но достаточно интересное блюдо - запечённая картошка с
-                                сосисками, помидорами и сыром. Ломтики картофеля в духовке... <span
-                                    class="card__more">ещё</span></p>
-                            <div class="card__categories-wrapper">
-                                <a class="category">#тегиблюда</a>
-                                <a class="category">#категории</a>
-                                <a class="category"> #категоряи2</a>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <div class="card__header">
-                                <div class="card__recipe-autor">
-                                    <img src="{% static 'main/images/avatar.png' %}" alt="" class="card__recipe-autor-avatar">
-                                    <div class="card__recipe-inner">
-                                        <h3 class="card__recipe-autor-name">User name</h3>
-                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>
-                                    </div>
-                                </div>
-                                <button type="button" class="card__dots"></button>
-                            </div>
-                            <img src="{% static 'main/images/dish.jpg' %}" alt="" class="card__img">
-                            <div class="card__info">
-                                <div class="card__interaction-wrapper">
-                                    <div class="card__interaction">
-                                        <button class="card__stars"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__comments"></button>
-                                        999
-                                    </div>
-                                    <div class="card__interaction">
-                                        <button class="card__bookmarks"></button>
-                                        999
-                                    </div>
-                                </div>
-                                <div class="card__statistics-wrapper">
-                                    <div class="card__statistic">
-                                        <button class="card__time"></button>
-                                        999
-                                    </div>
-                                    <div class="card__statistic">
-                                        <button class="card__calories"></button>
-                                        999
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="card__title">Название может быть длинным. </h3>
-                            <p class="card__description">Простое, но достаточно интересное блюдо - запечённая картошка с
-                                сосисками, помидорами и сыром. Ломтики картофеля в духовке... <span
-                                    class="card__more">ещё</span></p>
-                            <div class="card__categories-wrapper">
-                                <a class="category">#тегиблюда</a>
-                                <a class="category">#категории</a>
-                                <a class="category"> #категоряи2</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="new__swiper-button-prev"></div>
-                <div class="new__swiper-button-next"></div> -->
-
-                <div class="new__swiper-pagination"></div>
-            </div>
-        </div>
-    </section>
-    <!--== End New Section ==-->
 
     <!--== End Main Content ==-->
 {% endblock %}

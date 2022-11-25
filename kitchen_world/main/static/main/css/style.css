@@ -318,6 +318,10 @@ p, span {
   display: block;
   background: url("../images/dots.svg") no-repeat center center;
 }
+.card-link{
+    display: block;
+    color: inherit;
+}
 .card__img {
   display: block;
   width: 100%;
@@ -374,12 +378,13 @@ p, span {
   height: 32px;
   background: url("../images/fire.svg") no-repeat center center/cover;
 }
-.card__title {
+.card__title{
   font-weight: 700;
   line-height: 1.45em;
   font-size: 14px;
   padding: 0 15px;
 }
+
 .card__description {
   font-weight: 400;
   font-size: 14px;
