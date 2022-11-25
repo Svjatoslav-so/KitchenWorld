@@ -20,7 +20,7 @@ def is_auth(func):
     return check
 
 
-def combine_recipes_and_photos(recipes) -> list[tuple]:
+def combine_recipes_and_photos(recipes):
     combined_array = []
     for r in recipes:
         try:
