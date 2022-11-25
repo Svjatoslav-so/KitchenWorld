@@ -597,6 +597,7 @@ p, span {
 
 .ingredient-inner {
   max-width: 400px;
+  margin-right: 30px;
 }
 
 .ingredient-title {
@@ -618,14 +619,20 @@ p, span {
   cursor: pointer;
   width: 12px;
   height: 6px;
-  margin: 12px 30px 0;
+  margin: 12px 0 0;
   background: url("../images/arrow-down.svg") no-repeat center center/contain;
+  transition: transform 1s ease-out;
+}
+
+.list-arrow.active{
+    transform: rotate(180deg);
 }
 
 .dashed-line {
   border-bottom: #000 1px dashed;
   flex-grow: 2;
   padding-top: 15px;
+  margin-left: 30px;
 }
 
 .recipe-steps {
