@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
@@ -20,7 +20,7 @@ def is_auth(func):
     return check
 
 
-def combine_recipes_and_photos(recipes):
+def combine_recipes_and_photos(recipes) -> list[tuple]:
     combined_array = []
     for r in recipes:
         try:
@@ -117,3 +117,8 @@ def edit_profile(request):
 def catalog(request):
     logout(request)
     return render(request, 'main/catalogue.html')
+
+def recipe(request, recipe_slug):
+    recp = get_object_or_404(Recipe, slug=recipe_slug)
+    context = {'recipe': recp}
+    return render(request, 'main/recipe.html', context=context)

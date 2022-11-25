@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class LikedRecipe(models.Model):
@@ -67,6 +68,9 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('recipe', kwargs={'recipe_slug': self.slug})
+
 
 class RecipePhoto(models.Model):
     photo = models.ImageField(upload_to="photos/recipe/%Y/%m/%d/", verbose_name="Фото")
@@ -92,7 +96,7 @@ class RecipeStep(models.Model):
     class Meta:
         verbose_name = 'Шаг рецепта'
         verbose_name_plural = 'Шаги рецепта'
-        ordering = ['recipe']
+        ordering = ['recipe', 'index']
 
     def __str__(self):
         return f"id({self.pk}) {self.index}. {self.title}"
@@ -128,7 +132,7 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-        ordering = ['recipe']
+        ordering = ['recipe', 'index']
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity}"

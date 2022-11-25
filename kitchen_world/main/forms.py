@@ -4,10 +4,6 @@ from django.forms import ModelForm, CharField, Textarea
 
 
 class RegistrationUserForm(UserCreationForm):
-    # username = forms.CharField()
-    # email
-    # password1
-    # password2
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for f in self.fields.values():
