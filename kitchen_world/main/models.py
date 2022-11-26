@@ -163,8 +163,7 @@ class ProductType(models.Model):
     description = models.TextField(verbose_name="Описание")
     photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
     slug = models.SlugField(max_length=255, unique=True)
-    parent_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, blank=True, null=True,
-                                    verbose_name="Родительский тип")
+    parent_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, blank=True, null=True, verbose_name="Родительский тип")
 
     class Meta:
         verbose_name = 'тип продукта'

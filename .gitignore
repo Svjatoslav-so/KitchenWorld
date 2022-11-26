@@ -2,8 +2,6 @@
 *.log
 *.pyc
 __pycache__
-db.sqlite3
-media
 secret_settings.py
 migrations/
 temp/
