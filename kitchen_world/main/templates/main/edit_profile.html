@@ -9,14 +9,11 @@
 {% endblock %}
 
 
-
-
-
 {% block main_content %}
     <section class="section profile-section">
         <div class="profile__wrapper">
-            <img src="{% static 'main/images/user.png' %}" alt="avatar" class="profile__avatar">
-            <form action="{% url 'edit_profile'%}" class="profile__form" method="post">
+            <img src="{% if request.user.author.photo %} {{ request.user.author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
+            <form action="{% url 'edit_profile'%}" class="profile__form" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
                 <div class="login-form__errors">{{ form.non_field_errors }}</div>
                 {% for field in form%}
@@ -29,10 +26,7 @@
                     </ul>
                     {% endif %}
                 {% endfor %}
-<!--                <input type="text" class="input" placeholder="Имя пользователя">-->
-<!--                <input type="text" class="input" placeholder="Логин">-->
-<!--                <input type="text" class="input" placeholder="Электронная почта">-->
-<!--                <input type="text" class="input big-input" placeholder="О себе">-->
+
                 <div class="btns-wrapper">
                     <button type="button" class="btn">Изменить пароль</button>
                     <button type="submit" class="btn active">Сохранить</button>

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm, CharField, Textarea
+from django.forms import CharField, Textarea, Form, EmailField, ImageField
 
 
 class RegistrationUserForm(UserCreationForm):
@@ -27,40 +27,33 @@ class LoginUserForm(AuthenticationForm):
         self.fields['password'].label = "Пароль"
 
 
-# to do
-class MultiEmailField(CharField):
-    def validate(self, value):
-        # """Check if value consists only of valid emails."""
-        # # Use the parent's handling of required fields, etc.
-        # super().validate(value)
-        # for email in value:
-        #     validate_email(email)
-        pass
-
-
-class EditProfileForm(ModelForm):
-    description = CharField(widget=Textarea)
-    # email = CharField()
-    username = MultiEmailField()
+class EditProfileForm(Form):
+    username = CharField()
+    first_name = CharField(required=False)
+    last_name = CharField(required=False)
+    email = EmailField(required=False)
+    description = CharField(widget=Textarea, required=False)
+    photo = ImageField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].label = ""
-        self.fields['first_name'].widget.attrs.update({'class': 'input', 'placeholder':'Имя'})
+        self.fields['first_name'].widget.attrs.update({'class': 'input', 'placeholder': 'Имя'})
 
         self.fields['last_name'].label = ""
         self.fields['last_name'].widget.attrs.update({'class': 'input', 'placeholder': 'Фамилия'})
 
         self.fields['username'].label = ""
-        self.fields['username'].widget.attrs.update({'class': 'input', 'placeholder':'Логин'})
+        self.fields['username'].widget.attrs.update({'class': 'input', 'placeholder': 'Логин'})
 
         self.fields['email'].label = ""
-        self.fields['email'].widget.attrs.update({'class': 'input', 'placeholder':'Почта'})
+        self.fields['email'].widget.attrs.update({'class': 'input', 'placeholder': 'Почта'})
 
         self.fields['description'].label = ""
-        self.fields['description'].widget.attrs.update({'class': 'input big-input', 'placeholder':'О себе'})
+        self.fields['description'].widget.attrs.update({'class': 'input big-input', 'placeholder': 'О себе'})
 
+        self.fields['photo'].label = ""
+        self.fields['photo'].widget.attrs.update({'class': 'input'})
 
     class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'description')
+        fields = ('first_name', 'last_name', 'username', 'email', 'description', 'photo')
