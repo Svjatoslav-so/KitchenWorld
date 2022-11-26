@@ -46,113 +46,120 @@
 <body>
 
 {% block main_content %}
-
     <section class="section recipes">
         <div class="recipes-container ">
             <div class="recipes-wrapper">
                 <div class="menu">
-<!--                    <img src="{% static 'main/img/catalogue_user.png' %}" alt="avatar" class="user-avatar">-->
+                    <img src="./img/user.png" alt="avatar" class="user-avatar">
                     <ul class="menu__list">
-                        {% for product in products %}
-                        <li class="menu__item">
-                            <img src="main/img/catalogue_pic.svg" alt="pic" class="menu__item-img">
-                            <form method="POST" action="{% url 'catalogue' %}">
-                                <input type="checkbox" checked autocomplete="off" name="tag" value={{ products }}/>
-                                    {{product}}
-                                <button type="submit">product</button>
-                            </form>
-                        </li>
-                         {% endfor %}
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Профиль</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item active">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Мои рецепты</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Черновики</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Черновики</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Понравившиеся</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Закладки</a>-->
+<!--                        </li>-->
+<!--                        <li class="menu__item">-->
+<!--                            <img src="./img/pic.svg" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Мои авторы</a>-->
+<!--                        </li>-->
                     </ul>
+                </div>
+                <div class="content">
+                    <div class="content__info">
+                        <h2 class="section-title">
+                            Каталог
+                        </h2>
+                        <div class="order">
+                            <p class="order-title">Сортировать по:</p>
+                            <select name="order" id="order-list" class="order__list">
+                                <option class="order__item" value="date">Дате</option>
+                                <option class="order__item" value="stars">Популярности</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cards-wrapper">
+                        <!-- Insert cards -->
+                         {% for recipe, r_photo in recipes %}
+                        <div class="card" data-recipeId="{{ recipe.id }}">
+                            <div class="card__header">
+                                <a href="#" class="card__recipe-autor">
+                                    <img src="{{ recipe.user.author.photo.url }}" alt="" class="card__recipe-autor-avatar">
+                                    <div class="card__recipe-inner">
+                                        <h3 class="card__recipe-autor-named">{{ recipe.user.username|title }}</h3>
+<!--                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>-->
+                                        <span class="card__recipe-time">{{ recipe.date_of_creation }}</span>
+                                    </div>
+                                </a>
+                                <button type="button" class="card__dots"></button>
+                            </div>
+                            <a href="{{ recipe.get_absolute_url }}" class="card-link">
+                                <img src="{{ r_photo.photo.url }}" alt="" class="card__img">
+                            </a>
+
+                            <div class="card__info">
+                                <div class="card__interaction-wrapper">
+                                    <div class="card__interaction">
+                                        <button class="card__stars"></button>
+                                        {{ recipe.num_of_stars }}
+                                    </div>
+                                    <div class="card__interaction">
+                                        <button class="card__comments"></button>
+                                        {{ recipe.num_of_comments }}
+                                    </div>
+                                    <div class="card__interaction">
+                                        <button class="card__bookmarks"></button>
+                                        {{ recipe.num_of_bookmarks }}
+                                    </div>
+                                </div>
+                                <div class="card__statistics-wrapper">
+                                    <div class="card__statistic">
+                                        <button class="card__time"></button>
+                                        {{ recipe.cooking_time }}
+                                    </div>
+                                    <div class="card__statistic">
+                                        <button class="card__calories"></button>
+                                        {{ recipe.calories }}
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="card__title"><a href="{{ recipe.get_absolute_url }}" class="card-link">{{ recipe.title }}</a> </h3>
+                            <p class="card__description">{{ recipe.description|truncatechars:100 }}<span
+                                    class="card__more">ещё</span></p>
+                            <div class="card__categories-wrapper">
+                                {% for c in recipe.categories.all %}
+                                <a class="category">#{{ c.name|lower }}</a>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        {% endfor %}
+
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </section>
-
-    <section class="section new" id="new">
-        <div class="content">
-            <div class="content__info">
-                 <!--== Start Main Content ==-->
-                {% for section_name, recipes in sections %}
-                <!--== Start New Section ==-->
-                    <div class="container">
-                        <h2 class="section-title">{{ section_name}}</h2>
-                        <div class="new__swiper">
-                            <div class="swiper-wrapper">
-                                <!-- Slides -->
-                                {% for recipe, r_photo in recipes %}
-                                <div class="swiper-slide">
-                                    <div class="card" data-recipeId="{{ recipe.id }}">
-                                        <div class="card__header">
-                                            <a href="#" class="card__recipe-autor">
-                                                <img src="{{ recipe.user.author.photo.url }}" alt="" class="card__recipe-autor-avatar">
-                                                <div class="card__recipe-inner">
-                                                    <h3 class="card__recipe-autor-named">{{ recipe.user.username|title }}</h3>
-            <!--                                        <span class="card__recipe-time">20.10.2022 в 15:58</span>-->
-                                                    <span class="card__recipe-time">{{ recipe.date_of_creation }}</span>
-                                                </div>
-                                            </a>
-                                            <button type="button" class="card__dots"></button>
-                                        </div>
-                                        <a href="{{ recipe.get_absolute_url }}" class="card-link">
-                                            <img src="{{ r_photo.photo.url }}" alt="" class="card__img">
-                                        </a>
-                                        <div class="card__info">
-                                            <div class="card__interaction-wrapper">
-                                                <div class="card__interaction">
-                                                    <button class="card__stars"></button>
-                                                    {{ recipe.num_of_stars }}
-                                                </div>
-                                                <div class="card__interaction">
-                                                    <button class="card__comments"></button>
-                                                    {{ recipe.num_of_comments }}
-                                                </div>
-                                                <div class="card__interaction">
-                                                    <button class="card__bookmarks"></button>
-                                                    {{ recipe.num_of_bookmarks }}
-                                                </div>
-                                            </div>
-                                            <div class="card__statistics-wrapper">
-                                                <div class="card__statistic">
-                                                    <button class="card__time"></button>
-                                                    {{ recipe.cooking_time }}
-                                                </div>
-                                                <div class="card__statistic">
-                                                    <button class="card__calories"></button>
-                                                    {{ recipe.calories }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h3 class="card__title"><a href="{{ recipe.get_absolute_url }}" class="card-link">{{ recipe.title }}</a> </h3>
-                                        <p class="card__description">{{ recipe.description|truncatechars:100 }}<span
-                                                class="card__more">ещё</span></p>
-                                        <div class="card__categories-wrapper">
-                                            {% for c in recipe.categories.all %}
-                                            <a class="category">#{{ c.name|lower }}</a>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="new__swiper-pagination"></div>
-                        </div>
-                    </div>
-                <!--== End New Section ==-->
-                {% endfor %}
-                <!--== End Main Content ==-->
-            </div>
-
-
-        </div>
-    </section>
-
-
-
 
 {% endblock %}
-
-
-
 
 </body>

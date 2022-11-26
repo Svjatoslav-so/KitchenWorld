@@ -115,8 +115,12 @@ def edit_profile(request):
 
 
 def catalog(request):
-    logout(request)
-    return render(request, 'main/catalogue.html')
+    recipes = Recipe.objects.all()
+    context = {
+        'recipes': combine_recipes_and_photos(recipes)
+    }
+    return render(request, 'main/catalogue.html', context=context)
+
 
 def recipe(request, recipe_slug):
     recp = get_object_or_404(Recipe, slug=recipe_slug)
