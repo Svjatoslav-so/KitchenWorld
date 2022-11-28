@@ -73,9 +73,9 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('title', 'id')
     prepopulated_fields = {'slug': ('title',)}
     fields = ('id', 'title', 'slug', 'get_all_recipe_photo', 'description',
-              ('cooking_time', 'calories', 'num_of_servings', 'finished_product_weight'), 'status', 'user',
-              'categories', 'get_all_recipe_ingredient', 'get_all_recipe_step', ('date_of_creation', 'edit_date'),
-              ('num_of_stars', 'num_of_comments', 'num_of_bookmarks'))
+              ('cooking_time', 'calories', 'num_of_servings'), ('finished_product_weight', 'dimension'), 'status',
+              'user', 'categories', 'get_all_recipe_ingredient', 'get_all_recipe_step',
+              ('date_of_creation', 'edit_date'), ('num_of_stars', 'num_of_comments', 'num_of_bookmarks'))
     readonly_fields = ('id', 'date_of_creation', 'edit_date', 'get_all_recipe_photo', 'get_all_recipe_ingredient',
                        'get_all_recipe_step')
 
@@ -93,7 +93,7 @@ class RecipeAdmin(admin.ModelAdmin):
         for i in RecipeIngredient.objects.filter(recipe=obj.id).order_by('index'):
             ingredients_html += f'<div>' \
                                 f'<a href="/admin/main/recipeingredient/{i.id}/change/">{i.product}</a> ' \
-                                f'<b>{i.quantity}</b>' \
+                                f'<b>{i.quantity}</b>  {i.product.get_dimension_display()}' \
                                 f'<p>{i.comment}</p>' \
                                 f'<p>{i.main_ingredient}</p>' \
                                 f'</div><hr>'
@@ -122,8 +122,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('id', 'name')
     prepopulated_fields = {'slug': ('name',)}
-    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo', 'product_type', 'calories', 'fat',
-              'proteins', 'carbohydrates')
+    fields = ('id', 'name', 'slug', 'description', 'get_html_photo', 'photo', 'product_type', 'dimension',
+              'gram_per_milliliter', 'grams_per_piece', 'calories', 'fat', 'proteins', 'carbohydrates')
     readonly_fields = ('id', 'get_html_photo')
 
     def get_html_photo(self, obj):
@@ -221,8 +221,13 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'quantity', 'is_essential', 'recipe', 'main_ingredient')
     list_display_links = ('id', 'product')
     search_fields = ('id',)
-    fields = ('id', 'product', 'quantity', 'is_essential', 'index', 'main_ingredient', 'comment', 'recipe')
-    readonly_fields = ('id',)
+    fields = ('id', 'product', ('quantity', 'grt_dimension'), 'is_essential', 'index', 'main_ingredient', 'comment',
+              'recipe')
+    readonly_fields = ('id', 'grt_dimension')
+
+    def grt_dimension(self, obj):
+        return obj.product.get_dimension_display()
+    grt_dimension.short_description = "Размерность"
 
 
 admin.site.register(RecipeIngredient, RecipeIngredientAdmin)
