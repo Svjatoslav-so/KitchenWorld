@@ -116,7 +116,6 @@ class Category(models.Model):
     parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True,
                                         verbose_name="Родительская категория")
     slug = models.SlugField(max_length=255, unique=True)
-    # recipe = models.ManyToManyField('Category', verbose_name="Категория")
 
     class Meta:
         verbose_name = 'категория'

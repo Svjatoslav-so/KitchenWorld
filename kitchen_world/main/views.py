@@ -138,17 +138,31 @@ def catalog(request):
 
     if request.method == "GET":
         print(request.GET)
-        if request.GET == "/?Выпечка=title":
-            recipes = Category.objects.filter(id=17)
+        categor = request.GET.getlist("category")
+        sort = request.GET.get("sort", "-num_of_stars")
+        print("CATEGOR", sort)
+        if not len(categor) == 0:
+            recipes = []
+            for c in categor:
+                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
         else:
-            recipes = Recipe.objects.filter(id=17)
+            recipes = Recipe.objects.all().order_by(sort)
     else:
         recipes = Recipe.objects.all()
     context = {
         'recipes': combine_recipes_and_photos(recipes),
-        'category': Category.objects.filter(parent_category=None)
+        'category': Category.objects.filter(parent_category=None),
+        'sub_category': Category.objects.all(),
+        'selected_categories': categor,
+        'selected_sort': sort
     }
     return render(request, 'main/catalogue.html', context=context)
+
+def merge_cat(cat, cat_new):
+    for c in cat_new:
+        if not c in cat:
+            cat.append(c)
+    return cat
 
 
 def recipe(request, recipe_slug):
