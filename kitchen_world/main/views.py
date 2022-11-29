@@ -1,4 +1,4 @@
-from django.contrib.auth import logout, login
+﻿from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto
+from .models import Recipe, RecipePhoto, Category
 
 
 def is_auth(func):
@@ -115,9 +115,18 @@ def edit_profile(request):
 
 
 def catalog(request):
-    recipes = Recipe.objects.all()
+
+    if request.method == "GET":
+        print(request.GET)
+        if request.GET == "/?Выпечка=title":
+            recipes = Category.objects.filter(id=17)
+        else:
+            recipes = Recipe.objects.filter(id=17)
+    else:
+        recipes = Recipe.objects.all()
     context = {
-        'recipes': combine_recipes_and_photos(recipes)
+        'recipes': combine_recipes_and_photos(recipes),
+        'category': Category.objects.filter(parent_category=None)
     }
     return render(request, 'main/catalogue.html', context=context)
 

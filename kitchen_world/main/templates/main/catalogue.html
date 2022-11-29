@@ -34,8 +34,6 @@
 {% endblock %}
 
 <body>
-from .models import Recipe
-from .models import Category
 
 {% block main_content %}
     <section class="section recipes">
@@ -45,27 +43,16 @@ from .models import Category
                     <ul class="menu">
                         <form method="get">
                             <button type="submit" class="btn submit active">Сортировать</button>
+                            <p>
+                                ____________________________
 
-                            <p>____________________________</p>
 
+                            </p>
+                            {% for cat in category %}
                             <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ breakfast }}>Завтраки
+                                <input name="{{cat.name}}" type="checkbox" value="title">{{cat.name}}
                             </li>
-                            <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ cake }}>Выпечка
-                            </li>
-                            <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ dessert }}>Десерты
-                            </li>
-                            <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ cv }}>Основные блюда
-                            </li>
-                            <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ salat }}>Салаты
-                            </li>
-                            <li class="menu__item">
-                                <input name="sort" type="checkbox" value="title" {{ soop }}>Супы
-                            </li>
+                            {% endfor %}
                         </form>
                     </ul>
                 </div>
