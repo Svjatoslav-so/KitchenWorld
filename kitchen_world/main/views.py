@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
 from .models import Recipe, RecipePhoto, Author
@@ -64,7 +65,7 @@ def registration(request):
         form = RegistrationUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            author = Author.objects.create(user=user)
+            author = Author.objects.create(user=user, slug=slugify(f'{user.username} {user.id}'))
             author.save()
             login(request, user)
             return redirect('home')
@@ -143,5 +144,7 @@ def catalog(request):
 
 def recipe(request, recipe_slug):
     recp = get_object_or_404(Recipe, slug=recipe_slug)
-    context = {'recipe': recp}
+    context = {
+        'recipe': recp,
+    }
     return render(request, 'main/recipe.html', context=context)
