@@ -3,12 +3,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
+
 # Create your views here.
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Author
+from .models import Recipe, RecipePhoto, Category, Author
 
 
 def is_auth(func):
@@ -135,11 +136,34 @@ def edit_profile(request):
 
 
 def catalog(request):
-    recipes = Recipe.objects.all()
+
+    if request.method == "GET":
+        print(request.GET)
+        categor = request.GET.getlist("category")
+        sort = request.GET.get("sort", "-num_of_stars")
+        print("CATEGOR", sort)
+        if not len(categor) == 0:
+            recipes = []
+            for c in categor:
+                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
+        else:
+            recipes = Recipe.objects.all().order_by(sort)
+    else:
+        recipes = Recipe.objects.all()
     context = {
-        'recipes': combine_recipes_and_photos(recipes)
+        'recipes': combine_recipes_and_photos(recipes),
+        'category': Category.objects.filter(parent_category=None),
+        'sub_category': Category.objects.all(),
+        'selected_categories': categor,
+        'selected_sort': sort
     }
     return render(request, 'main/catalogue.html', context=context)
+
+def merge_cat(cat, cat_new):
+    for c in cat_new:
+        if not c in cat:
+            cat.append(c)
+    return cat
 
 
 def recipe(request, recipe_slug):
