@@ -125,6 +125,18 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_hierarchy(root=None):
+        roots = Category.objects.filter(parent_category=root)
+        cat_list = []
+        for r in roots:
+            cat_list.append(r)
+            sub_cat_list = Category.get_hierarchy(r)
+            if sub_cat_list:
+                cat_list.append(sub_cat_list)
+        print(cat_list)
+        return cat_list
+
 
 class RecipeIngredient(models.Model):
     comment = models.TextField(blank=True, null=True, verbose_name="Комментарий")

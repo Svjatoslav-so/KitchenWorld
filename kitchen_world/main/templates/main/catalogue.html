@@ -1,6 +1,7 @@
 {% extends "main/base_generic.html" %}
 
 {% load static %}
+{% load main_tags %}
 
 {% block css %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
@@ -11,29 +12,6 @@
 
 {% block title %}<title>Kitchen World Соцсеть для кулинаров</title>{% endblock %}
 
-{% block extends_header %}
-<!--== Start Header ==-->
-<header class="header" id="header">
-
-<nav class="Nav" id="nav">
-    <div class="container">
-        <div class="nav__wrapper">
-            <h1>Поиск</h1>
-            <form class="Search" action="#" method="get">
-                <input class="input" type="text" name="search-input" placeholder="Найти" id="search-input">
-                <button class="search-btn" type="submit"></button>
-            </form>
-        </div>
-
-    </div>
-</nav>
-
-
-</header>
-<!--== End Header ==-->
-{% endblock %}
-
-<body>
 
 {% block main_content %}
     <section class="section recipes">
@@ -46,22 +24,26 @@
                             <p>
                                 ____________________________
                             </p>
-                            {% for cat in category %}
-                            <li class="menu__item">
-                                <details>
-                                    <summary>
-                                        <input  name="category" type="checkbox" value="{{cat.name}}" {% if cat.name in selected_categories %} checked {%endif%} >{{cat.name}}
-                                    </summary>
-                                    {% for s_cat in sub_category %}
-                                        {% if s_cat.parent_category == cat %}
-                                            <li class="menu__item">
-                                                <input  name="category" type="checkbox" value="{{s_cat.name}}" {% if s_cat.name in selected_categories %} checked {%endif%} >{{s_cat.name}}
-                                            </li>
-                                        {%endif%}
-                                    {% endfor %}
-                                </details>
-                            </li>
-                            {% endfor %}
+<!--                            {% for cat in category %}-->
+<!--                            <li class="menu__item">-->
+<!--                                <details>-->
+<!--                                    <summary>-->
+<!--                                        <input  name="category" type="checkbox" value="{{cat.name}}" {% if cat.name in selected_categories %} checked {%endif%} >{{cat.name}}-->
+<!--                                    </summary>-->
+<!--                                    {% for s_cat in sub_category %}-->
+<!--                                        {% if s_cat.parent_category == cat %}-->
+<!--                                            <li class="menu__item">-->
+<!--                                                <input  name="category" type="checkbox" value="{{s_cat.name}}" {% if s_cat.name in selected_categories %} checked {%endif%} >{{s_cat.name}}-->
+<!--                                            </li>-->
+<!--                                        {%endif%}-->
+<!--                                    {% endfor %}-->
+<!--                                </details>-->
+<!--                            </li>-->
+<!--                            {% endfor %}-->
+
+                            {% autoescape off %}
+                            {% show_categories selected_categories %}
+                            {% endautoescape %}
                         </form>
                     </ul>
                 </div>
@@ -70,24 +52,24 @@
                         <h2 class="section-title">
                             Каталог
                         </h2>
-<!--                        <form method="get">-->
-                            <div class="order">
-                                <p class="order-title">Сортировать по:</p>
-                                <select form="cat_filt" name="sort" id="order-list" class="order__list" onchange="this.form.submit()">
-                                    <option class="order__item" name="sort" value="-date_of_creation" {% if selected_sort == "-date_of_creation" %} selected {%endif%}>
-                                            Дате
-                                    </option>
-                                    <option class="order__item" name="sort" value="-num_of_stars" {% if selected_sort == "-num_of_stars" %} selected {%endif%}>
-                                            Популярности
-                                    </option>
-                                    <option class="order__item" name="sort" value="title" {% if selected_sort == "title" %} selected {%endif%}>
-                                            Алфавиту
-                                    </option>
-                                </select>
-
-<!--                                <button type="submit" class="btn submit active">Сортировать</button>-->
-                            </div>
-<!--                        </form>-->
+                        <form class="search" action="#" method="get">
+                            <input class="input" type="text" name="search-input" placeholder="Найти" id="search-input">
+                            <button class="search-btn" type="submit"></button>
+                        </form>
+                        <div class="order">
+                            <p class="order-title">Сортировать по:</p>
+                            <select form="cat_filt" name="sort" id="order-list" class="order__list" onchange="this.form.submit()">
+                                <option class="order__item" name="sort" value="-date_of_creation" {% if selected_sort == "-date_of_creation" %} selected {%endif%}>
+                                        Дате
+                                </option>
+                                <option class="order__item" name="sort" value="-num_of_stars" {% if selected_sort == "-num_of_stars" %} selected {%endif%}>
+                                        Популярности
+                                </option>
+                                <option class="order__item" name="sort" value="title" {% if selected_sort == "title" %} selected {%endif%}>
+                                        Алфавиту
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <div class="cards-wrapper">
                         <!-- Insert cards -->
@@ -156,5 +138,3 @@
     </section>
 
 {% endblock %}
-
-</body>

@@ -142,13 +142,10 @@ p, span {
 .search {
   display: block;
   position: relative;
-  width: 420px;
+  max-width: 420px;
+  flex-grow: 2;
 }
-.Search {
-  display: block;
-  position: relative;
-  width: 1120px;
-}
+
 .Nav {
   padding: 15px 0;
   background: #ffebcd;
