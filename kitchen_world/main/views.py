@@ -1,13 +1,14 @@
-﻿from django.contrib.auth import logout, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout, login
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Category
+from .models import Recipe, RecipePhoto, Category, Author
 
 
 def is_auth(func):
@@ -64,6 +65,8 @@ def registration(request):
         form = RegistrationUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            author = Author.objects.create(user=user)
+            author.save()
             login(request, user)
             return redirect('home')
     else:
@@ -84,7 +87,7 @@ def logout_user(request):
 def edit_profile(request):
     if request.method == "POST":
         print("POST", request.POST)
-        form = EditProfileForm(request.POST)
+        form = EditProfileForm(request.POST, request.FILES)
         print('form', form)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
@@ -92,22 +95,39 @@ def edit_profile(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             description = form.cleaned_data['description']
+            photo = form.cleaned_data['photo']
+            try:
+                check_user = User.objects.get(username=username)
+            except ObjectDoesNotExist:
+                check_user = None
             user = request.user
-            user.first_name = first_name
-            user.last_name = last_name
-            user.username = username
-            user.email = email
-            user.author.description = description
-            user.save()
-            user.author.save()
+            if check_user is None or user == check_user:
+                user.first_name = first_name
+                user.last_name = last_name
+                user.username = username
+                user.email = email
+                user.author.description = description
+                if not (photo is None):
+                    if user.author.photo:
+                        user.author.photo.delete()
+                        print("\nSUCCESSFULLY\n")
+                    user.author.photo = photo
+                print('input_photo', photo)
+                print("author.photo", user.author.photo)
+                user.save()
+                user.author.save()
+            else:
+                form.add_error('username', 'Пользователь с таким именем уже существует.')
     else:
         print("GET", request)
+        print("photo", request.user.author.photo)
         form = EditProfileForm(
             {'first_name': request.user.first_name,
              'username': request.user.username,
              'email': request.user.email,
              'description': request.user.author.description,
-             'last_name': request.user.last_name})
+             'last_name': request.user.last_name,
+             })
     context = {
         'form': form
     }
