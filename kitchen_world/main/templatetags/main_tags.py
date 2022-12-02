@@ -5,6 +5,11 @@ from ..models import Category
 register = template.Library()
 
 
+@register.inclusion_tag('main/recipe_cart.html')
+def show_recipe_cart(recipe, r_photo):
+    return {"recipe": recipe, "r_photo": r_photo}
+
+
 def is_details_open(selected, hierarchy):
     # print('SELECTED: ', selected, "\nHIERARHY: ", hierarchy)
     is_open = False
@@ -28,7 +33,7 @@ def show_categories(selected_categories, cat_list=Category.get_hierarchy()):
         if i < len(cat_list) - 1 and type(cat_list[i + 1]) is list:
             menu += f'<li class="menu__item">' \
                     f'<details'
-            if is_details_open(selected_categories, cat_list[i+1]):
+            if is_details_open(selected_categories, cat_list[i + 1]):
                 menu += ' open '
             menu += f'>' \
                     f'  <summary>' \
@@ -36,8 +41,7 @@ def show_categories(selected_categories, cat_list=Category.get_hierarchy()):
             if cat_list[i].name in selected_categories:
                 menu += ' checked '
             menu += f'>{cat_list[i].name}' \
-                    f'  </summary>' \
-
+                    f'  </summary>'
         elif type(cat_list[i]) is list:
             menu += f'  {show_categories(selected_categories, cat_list[i])}' \
                     f'</details>' \
