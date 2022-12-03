@@ -136,7 +136,6 @@ def edit_profile(request):
 
 
 def catalog(request):
-
     if request.method == "GET":
         print(request.GET)
         categor = request.GET.getlist("category")
@@ -177,6 +176,7 @@ def catalog(request):
     }
     return render(request, 'main/catalogue.html', context=context)
 
+
 def merge_cat(cat, cat_new):
     for c in cat_new:
         if not c in cat:
@@ -190,3 +190,39 @@ def recipe(request, recipe_slug):
         'recipe': recp,
     }
     return render(request, 'main/recipe.html', context=context)
+
+
+def my_recipes(request):
+    recipes = Recipe.objects.filter(user=request.user).filter(status=True)
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Мои рецепты'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_drafts(request):
+    recipes = Recipe.objects.filter(user=request.user).filter(status=False)
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Черновики'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_liked(request):
+    recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='L')
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Понравившиеся'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_bookmarks(request):
+    recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='B')
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Закладки'
+    }
+    return render(request, 'main/my_profile.html', context=context)
