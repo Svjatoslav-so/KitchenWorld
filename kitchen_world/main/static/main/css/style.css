@@ -258,6 +258,21 @@ p, span {
   background: #48B705;
 }
 
+.btn-input-block {
+    position: relative;
+    font-size: 16px;
+}
+.btn-input {
+    font-size: 16px;
+}
+.in-input-btn{
+  top: 0;
+  right: 0;
+  position: absolute;
+  line-height: inherit;
+  border: none;
+}
+
 .section {
   background: #403939;
 }
@@ -633,7 +648,7 @@ p, span {
 }
 
 .recipe-steps {
-  padding-bottom: 20px;
+  /*padding-bottom: 20px;*/
 }
 
 .recipe-steps-wrapper {
@@ -669,4 +684,99 @@ p, span {
   flex-direction: row-reverse;
 }
 
+.recipe-comments {
+  padding-bottom: 20px;
+}
+.recipe-comments-wrapper {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  padding-bottom: 30px;
+}
+.recipe-comment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 25px;
+}
+.recipe-comment__img {
+  width: 100px;
+  /*height: 100px;*/
+  aspect-ratio: 1/1;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 100%;
+}
+.recipe-comment__desc {
+  width: 100%;
+  min-height: 100px;
+  margin-left: 17px;
+  background-color: #E4E3E1;
+  border-radius: 0 25px 25px 25px;
+  padding: 10px 30px;
+}
+.recipe-comment__desc.my_comment {
+    background-color: #48b705;
+}
+.recipe-comment__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.recipe-comment__info{
+    display: flex;
+}
+.recipe-comment__author-named{
+    font-weight: 700;
+    font-size: 18px;
+    margin-right: 20px;
+    color: #48b705;
+}
+.my_comment .recipe-comment__author-named {
+    color: #E4E3E1;
+}
+.recipe-add-comment{
+    margin-left: 117px;
+}
+.recipe-add-comment-text{
+    display: block;
+}
+
+.recipe-comment__action{
+    display: flex;
+}
+
+.comment_action-btn{
+    color:#48b705;
+    background:none;
+    margin-left: 5px;
+}
+.my_comment .recipe-comment__action .comment_action-btn {
+    color: #E4E3E1;
+}
+
+.recipe-comment-children{
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+
+.recipe-comment-reply p{
+    color: #E4E3E1;
+    padding: 5px 15px;
+}
+.recipe-comment-reply.show{
+    display: flex;
+}
+
 /* style recipe end */
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
+}

@@ -1,6 +1,7 @@
 from django import template
+from django.template.loader import render_to_string
 
-from ..models import Category
+from ..models import Category, RecipeComment
 
 register = template.Library()
 
@@ -55,3 +56,21 @@ def show_categories(selected_categories, cat_list=Category.get_hierarchy()):
                     f'</li>'
     # print(f'\nStart\n{menu}\nEnd\n')
     return menu
+
+
+@register.inclusion_tag('main/comment.html')
+def show_comment(comment):
+    return {"comment": comment}
+
+
+@register.simple_tag()
+def show_all_comments(comments, request):
+    html = ""
+    for comment in comments:
+        html += f'<!-- Comment start -->\n{ render_to_string("main/comment.html", {"comment": comment}, request) }' \
+                f'\n <div class="recipe-comment-children">'
+        comment_children = RecipeComment.objects.filter(parent_comment=comment)
+        html += show_all_comments(comment_children, request)
+        html += '\n</div>\n<!-- Comment end -->'
+    return html
+

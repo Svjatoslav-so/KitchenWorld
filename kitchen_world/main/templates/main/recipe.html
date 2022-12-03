@@ -2,6 +2,7 @@
 {% block title %} <title>Рецепт</title> {% endblock %}
 
 {% load static %}
+{% load main_tags %}
 
 {% block main_content %}
     <!-- Recipe title start -->
@@ -198,4 +199,36 @@
     </section>
     <!-- Steps end -->
 
+    <!-- Comments start -->
+        <section class="section recipe-comments" id="recipe-comments">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                     <h2 class="section-title section-title_left">
+                        Комментарии
+                    </h2>
+                    <div class="recipe-comments-wrapper">
+                        {% autoescape off %}
+                        {% show_all_comments comments request %}
+                        {% endautoescape %}
+                    </div>
+                    {% if request.user.is_authenticated %}
+                    <div class="recipe-add-comment">
+                        <div class="recipe-comment-reply hide" id="comment-reply-message">
+                            <p>Ответ на: </p>
+                            <button class="comment_action-btn" id="cancel_btn">Отменить</button>
+                        </div>
+                        <form class="btn-input-block" action="{{ recipe.slug }}/add-comment/" method="post" id="sent_comment">
+                            {% csrf_token %}
+                                <input class="input btn-input" type="text" required name="new_comment" placeholder="Ваш отзыв" id="new-comment-input">
+                                <button class="btn active in-input-btn" type="submit">Отправить</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    <!-- Comments end -->
+
 {% endblock %}
+
+{% block custom_js %}<script src="{% static 'main/js/comment.js' %}"></script>{% endblock %}

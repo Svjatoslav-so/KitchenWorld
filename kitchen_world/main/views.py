@@ -2,6 +2,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -9,7 +10,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Category, Author
+from .models import Recipe, RecipePhoto, Category, Author, RecipeComment
 
 
 def is_auth(func):
@@ -159,6 +160,7 @@ def catalog(request):
     }
     return render(request, 'main/catalogue.html', context=context)
 
+
 def merge_cat(cat, cat_new):
     for c in cat_new:
         if not c in cat:
@@ -168,7 +170,41 @@ def merge_cat(cat, cat_new):
 
 def recipe(request, recipe_slug):
     recp = get_object_or_404(Recipe, slug=recipe_slug)
+    comments = RecipeComment.objects.filter(recipe=recp).filter(parent_comment=None)
     context = {
         'recipe': recp,
+        'comments': comments,
     }
     return render(request, 'main/recipe.html', context=context)
+
+
+@is_auth
+def add_comment(request, recipe_slug):
+    if request.method == "POST":
+        print(request.POST)
+        parent_comment_id = request.POST.get("parent_comment_id", None)
+        if parent_comment_id:
+            try:
+                parent_comment = RecipeComment.objects.get(pk=parent_comment_id)
+            except ObjectDoesNotExist:
+                parent_comment = None
+        else:
+            parent_comment = None
+        text = request.POST.get("new_comment", "Очень хороший рецепт!!!")
+        _recipe = get_object_or_404(Recipe, slug=recipe_slug)
+        max_ = RecipeComment.objects.aggregate(max_index=Max('index', filter=Q(recipe=_recipe), default=0))
+        print("max_index: ", max_["max_index"])
+        new_comment = RecipeComment.objects.create(text=text, index=max_["max_index"]+1, recipe=_recipe,
+                                                   user=request.user,  parent_comment=parent_comment)
+        new_comment.save()
+    return redirect("recipe", recipe_slug)
+
+
+@is_auth
+def delete_comment(request, recipe_slug, comment_id):
+    if request.method == "POST":
+        print(request.POST)
+        comment = get_object_or_404(RecipeComment, pk=comment_id)
+        if comment.user == request.user:
+            comment.delete()
+    return redirect("recipe", recipe_slug)
