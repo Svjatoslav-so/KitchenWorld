@@ -152,27 +152,30 @@ def catalog(request):
         if len(categor) != 0 and len(search) != 0:
             recipes = []
             for c in categor:
-                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__icontains=search).order_by(sort)) )
+                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)) )
         if len(categor) != 0 and len(search) == 0:
             recipes = []
             for c in categor:
                 recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
         if len(categor) == 0 and len(search) != 0:
             recipes = []
-            recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__icontains=search).order_by(sort)) )
+            recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)) )
         if len(categor) == 0 and len(search) == 0:
             recipes = Recipe.objects.all().order_by(sort)
     else:
         recipes = Recipe.objects.all()
     if len(recipes) == 0:
-        recipes = ["Простите, по вашему запросу ничего не найдено..."]
+        is_data = False
+    else:
+        is_data = True
     context = {
         'recipes': combine_recipes_and_photos(recipes),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': categor,
         'selected_sort': sort,
-        'curr_search': search
+        'curr_search': search,
+        'is_data_exist': is_data
     }
     return render(request, 'main/catalogue.html', context=context)
 

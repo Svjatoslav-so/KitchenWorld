@@ -71,13 +71,18 @@
                             </select>
                         </div>
                     </div>
-                    <div class="cards-wrapper">
-                        <!-- Insert cards -->
-                        {% for recipe, r_photo in recipes %}
-                            {% show_recipe_cart recipe r_photo %}
-                        {% endfor %}
-
-                    </div>
+                    {% if is_data_exist %}
+                        <div class="cards-wrapper">
+                            <!-- Insert cards -->
+                            {% for recipe, r_photo in recipes %}
+                                {% show_recipe_cart recipe r_photo %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                         <div class="menu">
+                            К сожалению, таких рецептов еще нет.. Но вы можете <a href="{% url 'my_recipes'%}">добавить новый рецепт</a>
+                        </div>
+                    {%endif%}
                 </div>
             </div>
         </div>
