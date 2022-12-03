@@ -52,10 +52,10 @@
                         <h2 class="section-title">
                             Каталог
                         </h2>
-                        <form class="search" action="#" method="get">
-                            <input class="input" type="text" name="search-input" placeholder="Найти" id="search-input">
-                            <button class="search-btn" type="submit"></button>
-                        </form>
+                        <div class="search" ">
+                            <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" {% if curr_search != "" %} placeholder="{{curr_search}}" {% else %}placeholder="Найти" {%endif%}id="search-input">
+                            <button class="search-btn" type="submit" ></button>
+                        </div>
                         <div class="order">
                             <p class="order-title">Сортировать по:</p>
                             <select form="cat_filt" name="sort" id="order-list" class="order__list" onchange="this.form.submit()">

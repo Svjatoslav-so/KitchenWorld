@@ -141,21 +141,39 @@ def catalog(request):
         print(request.GET)
         categor = request.GET.getlist("category")
         sort = request.GET.get("sort", "-num_of_stars")
-        print("CATEGOR", sort)
-        if not len(categor) == 0:
+        search = request.GET.get("search-input", "")
+        print("CATEGOR", categor)
+        print(len(categor))
+        print("SEARCH", search)
+        bool = (len(search) != 0)
+        print(bool)
+        print(len(search))
+
+        print("SORT", sort)
+        if len(categor) != 0 and len(search) != 0:
+            recipes = []
+            for c in categor:
+                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__icontains=search).order_by(sort)) )
+        if len(categor) != 0 and len(search) == 0:
             recipes = []
             for c in categor:
                 recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
-        else:
+        if len(categor) == 0 and len(search) != 0:
+            recipes = []
+            recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__icontains=search).order_by(sort)) )
+        if len(categor) == 0 and len(search) == 0:
             recipes = Recipe.objects.all().order_by(sort)
     else:
         recipes = Recipe.objects.all()
+    if len(recipes) == 0:
+        recipes = ["Простите, по вашему запросу ничего не найдено..."]
     context = {
         'recipes': combine_recipes_and_photos(recipes),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': categor,
-        'selected_sort': sort
+        'selected_sort': sort,
+        'curr_search': search
     }
     return render(request, 'main/catalogue.html', context=context)
 
