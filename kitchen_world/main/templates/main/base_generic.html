@@ -6,9 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block meta %}
     <meta name="description" content="Рецепты">
     <meta name="keywords" content="рецепт">
-
+    {% endblock %}
     {% block title %} <!--== Title ==--> {% endblock %}
 
     <!-- Og tags -->
@@ -50,7 +52,7 @@
                 </form>
 
                 {% if request.user.is_authenticated %}
-                <a href="#">
+                <a href="{% url 'my_recipes' %}">
                     <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.svg' %} {% endif %}">
                 </a>
                 <a href="{% url 'logout' %}" class="login-btn active">Выйти</a>

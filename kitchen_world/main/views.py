@@ -137,26 +137,46 @@ def edit_profile(request):
 
 
 def catalog(request):
-
     if request.method == "GET":
         print(request.GET)
         categor = request.GET.getlist("category")
         sort = request.GET.get("sort", "-num_of_stars")
-        print("CATEGOR", sort)
-        if not len(categor) == 0:
+        search = request.GET.get("search-input", "")
+        print("CATEGOR", categor)
+        print(len(categor))
+        print("SEARCH", search)
+        bool = (len(search) != 0)
+        print(bool)
+        print(len(search))
+
+        print("SORT", sort)
+        if len(categor) != 0 and len(search) != 0:
+            recipes = []
+            for c in categor:
+                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)) )
+        if len(categor) != 0 and len(search) == 0:
             recipes = []
             for c in categor:
                 recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
-        else:
+        if len(categor) == 0 and len(search) != 0:
+            recipes = []
+            recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)) )
+        if len(categor) == 0 and len(search) == 0:
             recipes = Recipe.objects.all().order_by(sort)
     else:
         recipes = Recipe.objects.all()
+    if len(recipes) == 0:
+        is_data = False
+    else:
+        is_data = True
     context = {
         'recipes': combine_recipes_and_photos(recipes),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': categor,
-        'selected_sort': sort
+        'selected_sort': sort,
+        'curr_search': search,
+        'is_data_exist': is_data
     }
     return render(request, 'main/catalogue.html', context=context)
 
@@ -176,6 +196,42 @@ def recipe(request, recipe_slug):
         'comments': comments,
     }
     return render(request, 'main/recipe.html', context=context)
+
+
+def my_recipes(request):
+    recipes = Recipe.objects.filter(user=request.user).filter(status=True)
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Мои рецепты'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_drafts(request):
+    recipes = Recipe.objects.filter(user=request.user).filter(status=False)
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Черновики'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_liked(request):
+    recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='L')
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Понравившиеся'
+    }
+    return render(request, 'main/my_profile.html', context=context)
+
+
+def my_bookmarks(request):
+    recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='B')
+    context = {
+        'recipes': combine_recipes_and_photos(recipes),
+        'active': 'Закладки'
+    }
+    return render(request, 'main/my_profile.html', context=context)
 
 
 @is_auth
