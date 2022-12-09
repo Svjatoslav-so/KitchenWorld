@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe
+from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product
 
 
 def is_auth(func):
@@ -236,6 +236,27 @@ def my_bookmarks(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
+def my_exceptions(request):
+    exceptions = numerate_exceptions(request.user.author.my_exceptions.all())
+    print(exceptions)
+    context = {
+        'active': 'Исключения',
+        'exceptions': exceptions
+    }
+    return render(request, 'main/my_exceptions.html', context=context)
+
+
+def delete_exception(request):
+    if request.method == "POST":
+        exception_id = request.POST.get("exception_id")
+        product = Product.objects.get(id=exception_id)
+        request.user.author.my_exceptions.remove(product)
+        # exception = request.user.author.my_exceptions.get(id=exception_id)
+        # print(exception)
+
+    return redirect('my_exceptions')
+
+
 @is_auth
 def add_comment(request, recipe_slug):
     if request.method == "POST":
@@ -287,7 +308,7 @@ def stars_on(request):
             like.save()
 
             return HttpResponse("OK")
-        except :
+        except:
             return HttpResponse("FAIL")
     return HttpResponse("FAIL")
 
@@ -310,6 +331,15 @@ def stars_off(request):
             LikedRecipe.objects.get(user=user, recipe=_recipe, liked_type=like_type).delete()
 
             return HttpResponse("OK")
-        except :
+        except:
             return HttpResponse("FAIL")
     return HttpResponse("FAIL")
+
+
+def numerate_exceptions(exceptions):
+    result_list = []
+    i = 1
+    for e in exceptions:
+        result_list.append((i, e))
+        i += 1
+    return result_list
