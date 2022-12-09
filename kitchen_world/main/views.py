@@ -2,7 +2,8 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, Q
+from django.db.models import Max, Q, F
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -10,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Category, Author, RecipeComment
+from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe
 
 
 def is_auth(func):
@@ -153,14 +154,15 @@ def catalog(request):
         if len(categor) != 0 and len(search) != 0:
             recipes = []
             for c in categor:
-                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)) )
+                recipes = merge_cat(recipes, list(
+                    Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)))
         if len(categor) != 0 and len(search) == 0:
             recipes = []
             for c in categor:
-                recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)) )
+                recipes = merge_cat(recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)))
         if len(categor) == 0 and len(search) != 0:
             recipes = []
-            recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)) )
+            recipes = merge_cat(recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)))
         if len(categor) == 0 and len(search) == 0:
             recipes = Recipe.objects.all().order_by(sort)
     else:
@@ -250,8 +252,8 @@ def add_comment(request, recipe_slug):
         _recipe = get_object_or_404(Recipe, slug=recipe_slug)
         max_ = RecipeComment.objects.aggregate(max_index=Max('index', filter=Q(recipe=_recipe), default=0))
         print("max_index: ", max_["max_index"])
-        new_comment = RecipeComment.objects.create(text=text, index=max_["max_index"]+1, recipe=_recipe,
-                                                   user=request.user,  parent_comment=parent_comment)
+        new_comment = RecipeComment.objects.create(text=text, index=max_["max_index"] + 1, recipe=_recipe,
+                                                   user=request.user, parent_comment=parent_comment)
         new_comment.save()
     return redirect("recipe", recipe_slug)
 
@@ -264,3 +266,50 @@ def delete_comment(request, recipe_slug, comment_id):
         if comment.user == request.user:
             comment.delete()
     return redirect("recipe", recipe_slug)
+
+
+def stars_on(request):
+    print("ON_STARS_Request: ", request)
+    if request.method == "GET":
+        try:
+            like_type = request.GET.get("type")
+            recipe_id = request.GET.get("id")
+            print("type: ", like_type, "id: ", recipe_id)
+            user = request.user.author
+            _recipe = Recipe.objects.get(id=recipe_id)
+            if like_type == 'L':
+                _recipe.num_of_stars = F('num_of_stars') + 1
+                _recipe.save(update_fields=["num_of_stars"])
+            else:
+                _recipe.num_of_bookmarks = F('num_of_bookmarks') + 1
+                _recipe.save(update_fields=["num_of_bookmarks"])
+            like = LikedRecipe(user=user, recipe=_recipe, liked_type=like_type)
+            like.save()
+
+            return HttpResponse("OK")
+        except :
+            return HttpResponse("FAIL")
+    return HttpResponse("FAIL")
+
+
+def stars_off(request):
+    print("OFF_STARS_Request: ", request)
+    if request.method == "GET":
+        try:
+            like_type = request.GET.get("type")
+            recipe_id = request.GET.get("id")
+            print("type: ", like_type, "id: ", recipe_id)
+            user = request.user.author
+            _recipe = Recipe.objects.get(id=recipe_id)
+            if like_type == 'L':
+                _recipe.num_of_stars = F('num_of_stars') - 1
+                _recipe.save(update_fields=["num_of_stars"])
+            else:
+                _recipe.num_of_bookmarks = F('num_of_bookmarks') - 1
+                _recipe.save(update_fields=["num_of_bookmarks"])
+            LikedRecipe.objects.get(user=user, recipe=_recipe, liked_type=like_type).delete()
+
+            return HttpResponse("OK")
+        except :
+            return HttpResponse("FAIL")
+    return HttpResponse("FAIL")

@@ -374,11 +374,17 @@ p, span {
   flex-direction: column;
   align-items: center;
 }
+
 .card__stars {
   width: 34px;
   height: 32px;
   background: url("../images/star.svg") no-repeat center center/cover;
 }
+
+.card__stars.active{
+background: url('../images/star-active.svg') no-repeat center center/cover;
+}
+
 .card__comments {
   width: 32px;
   height: 32px;
@@ -389,6 +395,11 @@ p, span {
   height: 32px;
   background: url("../images/bookmark.svg") no-repeat center center/cover;
 }
+.card__bookmarks.active{
+  background: url("../images/bookmark-active.svg") no-repeat center center/cover;
+
+}
+
 .card__statistics-wrapper {
   display: flex;
   align-items: center;
@@ -780,3 +791,19 @@ p, span {
 .show{
     display: block;
 }
+
+/* Vector */
+/*
+box-sizing: border-box;
+
+width: 33.51px;
+height: 32px;
+
+background: #DECF43;
+border: 1px solid #000000;
+
+/* Inside auto layout
+flex: none;
+order: 0;
+flex-grow: 0;
+*/

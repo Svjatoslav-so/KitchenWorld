@@ -37,7 +37,7 @@
 
                     {% for recipe, r_photo in recipes %}
                     <div class="swiper-slide">
-                        {% show_recipe_cart recipe r_photo %}
+                        {% show_recipe_cart recipe r_photo request %}
                     </div>
                     {% endfor %}
 
@@ -51,7 +51,12 @@
     <!--== End New Section ==-->
     {% endfor %}
 
-
-
     <!--== End Main Content ==-->
+{% endblock %}
+
+
+{% block custom_js %}
+{% if request.user.is_authenticated %}
+<script src="{% static 'main/js/recipe_cart.js' %}"></script>
+{% endif %}
 {% endblock %}

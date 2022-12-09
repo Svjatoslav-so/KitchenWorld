@@ -52,7 +52,7 @@
                         <h2 class="section-title">
                             Каталог
                         </h2>
-                        <div class="search" ">
+                        <div class="search" >
                             <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" {% if curr_search != "" %} placeholder="{{curr_search}}" {% else %}placeholder="Найти" {%endif%}id="search-input">
                             <button class="search-btn" type="submit" ></button>
                         </div>
@@ -75,7 +75,7 @@
                         <div class="cards-wrapper">
                             <!-- Insert cards -->
                             {% for recipe, r_photo in recipes %}
-                                {% show_recipe_cart recipe r_photo %}
+                                {% show_recipe_cart recipe r_photo request %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -90,4 +90,10 @@
 
     </section>
 
+{% endblock %}
+
+{% block custom_js %}
+{% if request.user.is_authenticated %}
+<script src="{% static 'main/js/recipe_cart.js' %}"></script>
+{% endif %}
 {% endblock %}

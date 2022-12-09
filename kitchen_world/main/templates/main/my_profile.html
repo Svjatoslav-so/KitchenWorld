@@ -74,7 +74,7 @@
 
                         <!-- Insert cards -->
                         {% for recipe, r_photo in recipes %}
-                        {% show_recipe_cart recipe r_photo %}
+                            {% show_recipe_cart recipe r_photo request %}
                         {% endfor %}
                     </div>
                 </div>
