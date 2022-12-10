@@ -175,6 +175,7 @@ def catalog(request):
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': categor,
+        'categories_hierarchy': Category.get_hierarchy(),
         'selected_sort': sort,
         'curr_search': search,
         'is_data_exist': is_data,

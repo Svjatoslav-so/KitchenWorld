@@ -34,7 +34,7 @@ def is_details_open(selected, hierarchy):
 
 
 @register.simple_tag()
-def show_categories(selected_categories, cat_list=Category.get_hierarchy()):
+def show_categories(selected_categories, cat_list):
     menu = ''
     for i in range(len(cat_list)):
         if i < len(cat_list) - 1 and type(cat_list[i + 1]) is list:

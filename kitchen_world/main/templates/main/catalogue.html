@@ -28,8 +28,9 @@
                             <li class="nav__item">Категории</li>
 
                             {% autoescape off %}
-                            {% show_categories selected_categories %}
+                            {% show_categories selected_categories categories_hierarchy %}
                             {% endautoescape %}
+                        </ul>
                     </div>
                     <div class="menu">
                             <li class="menu__item">

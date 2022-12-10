@@ -134,7 +134,7 @@ class Category(models.Model):
             sub_cat_list = Category.get_hierarchy(r)
             if sub_cat_list:
                 cat_list.append(sub_cat_list)
-        print(cat_list)
+        # print(cat_list)
         return cat_list
 
 
