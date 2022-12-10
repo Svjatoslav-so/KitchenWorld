@@ -111,8 +111,8 @@ class RecipeStep(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name="Название")
-    description = models.TextField(verbose_name="Описание")
-    photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/", verbose_name="Фото")
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
+    photo = models.ImageField(upload_to="photos/category/%Y/%m/%d/", verbose_name="Фото", blank=True, null=True)
     parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True,
                                         verbose_name="Родительская категория")
     slug = models.SlugField(max_length=255, unique=True)
@@ -166,8 +166,8 @@ class Product(models.Model):
     )
 
     name = models.CharField(max_length=255, unique=True, verbose_name="Название")
-    description = models.TextField(verbose_name="Описание")
-    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
+    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото", blank=True, null=True)
     product_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, verbose_name="Тип продукта")
     slug = models.SlugField(max_length=255, unique=True)
     dimension = models.CharField(max_length=5, choices=DIMENSION_TYPES, verbose_name="Размерность", default=GRAM)
@@ -189,8 +189,8 @@ class Product(models.Model):
 
 class ProductType(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name="Название")
-    description = models.TextField(verbose_name="Описание")
-    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото")
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
+    photo = models.ImageField(upload_to="photos/product/%Y/%m/%d/", verbose_name="Фото", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True)
     parent_type = models.ForeignKey('ProductType', on_delete=models.CASCADE, blank=True, null=True,
                                     verbose_name="Родительский тип")
