@@ -21,9 +21,10 @@
                     <div class="menu">
                         <ul class="menu">
                             <button type="submit" class="btn submit active">Фильтровать</button>
-                            <p>
-                                ____________________________
-                            </p>
+                                {% if request.user.is_authenticated %}
+                                    <input  name="allergic" type="checkbox" value="true" {% if allergic_on == "true" %} checked {%endif%}>Учитывать исключения
+                                {%endif%}
+                            <p>__________________________________</p>
                             <li class="nav__item">Категории</li>
 
                             {% autoescape off %}

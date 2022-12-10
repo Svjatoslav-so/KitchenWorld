@@ -144,41 +144,28 @@ def catalog(request):
         sort = request.GET.get("sort", "-num_of_stars")
         search = request.GET.get("search-input", "")
         prod = request.GET.getlist("product", "")
-        print("prod", prod)
-        print(len(categor))
-        print("SEARCH", search)
-        bool = (len(search) != 0)
-        print(bool)
-        print(len(search))
+        isAllergic = request.GET.get("allergic", "false")
 
-        print("SORT", sort)
-        if len(prod) == 0:
-            if len(categor) != 0:
-                recipes = []
-                for c in categor:
-                    recipes = merge_cat( recipes, list(Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)) )
-            if len(categor) == 0:
-                recipes = []
-                recipes = merge_cat( recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)) )
-        else:
-            if len(categor) != 0:
-                recipes = []
-                for c in categor:
-                    rec = Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)
-                    for p in prod:
-                        rec = rec.filter(recipeingredient__product__name=p)
-                        # recipes = merge_cat(recipes, list(Recipe.objects.filter(categories__name=c).filter(title__iregex=search).filter(recipeingredient__product__name=p).order_by(sort)))
-                recipes = merge_cat(recipes, list(rec))
-            if len(categor) == 0:
-                recipes = []
-                rec = Recipe.objects.all().filter(title__iregex=search).order_by(sort)
-                for p in prod:
-                    rec.filter(recipeingredient__product__name=p)
-                recipes = merge_cat(recipes, list(rec))
-        # recipes = recipes.filter(categories__name="Выпечка")
-
-    else:
         recipes = Recipe.objects.all()
+
+        print("allerg", isAllergic)
+
+        if isAllergic=="true":
+            allerg = request.user.author.my_exceptions.all()
+            for al in allerg:
+                recipes = recipes.exclude(recipeingredient__product__name=al)
+        recipes = recipes.filter(title__iregex=search)
+        if len(prod) != 0:
+            for p in prod:
+                recipes = recipes.filter(recipeingredient__product__name=p)
+        recipes = recipes.order_by(sort)
+        if len(categor) != 0:
+            rec = []
+            for c in categor:
+                rec = merge_cat(rec, list(recipes.filter(categories__name=c).order_by(sort)))
+            recipes = rec
+    else:
+        recipes = Recipe.objects.all().order_by("-num_of_stars")
     if len(recipes) == 0:
         is_data = False
     else:
@@ -193,7 +180,8 @@ def catalog(request):
         'is_data_exist': is_data,
         'prod_types': ProductType.objects.all(),
         'product': Product.objects.all(),
-        'selected_products': prod
+        'selected_products': prod,
+        'allergic_on': isAllergic
     }
     return render(request, 'main/catalogue.html', context=context)
 
