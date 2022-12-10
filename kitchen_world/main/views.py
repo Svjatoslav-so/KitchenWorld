@@ -212,6 +212,7 @@ def recipe(request, recipe_slug):
     return render(request, 'main/recipe.html', context=context)
 
 
+@is_auth
 def my_recipes(request):
     recipes = Recipe.objects.filter(user=request.user).filter(status=True)
     context = {
@@ -221,6 +222,7 @@ def my_recipes(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
+@is_auth
 def my_drafts(request):
     recipes = Recipe.objects.filter(user=request.user).filter(status=False)
     context = {
@@ -230,6 +232,7 @@ def my_drafts(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
+@is_auth
 def my_liked(request):
     recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='L')
     context = {
@@ -239,6 +242,7 @@ def my_liked(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
+@is_auth
 def my_bookmarks(request):
     recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='B')
     context = {
@@ -257,6 +261,7 @@ def numerate_exceptions(exceptions):
     return result_list
 
 
+@is_auth
 def my_exceptions(request):
     exceptions = numerate_exceptions(request.user.author.my_exceptions.all())
     print(exceptions)
@@ -267,6 +272,7 @@ def my_exceptions(request):
     return render(request, 'main/my_exceptions.html', context=context)
 
 
+@is_auth
 def delete_exception(request):
     if request.method == "POST":
         exception_id = request.POST.get("exception_id")
@@ -310,6 +316,7 @@ def delete_comment(request, recipe_slug, comment_id):
     return redirect("recipe", recipe_slug)
 
 
+@is_auth
 def stars_on(request):
     print("ON_STARS_Request: ", request)
     if request.method == "GET":
@@ -334,6 +341,7 @@ def stars_on(request):
     return HttpResponse("FAIL")
 
 
+@is_auth
 def stars_off(request):
     print("OFF_STARS_Request: ", request)
     if request.method == "GET":

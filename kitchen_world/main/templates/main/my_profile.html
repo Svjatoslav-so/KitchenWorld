@@ -86,3 +86,13 @@
 
     </section>
 {% endblock %}
+
+{% block custom_js %}
+    {% if active == 'Мои рецепты' or active == 'Черновики' %}
+        <script src="{% static 'main/js/recipe_cart.js' %}"></script>
+    {% elif active == 'Понравившиеся' %}
+        <script src="{% static 'main/js/liked_recipe_cart.js' %}"></script>
+    {% elif active == 'Закладки' %}
+        <script src="{% static 'main/js/bookmarked_recipe_cart.js' %}"></script>
+    {% endif %}
+{% endblock %}

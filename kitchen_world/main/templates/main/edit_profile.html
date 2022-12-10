@@ -11,6 +11,11 @@
 
 {% block main_content %}
     <section class="section profile-section">
+        <div class="content__info">
+            <h2 class="section-title">
+                Мой профиль
+            </h2>
+        </div>
         <div class="profile__wrapper">
             <img src="{% if request.user.author.photo %} {{ request.user.author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
             <form action="{% url 'edit_profile'%}" class="profile__form" enctype="multipart/form-data" method="post">
