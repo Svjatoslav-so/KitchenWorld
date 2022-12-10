@@ -14,7 +14,7 @@ def show_recipe_cart(recipe, r_photo, request):
         liked_recipe = request.user.author.likedrecipe_set.filter(recipe=recipe)
         is_liked = liked_recipe.filter(liked_type="L").count() > 0
         is_bookmark = liked_recipe.filter(liked_type="B").count() > 0
-    return {"recipe": recipe, "r_photo": r_photo, "is_liked": is_liked, "is_bookmark": is_bookmark}
+    return {"request": request, "recipe": recipe, "r_photo": r_photo, "is_liked": is_liked, "is_bookmark": is_bookmark}
 
 
 def is_details_open(selected, hierarchy):

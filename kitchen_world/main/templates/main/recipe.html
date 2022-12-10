@@ -47,17 +47,17 @@
                     <div class="card__info recipe-info__info">
                         <!-- Statistic -->
                         <div class="card__interaction-wrapper">
-                            <div class="card__interaction">
-                                <button type="button" class="card__stars card__stars_light"></button>
-                                {{ recipe.num_of_stars }}
+                            <div class="card__interaction" {% if request.user.is_authenticated %}name="L_{{recipe.id}}" {% if is_liked %}onclick="Like('/stars_off/', 'L_{{recipe.id}}')"{% else %}onclick="Like('/stars_on/', 'L_{{recipe.id}}')"{% endif %}{% endif %}>
+                                <button type="button" class="card__stars card__stars_light {% if is_liked%}active{% endif %}"></button>
+                                <p>{{ recipe.num_of_stars }}</p>
                             </div>
                             <div class="card__interaction">
                                 <button type="button" class="card__comments card__comments_light"></button>
                                 {{ recipe.num_of_comments }}
                             </div>
-                            <div class="card__interaction">
-                                <button type="button" class="card__bookmarks card__bookmarks_light"></button>
-                                {{ recipe.num_of_bookmarks }}
+                            <div class="card__interaction" {% if request.user.is_authenticated %}name="B_{{recipe.id}}" {% if is_bookmark %}onclick="Like('/stars_off/', 'B_{{recipe.id}}')"{% else %}onclick="Like('/stars_on/', 'B_{{recipe.id}}')"{% endif %}{% endif %}>
+                                <button type="button" class="card__bookmarks card__bookmarks_light {% if is_bookmark %}active{% endif %}"></button>
+                                <p>{{ recipe.num_of_bookmarks }}</p>
                             </div>
                         </div>
                         <div class="card__statistics-wrapper">
@@ -231,4 +231,9 @@
 
 {% endblock %}
 
-{% block custom_js %}<script src="{% static 'main/js/comment.js' %}"></script>{% endblock %}
+{% block custom_js %}
+<script src="{% static 'main/js/comment.js' %}"></script>
+{% if request.user.is_authenticated %}
+<script src="{% static 'main/js/recipe_cart.js' %}"></script>
+{% endif %}
+{% endblock %}

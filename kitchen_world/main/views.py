@@ -196,9 +196,17 @@ def merge_cat(cat, cat_new):
 def recipe(request, recipe_slug):
     recp = get_object_or_404(Recipe, slug=recipe_slug)
     comments = RecipeComment.objects.filter(recipe=recp).filter(parent_comment=None)
+    is_liked = False
+    is_bookmark = False
+    if request.user.is_authenticated:
+        liked_recipe = request.user.author.likedrecipe_set.filter(recipe=recp)
+        is_liked = liked_recipe.filter(liked_type="L").count() > 0
+        is_bookmark = liked_recipe.filter(liked_type="B").count() > 0
     context = {
         'recipe': recp,
         'comments': comments,
+        "is_liked": is_liked,
+        "is_bookmark": is_bookmark
     }
     return render(request, 'main/recipe.html', context=context)
 
@@ -237,6 +245,15 @@ def my_bookmarks(request):
         'active': 'Закладки'
     }
     return render(request, 'main/my_profile.html', context=context)
+
+
+def numerate_exceptions(exceptions):
+    result_list = []
+    i = 1
+    for e in exceptions:
+        result_list.append((i, e))
+        i += 1
+    return result_list
 
 
 def my_exceptions(request):
@@ -338,11 +355,3 @@ def stars_off(request):
             return HttpResponse("FAIL")
     return HttpResponse("FAIL")
 
-
-def numerate_exceptions(exceptions):
-    result_list = []
-    i = 1
-    for e in exceptions:
-        result_list.append((i, e))
-        i += 1
-    return result_list

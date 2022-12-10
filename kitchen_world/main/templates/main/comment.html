@@ -7,7 +7,7 @@
                 <span class="recipe-comment__date">{{ comment.date_of_creation }}</span>
             </div>
             <div class="recipe-comment__action">
-                <button class="comment_action-btn" name="answer_comment_btn" id="{{ comment.pk }}">Ответить</button>
+                {% if request.user.is_authenticated %}<button class="comment_action-btn" name="answer_comment_btn" id="{{ comment.pk }}">Ответить</button>{% endif %}
                 {% if comment.user == request.user %}
                 <form action="{{ comment.recipe.slug }}/delete-comment/{{ comment.pk }}" method="post">
                     {% csrf_token %}

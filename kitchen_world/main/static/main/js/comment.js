@@ -30,11 +30,13 @@ for(let btn of answer_btns){
 }
 
 cancel_btn = document.getElementById("cancel_btn")
-cancel_btn.onclick = function(){
-    div_reply.classList.remove("show")
-    div_reply.classList.add("hide")
-    for (let input of document.getElementsByName("parent_comment_id")){
-        form.removeChild(input)
+if(cancel_btn){
+    cancel_btn.onclick = function(){
+        div_reply.classList.remove("show")
+        div_reply.classList.add("hide")
+        for (let input of document.getElementsByName("parent_comment_id")){
+            form.removeChild(input)
+        }
     }
 }
 
