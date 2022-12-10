@@ -35,7 +35,7 @@
                         </li>
                         <li class="menu__item{% if active == 'Исключения' %} active {%endif%}">
                             <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
-                            <a href="#">Исключения</a>
+                            <a href="{% url 'my_exceptions' %}">Исключения</a>
                         </li>
                         <li class="menu__item{% if active == 'Понравившиеся' %} active {%endif%}">
                             <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
@@ -45,24 +45,25 @@
                             <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
                             <a href="{% url 'my_bookmarks' %}">Закладки</a>
                         </li>
-                        <li class="menu__item{% if active == 'Мои авторы' %} active {%endif%}">
-                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
-                            <a href="#">Мои авторы</a>
-                        </li>
+<!--                        <li class="menu__item{% if active == 'Мои авторы' %} active {%endif%}">-->
+<!--                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Мои авторы</a>-->
+<!--                        </li>-->
                     </ul>
                 </div>
                 <div class="content">
+                    {% block my_profile_content %}
                     <div class="content__info">
                         <h2 class="section-title">
                             {{active}}
                         </h2>
-                        <div class="order">
-                            <p class="order-title">Сортировать по:</p>
-                            <select name="order" id="order-list" class="order__list">
-                                <option class="order__item" value="date">Дате</option>
-                                <option class="order__item" value="stars">Популярности</option>
-                            </select>
-                        </div>
+<!--                        <div class="order">-->
+<!--                            <p class="order-title">Сортировать по:</p>-->
+<!--                            <select name="order" id="order-list" class="order__list">-->
+<!--                                <option class="order__item" value="date">Дате</option>-->
+<!--                                <option class="order__item" value="stars">Популярности</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
                     </div>
                     <div class="cards-wrapper">
                         {% if active == 'Мои рецепты' or active == 'Черновики'%}
@@ -74,9 +75,10 @@
 
                         <!-- Insert cards -->
                         {% for recipe, r_photo in recipes %}
-                        {% show_recipe_cart recipe r_photo %}
+                            {% show_recipe_cart recipe r_photo request %}
                         {% endfor %}
                     </div>
+                    {% endblock %}
                 </div>
             </div>
         </div>

@@ -83,7 +83,7 @@
                         <div class="cards-wrapper">
                             <!-- Insert cards -->
                             {% for recipe, r_photo in recipes %}
-                                {% show_recipe_cart recipe r_photo %}
+                                {% show_recipe_cart recipe r_photo request %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -98,4 +98,10 @@
 
     </section>
 
+{% endblock %}
+
+{% block custom_js %}
+{% if request.user.is_authenticated %}
+<script src="{% static 'main/js/recipe_cart.js' %}"></script>
+{% endif %}
 {% endblock %}

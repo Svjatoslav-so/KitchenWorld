@@ -1,0 +1,33 @@
+{% extends "main/my_profile.html" %}
+
+{% block my_profile_content %}
+
+<div class="my_exceptions">
+    <div class="content__info">
+        <h2 class="section-title">
+            Мои {{active}}
+        </h2>
+    </div>
+    <ul class="exceptions__list">
+        {% for i, exception in exceptions %}
+
+        <li class="exceptions__item">
+            <div>
+                <div class="ingredient-number">{{ i }}</div>
+                <p>
+                    {{exception}}
+                </p>
+            </div>
+            <form action="{% url 'delete_exception'%}" class="delete_exception" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="exception_id" value="{{exception.id}}">
+                <button type="submit" class="delete_exception_btn">
+
+                </button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

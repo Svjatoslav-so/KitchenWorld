@@ -16,17 +16,17 @@
 
     <div class="card__info">
         <div class="card__interaction-wrapper">
-            <div class="card__interaction">
-                <button class="card__stars"></button>
-                {{ recipe.num_of_stars }}
+            <div class="card__interaction" name="L_{{recipe.id}}" {% if is_liked %}onclick="Like('/stars_off/', 'L_{{recipe.id}}')"{% else %}onclick="Like('/stars_on/', 'L_{{recipe.id}}')"{% endif %} >
+                <button class="card__stars {% if is_liked%}active{% endif %}"></button>
+                <p>{{ recipe.num_of_stars }}</p>
             </div>
             <div class="card__interaction">
                 <button class="card__comments"></button>
                 {{ recipe.num_of_comments }}
             </div>
-            <div class="card__interaction">
-                <button class="card__bookmarks"></button>
-                {{ recipe.num_of_bookmarks }}
+            <div class="card__interaction" name="B_{{recipe.id}}" {% if is_bookmark %}onclick="Like('/stars_off/', 'B_{{recipe.id}}')"{% else %}onclick="Like('/stars_on/', 'B_{{recipe.id}}')"{% endif %}>
+                <button class="card__bookmarks {% if is_bookmark %}active{% endif %}"></button>
+                <p>{{ recipe.num_of_bookmarks }}</p>
             </div>
         </div>
         <div class="card__statistics-wrapper">

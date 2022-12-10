@@ -1,13 +1,20 @@
 from django import template
+from django.template.loader import render_to_string
 
-from ..models import Category
+from ..models import Category, RecipeComment
 
 register = template.Library()
 
 
 @register.inclusion_tag('main/recipe_cart.html')
-def show_recipe_cart(recipe, r_photo):
-    return {"recipe": recipe, "r_photo": r_photo}
+def show_recipe_cart(recipe, r_photo, request):
+    is_liked = False
+    is_bookmark = False
+    if request.user.is_authenticated:
+        liked_recipe = request.user.author.likedrecipe_set.filter(recipe=recipe)
+        is_liked = liked_recipe.filter(liked_type="L").count() > 0
+        is_bookmark = liked_recipe.filter(liked_type="B").count() > 0
+    return {"recipe": recipe, "r_photo": r_photo, "is_liked": is_liked, "is_bookmark": is_bookmark}
 
 
 def is_details_open(selected, hierarchy):
@@ -55,3 +62,21 @@ def show_categories(selected_categories, cat_list=Category.get_hierarchy()):
                     f'</li>'
     # print(f'\nStart\n{menu}\nEnd\n')
     return menu
+
+
+@register.inclusion_tag('main/comment.html')
+def show_comment(comment):
+    return {"comment": comment}
+
+
+@register.simple_tag()
+def show_all_comments(comments, request):
+    html = ""
+    for comment in comments:
+        html += f'<!-- Comment start -->\n{ render_to_string("main/comment.html", {"comment": comment}, request) }' \
+                f'\n <div class="recipe-comment-children">'
+        comment_children = RecipeComment.objects.filter(parent_comment=comment)
+        html += show_all_comments(comment_children, request)
+        html += '\n</div>\n<!-- Comment end -->'
+    return html
+
