@@ -17,42 +17,50 @@
     <section class="section recipes">
         <div class="recipes-container ">
             <div class="recipes-wrapper">
-                <div class="menu">
-                    <ul class="menu">
-                        <form method="get" id="cat_filt">
+                <form method="get" id="cat_filt">
+                    <div class="menu">
+                        <ul class="menu">
                             <button type="submit" class="btn submit active">Фильтровать</button>
                             <p>
                                 ____________________________
                             </p>
-<!--                            {% for cat in category %}-->
-<!--                            <li class="menu__item">-->
-<!--                                <details>-->
-<!--                                    <summary>-->
-<!--                                        <input  name="category" type="checkbox" value="{{cat.name}}" {% if cat.name in selected_categories %} checked {%endif%} >{{cat.name}}-->
-<!--                                    </summary>-->
-<!--                                    {% for s_cat in sub_category %}-->
-<!--                                        {% if s_cat.parent_category == cat %}-->
-<!--                                            <li class="menu__item">-->
-<!--                                                <input  name="category" type="checkbox" value="{{s_cat.name}}" {% if s_cat.name in selected_categories %} checked {%endif%} >{{s_cat.name}}-->
-<!--                                            </li>-->
-<!--                                        {%endif%}-->
-<!--                                    {% endfor %}-->
-<!--                                </details>-->
-<!--                            </li>-->
-<!--                            {% endfor %}-->
+                            <li class="nav__item">Категории</li>
 
                             {% autoescape off %}
                             {% show_categories selected_categories %}
                             {% endautoescape %}
-                        </form>
-                    </ul>
-                </div>
+                    </div>
+                    <div class="menu">
+                            <li class="menu__item">
+                                <li class="nav__item">Ингредиенты</li>
+                                <li class="menu__item">
+                                    {% for prod_tp in prod_types %}
+                                        <li class="menu__item">
+                                            <details>
+                                                <summary>
+                                                        <input  name="category" type="checkbox" value="{{prod_tp.name}}" >{{prod_tp.name}}
+                                                </summary>
+                                                {% for prod in product %}
+                                                    {% if prod.product_type == prod_tp %}
+                                                        <li class="menu__item">
+                                                            <input  name="product" type="checkbox" value="{{prod.name}}" {% if prod.name in selected_products %} checked {%endif%} >{{prod.name}}
+                                                        </li>
+                                                    {%endif%}
+                                                {% endfor %}
+                                            </details>
+                                        </li>
+                                    {% endfor %}
+                                </li>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
                 <div class="content">
                     <div class="content__info">
                         <h2 class="section-title">
                             Каталог
                         </h2>
-                        <div class="search" ">
+                        <div class="search">
                             <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" {% if curr_search != "" %} placeholder="{{curr_search}}" {% else %}placeholder="Найти" {%endif%}id="search-input">
                             <button class="search-btn" type="submit" ></button>
                         </div>

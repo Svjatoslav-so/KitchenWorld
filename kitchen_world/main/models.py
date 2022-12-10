@@ -66,6 +66,7 @@ class Recipe(models.Model):
     num_of_bookmarks = models.PositiveIntegerField(default=0, verbose_name="Закладок")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
     categories = models.ManyToManyField('Category', verbose_name="Категория")
+    ingredients = models.ManyToManyField('Product', verbose_name="Ингредиенты")
 
     class Meta:
         verbose_name = 'рецепт'
