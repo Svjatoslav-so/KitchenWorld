@@ -39,12 +39,18 @@
                                         <li class="menu__item">
                                             <details>
                                                 <summary>
-                                                        <input  name="category" type="checkbox" value="{{prod_tp.name}}" >{{prod_tp.name}}
+                                                        <li class="menu__item">{{prod_tp.name}}</li>
                                                 </summary>
                                                 {% for prod in product %}
                                                     {% if prod.product_type == prod_tp %}
-                                                        <li class="menu__item">
-                                                            <input  name="product" type="checkbox" value="{{prod.name}}" {% if prod.name in selected_products %} checked {%endif%} >{{prod.name}}
+                                                        <li class="switch-item">
+                                                            <label class="switch">
+                                                                <input  name="product" type="checkbox" value="{{prod.name}}" {% if prod.name in selected_products %} checked {%endif%} >
+                                                                <span class="switch__slider round">
+    <!--                                                                {{prod.name}}-->
+                                                                </span>
+                                                            </label>
+                                                            {{prod.name}}
                                                         </li>
                                                     {%endif%}
                                                 {% endfor %}
