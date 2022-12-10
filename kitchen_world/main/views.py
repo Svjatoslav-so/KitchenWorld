@@ -303,6 +303,8 @@ def add_comment(request, recipe_slug):
         new_comment = RecipeComment.objects.create(text=text, index=max_["max_index"] + 1, recipe=_recipe,
                                                    user=request.user, parent_comment=parent_comment)
         new_comment.save()
+        _recipe.num_of_comments = F('num_of_comments') + 1
+        _recipe.save(update_fields=["num_of_comments"])
     return redirect("recipe", recipe_slug)
 
 
@@ -312,7 +314,12 @@ def delete_comment(request, recipe_slug, comment_id):
         print(request.POST)
         comment = get_object_or_404(RecipeComment, pk=comment_id)
         if comment.user == request.user:
+            comment_children = comment.get_all_comment_children()
             comment.delete()
+            # print(comment_children)
+            _recipe = get_object_or_404(Recipe, slug=recipe_slug)
+            _recipe.num_of_comments = F('num_of_comments') - 1 - len(comment_children)
+            _recipe.save(update_fields=["num_of_comments"])
     return redirect("recipe", recipe_slug)
 
 

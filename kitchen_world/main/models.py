@@ -216,3 +216,12 @@ class RecipeComment(models.Model):
 
     def __str__(self):
         return f"{self.index}. {self.text[:15]} - {self.user}"
+
+    def get_all_comment_children(self):
+        children = []
+        comment_children = RecipeComment.objects.filter(parent_comment=RecipeComment.objects.get(id=self.id))
+        for child in comment_children:
+            children.append(child)
+            child_children = child.get_all_comment_children()
+            children.extend(child_children)
+        return children
