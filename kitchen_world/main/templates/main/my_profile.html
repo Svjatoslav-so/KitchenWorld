@@ -1,0 +1,88 @@
+    {% extends "main/base_generic.html" %}
+    {%load static%}
+    {% load main_tags %}
+    {% block title %} <title>Профиль</title> {% endblock %}
+    {% block meta %}
+    <meta name="description" content="Мои рецепты">
+    <meta name="keywords" content="рецепт">
+    {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'main/css/my_profile_style.css' %}">
+    {% endblock %}
+
+
+    {% block main_content %}
+
+    <section class="section recipes">
+        <div class="recipes-container ">
+            <div class="recipes-wrapper">
+                <div class="menu">
+                    <img src="{%if request.user.author.photo%} {{request.user.author.photo.url}}
+                     {% else %} {%static 'main/images/user.png' %} {% endif %}" alt="avatar" class="user-avatar">
+                    <ul class="menu__list">
+                        <li class="menu__item{% if active == 'Профиль' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'edit_profile' %}">Профиль</a>
+                        </li>
+                        <li class="menu__item {% if active == 'Мои рецепты' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'my_recipes' %}">Мои рецепты</a>
+                        </li>
+                        <li class="menu__item{% if active == 'Черновики' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'my_drafts' %}">Черновики</a>
+                        </li>
+                        <li class="menu__item{% if active == 'Исключения' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'my_exceptions' %}">Исключения</a>
+                        </li>
+                        <li class="menu__item{% if active == 'Понравившиеся' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'my_liked' %}">Понравившиеся</a>
+                        </li>
+                        <li class="menu__item{% if active == 'Закладки' %} active {%endif%}">
+                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">
+                            <a href="{% url 'my_bookmarks' %}">Закладки</a>
+                        </li>
+<!--                        <li class="menu__item{% if active == 'Мои авторы' %} active {%endif%}">-->
+<!--                            <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">-->
+<!--                            <a href="#">Мои авторы</a>-->
+<!--                        </li>-->
+                    </ul>
+                </div>
+                <div class="content">
+                    {% block my_profile_content %}
+                    <div class="content__info">
+                        <h2 class="section-title">
+                            {{active}}
+                        </h2>
+<!--                        <div class="order">-->
+<!--                            <p class="order-title">Сортировать по:</p>-->
+<!--                            <select name="order" id="order-list" class="order__list">-->
+<!--                                <option class="order__item" value="date">Дате</option>-->
+<!--                                <option class="order__item" value="stars">Популярности</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+                    </div>
+                    <div class="cards-wrapper">
+                        {% if active == 'Мои рецепты' or active == 'Черновики'%}
+                        <a href="#" class="add-recipe">
+                            <div class="add-recipe__plus-img"></div>
+                            <h3 class="add-recipe__title">Добавить рецепт</h3>
+                        </a>
+                        {% endif %}
+
+                        <!-- Insert cards -->
+                        {% for recipe, r_photo in recipes %}
+                            {% show_recipe_cart recipe r_photo request %}
+                        {% endfor %}
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        
+
+    </section>
+{% endblock %}
