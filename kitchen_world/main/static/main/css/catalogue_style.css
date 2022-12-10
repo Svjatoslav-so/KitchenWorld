@@ -272,3 +272,51 @@ summary:focus {
   outline:0;
   box-shadow: inset 0 0 1px rgba(0,0,0,0.3), inset 0 0 2px rgba(0,0,0,0.3);
 }
+
+.switch {
+  flex-shrink: 0;
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 20px;
+}
+.switch input {
+  display: none;
+}
+.switch input:checked + .switch__slider {
+  background-color: #48B705;
+}
+.switch input:focus + .switch__slider {
+  box-shadow: 0 0 1px #48B705;
+}
+.switch input:checked + .switch__slider:before {
+  transform: translateX(10px);
+}
+.switch__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border: 1px solid #48B705;
+  border-radius: 25px;
+}
+.switch__slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+}
+.switch__slider.round {
+  border-radius: 34px;
+}
+.switch__slider.round:before {
+  border-radius: 50%;
+}
