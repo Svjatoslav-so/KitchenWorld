@@ -2,6 +2,7 @@
 {% block title %} <title>Рецепт</title> {% endblock %}
 
 {% load static %}
+{% load main_tags %}
 
 {% block main_content %}
     <!-- Recipe title start -->
@@ -107,8 +108,7 @@
                                     id="total-weight">
                                 <select name="total-weight-units" id="total-weight-units"
                                     class="input small-input small-select">
-                                    <option size="1" value="1000">кг</option>
-                                    <option size="2" value="1">г</option>
+                                    <option value="{{ recipe.dimension }}" selected >{{ recipe.get_dimension_display }}</option>
                                 </select>
                             </div>
                         </div>
@@ -131,8 +131,7 @@
                                 <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
                                 <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}">
                                 <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
+                                    <option value="{{ ingredient.product.dimension }}" selected >{{ ingredient.product.get_dimension_display }}</option>
                                 </select>
                             </div>
                             {% for analog in ingredient.recipeingredient_set.all %}
@@ -200,4 +199,36 @@
     </section>
     <!-- Steps end -->
 
+    <!-- Comments start -->
+        <section class="section recipe-comments" id="recipe-comments">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                     <h2 class="section-title section-title_left">
+                        Комментарии
+                    </h2>
+                    <div class="recipe-comments-wrapper">
+                        {% autoescape off %}
+                        {% show_all_comments comments request %}
+                        {% endautoescape %}
+                    </div>
+                    {% if request.user.is_authenticated %}
+                    <div class="recipe-add-comment">
+                        <div class="recipe-comment-reply hide" id="comment-reply-message">
+                            <p>Ответ на: </p>
+                            <button class="comment_action-btn" id="cancel_btn">Отменить</button>
+                        </div>
+                        <form class="btn-input-block" action="{{ recipe.slug }}/add-comment/" method="post" id="sent_comment">
+                            {% csrf_token %}
+                                <input class="input btn-input" type="text" required name="new_comment" placeholder="Ваш отзыв" id="new-comment-input">
+                                <button class="btn active in-input-btn" type="submit">Отправить</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    <!-- Comments end -->
+
 {% endblock %}
+
+{% block custom_js %}<script src="{% static 'main/js/comment.js' %}"></script>{% endblock %}

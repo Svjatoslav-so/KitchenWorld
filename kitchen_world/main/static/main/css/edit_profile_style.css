@@ -170,13 +170,13 @@ p, span {
   display: block;
 }
 
-.profile {
+/*.profile {
   display: none;
   border-radius: 50px;
   width: 61px;
   height: 61px;
   background: url("../images/user.png") no-repeat center center/contain;
-}
+}*/
 
 .profile.active {
   display: block;
