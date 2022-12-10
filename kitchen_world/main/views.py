@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
-from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product
+from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType
 
 
 def is_auth(func):
@@ -143,30 +143,29 @@ def catalog(request):
         categor = request.GET.getlist("category")
         sort = request.GET.get("sort", "-num_of_stars")
         search = request.GET.get("search-input", "")
-        print("CATEGOR", categor)
-        print(len(categor))
-        print("SEARCH", search)
-        bool = (len(search) != 0)
-        print(bool)
-        print(len(search))
+        prod = request.GET.getlist("product", "")
+        isAllergic = request.GET.get("allergic", "false")
 
-        print("SORT", sort)
-        if len(categor) != 0 and len(search) != 0:
-            recipes = []
-            for c in categor:
-                recipes = merge_cat(recipes, list(
-                    Recipe.objects.filter(categories__name=c).filter(title__iregex=search).order_by(sort)))
-        if len(categor) != 0 and len(search) == 0:
-            recipes = []
-            for c in categor:
-                recipes = merge_cat(recipes, list(Recipe.objects.filter(categories__name=c).order_by(sort)))
-        if len(categor) == 0 and len(search) != 0:
-            recipes = []
-            recipes = merge_cat(recipes, list(Recipe.objects.all().filter(title__iregex=search).order_by(sort)))
-        if len(categor) == 0 and len(search) == 0:
-            recipes = Recipe.objects.all().order_by(sort)
-    else:
         recipes = Recipe.objects.all()
+
+        print("allerg", isAllergic)
+
+        if isAllergic=="true":
+            allerg = request.user.author.my_exceptions.all()
+            for al in allerg:
+                recipes = recipes.exclude(recipeingredient__product__name=al)
+        recipes = recipes.filter(title__iregex=search)
+        if len(prod) != 0:
+            for p in prod:
+                recipes = recipes.filter(recipeingredient__product__name=p)
+        recipes = recipes.order_by(sort)
+        if len(categor) != 0:
+            rec = []
+            for c in categor:
+                rec = merge_cat(rec, list(recipes.filter(categories__name=c).order_by(sort)))
+            recipes = rec
+    else:
+        recipes = Recipe.objects.all().order_by("-num_of_stars")
     if len(recipes) == 0:
         is_data = False
     else:
@@ -178,7 +177,11 @@ def catalog(request):
         'selected_categories': categor,
         'selected_sort': sort,
         'curr_search': search,
-        'is_data_exist': is_data
+        'is_data_exist': is_data,
+        'prod_types': ProductType.objects.all(),
+        'product': Product.objects.all(),
+        'selected_products': prod,
+        'allergic_on': isAllergic
     }
     return render(request, 'main/catalogue.html', context=context)
 
