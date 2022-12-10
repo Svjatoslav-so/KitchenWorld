@@ -43,7 +43,7 @@
                                                 </summary>
                                                 {% for prod in product %}
                                                     {% if prod.product_type == prod_tp %}
-                                                        <li class="switch">
+                                                        <li class="switch-item">
                                                             <label class="switch">
                                                                 <input  name="product" type="checkbox" value="{{prod.name}}" {% if prod.name in selected_products %} checked {%endif%} >
                                                                 <span class="switch__slider round">
