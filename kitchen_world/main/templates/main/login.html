@@ -16,6 +16,7 @@
 
         <form class="login-form" action="{% url action %}" method="post">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
             <div class="btn-switch-wrapper">
                 <a href="{% url 'login' %}" class="login-switch {% if action == 'login' %}active{% endif %}">Войти</a>
                 <a href="{% url 'registration' %}" class="reg-switch {% if action == 'registration' %}active{% endif %}">Зарегистрироваться</a>

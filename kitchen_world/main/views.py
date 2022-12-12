@@ -1,4 +1,5 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
@@ -24,16 +25,6 @@ def slugify(s):
     Overriding django slugify that allows to use russian words as well.
     """
     return django_slugify(''.join(alphabet.get(w, w) for w in s.lower()))
-
-
-def is_auth(func):
-    def check(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return func(request, *args, **kwargs)
-        else:
-            return redirect('login')
-
-    return check
 
 
 def combine_recipes_and_photos(recipes):
@@ -68,12 +59,13 @@ def index(request):
 class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'main/login.html'
+    next_page = 'home'
     extra_context = {
         'action': 'login'
     }
 
-    def get_success_url(self):
-        return reverse_lazy('home')
+    # def get_success_url(self):
+    #     return reverse_lazy('home')
 
 
 def registration(request):
@@ -111,7 +103,7 @@ def profile(request, author_slug):
     return render(request, 'main/profile.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def edit_profile(request):
     if request.method == "POST":
         print("POST", request.POST)
@@ -238,7 +230,7 @@ def recipe(request, recipe_slug):
     return render(request, 'main/recipe.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def my_recipes(request):
     recipes = Recipe.objects.filter(user=request.user).filter(status=True)
     context = {
@@ -248,7 +240,7 @@ def my_recipes(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def my_drafts(request):
     recipes = Recipe.objects.filter(user=request.user).filter(status=False)
     context = {
@@ -258,7 +250,7 @@ def my_drafts(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def my_liked(request):
     recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='L')
     context = {
@@ -268,7 +260,7 @@ def my_liked(request):
     return render(request, 'main/my_profile.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def my_bookmarks(request):
     recipes = Recipe.objects.filter(likedrecipe__user=request.user.author, likedrecipe__liked_type='B')
     context = {
@@ -287,7 +279,7 @@ def numerate_exceptions(exceptions):
     return result_list
 
 
-@is_auth
+@login_required(login_url='login')
 def my_exceptions(request):
     exceptions = numerate_exceptions(request.user.author.my_exceptions.all())
     print(exceptions)
@@ -298,7 +290,7 @@ def my_exceptions(request):
     return render(request, 'main/my_exceptions.html', context=context)
 
 
-@is_auth
+@login_required(login_url='login')
 def delete_exception(request):
     if request.method == "POST":
         exception_id = request.POST.get("exception_id")
@@ -310,7 +302,7 @@ def delete_exception(request):
     return redirect('my_exceptions')
 
 
-@is_auth
+@login_required(login_url='login')
 def add_comment(request, recipe_slug):
     if request.method == "POST":
         print(request.POST)
@@ -334,7 +326,7 @@ def add_comment(request, recipe_slug):
     return redirect("recipe", recipe_slug)
 
 
-@is_auth
+@login_required(login_url='login')
 def delete_comment(request, recipe_slug, comment_id):
     if request.method == "POST":
         print(request.POST)
@@ -349,7 +341,7 @@ def delete_comment(request, recipe_slug, comment_id):
     return redirect("recipe", recipe_slug)
 
 
-@is_auth
+@login_required(login_url='login')
 def stars_on(request):
     print("ON_STARS_Request: ", request)
     if request.method == "GET":
@@ -374,7 +366,7 @@ def stars_on(request):
     return HttpResponse("FAIL")
 
 
-@is_auth
+@login_required(login_url='login')
 def stars_off(request):
     print("OFF_STARS_Request: ", request)
     if request.method == "GET":
