@@ -92,23 +92,23 @@
                 <div class="recipe-desc-inner">
 
                     <!-- Ingredients start -->
-                    <form action="#" class="ingredients">
+                    <form action="#" class="ingredients" name="ingredients">
                         <div class="wrapper-flat">
                             <h2 class="section-title section-title_left">Ингредиенты</h2>
                             <div class="total-wrapper">
                                 <!-- Number of servings -->
                                 <input size="3" type="text" value="{{recipe.num_of_servings}}" name="c" class="input small-input"
-                                    id="servings">
+                                    id="servings" data-original_quantity="{{ recipe.num_of_servings }}">
                                 <label for="servings">Порций</label>
                                 <!-- kcal -->
-                                <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input" id="kcal">
+                                <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input total-input" id="kcal" data-original_quantity="{{ recipe.calories }}" >
                                 <label for="kcal">ккал</label>
                                 <!-- weight -->
-                                <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input"
-                                    id="total-weight">
+                                <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input total-input"
+                                    id="total-weight" data-original_quantity="{{ recipe.finished_product_weight }}">
                                 <select name="total-weight-units" id="total-weight-units"
                                     class="input small-input small-select">
-                                    <option value="{{ recipe.dimension }}" selected >{{ recipe.get_dimension_display }}</option>
+                                    <option value="{{ recipe.dimension }}" name="{{ recipe.dimension }}" selected >{{ recipe.get_dimension_display }}</option>
                                 </select>
                             </div>
                         </div>
@@ -129,9 +129,9 @@
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
                                 <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="{{ ingredient.product.dimension }}" selected >{{ ingredient.product.get_dimension_display }}</option>
+                                <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}" data-original_quantity="{{ ingredient.quantity }}">
+                                <select name="id-units" id="{{ ingredient.id }}-{{ ingredient.product.dimension }}" class=" input small-input small-select">
+                                    <option value="{{ ingredient.product.dimension }}" name="{{ ingredient.product.dimension }}" selected >{{ ingredient.product.get_dimension_display }}</option>
                                 </select>
                             </div>
                             {% for analog in ingredient.recipeingredient_set.all %}
@@ -146,10 +146,9 @@
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
                                 <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="{{ analog.quantity }}" name="id" class="input small-input" id="{{ analog.id }}">
-                                <select name="id-units" id="id-units" class=" input small-input small-select">
-                                    <option value="1000">кг</option>
-                                    <option value="1">г</option>
+                                <input type="text" value="{{ analog.quantity }}" name="id" class="input small-input" id="{{ analog.id }}" data-original_quantity="{{ analog.quantity }}">
+                                <select name="id-units" id="{{ analog.id }}-{{ analog.product.dimension }}" class=" input small-input small-select">
+                                    <option value="{{ analog.product.dimension }}" name="{{ analog.product.dimension }}" selected>{{ analog.product.get_dimension_display }}</option>
                                 </select>
                             </div>
                             {% endfor %}
@@ -233,6 +232,7 @@
 
 {% block custom_js %}
 <script src="{% static 'main/js/comment.js' %}"></script>
+<script src="{% static 'main/js/recipe_ingredient_converter.js' %}"></script>
 {% if request.user.is_authenticated %}
 <script src="{% static 'main/js/recipe_cart.js' %}"></script>
 {% endif %}

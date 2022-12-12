@@ -46,7 +46,8 @@ def index(request):
         "sections": [
             ("NEW", combine_recipes_and_photos(new_recipe)),
             ("BEST", combine_recipes_and_photos(best_recipe))
-        ]
+        ],
+        "menu_active": "home",
     }
 
     return render(request, 'main/index.html', context=context)
@@ -171,6 +172,7 @@ def catalog(request):
     else:
         is_data = True
     context = {
+        "menu_active": "catalogue",
         'recipes': combine_recipes_and_photos(recipes),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
@@ -182,7 +184,7 @@ def catalog(request):
         'prod_types': ProductType.objects.all(),
         'product': Product.objects.all(),
         'selected_products': prod,
-        'allergic_on': isAllergic
+        'allergic_on': isAllergic,
     }
     return render(request, 'main/catalogue.html', context=context)
 

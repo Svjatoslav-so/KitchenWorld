@@ -36,10 +36,10 @@
             <div class="nav__wrapper">
                 <a href="{% url 'home'%}" class="logo"></a>
                 <ul class="nav__list">
-                    <li class="nav__item active">
+                    <li class="nav__item {% if menu_active == 'home' %}active{% endif %}">
                         <a href="{% url 'home'%}">Главная</a>
                     </li>
-                    <li class="nav__item">
+                    <li class="nav__item {% if menu_active == 'catalogue' %}active{% endif %}">
                         <a href="{% url 'catalogue'%}">Каталог</a>
                     </li>
                     <li class="nav__item">
