@@ -8,10 +8,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
-from django.utils.text import slugify
+from django.utils.text import slugify as django_slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
 from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType
+
+alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
+            'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+            'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ы': 'i', 'э': 'e', 'ю': 'yu',
+            'я': 'ya'}
+
+
+def slugify(s):
+    """
+    Overriding django slugify that allows to use russian words as well.
+    """
+    return django_slugify(''.join(alphabet.get(w, w) for w in s.lower()))
 
 
 def is_auth(func):
@@ -87,6 +99,18 @@ def logout_user(request):
     return redirect('home')
 
 
+def profile(request, author_slug):
+    order_by = request.POST.get("sort", "-date_of_creation")
+    author = get_object_or_404(Author, slug=author_slug)
+    recipes = Recipe.objects.filter(user=author.user).order_by(order_by)
+    context = {
+        "author": author,
+        "recipes": combine_recipes_and_photos(recipes),
+        "selected_sort": order_by,
+    }
+    return render(request, 'main/profile.html', context=context)
+
+
 @is_auth
 def edit_profile(request):
     if request.method == "POST":
@@ -151,7 +175,7 @@ def catalog(request):
 
         print("allerg", isAllergic)
 
-        if isAllergic=="true":
+        if isAllergic == "true":
             allerg = request.user.author.my_exceptions.all()
             for al in allerg:
                 recipes = recipes.exclude(recipeingredient__product__name=al)
@@ -372,4 +396,3 @@ def stars_off(request):
         except:
             return HttpResponse("FAIL")
     return HttpResponse("FAIL")
-

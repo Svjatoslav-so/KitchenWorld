@@ -16,7 +16,7 @@
                 Мой профиль
             </h2>
         </div>
-        <div class="profile__wrapper">
+        <div class="edit_profile__wrapper">
             <img src="{% if request.user.author.photo %} {{ request.user.author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
             <form action="{% url 'edit_profile'%}" class="profile__form" enctype="multipart/form-data" method="post">
                 {% csrf_token %}

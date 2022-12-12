@@ -36,7 +36,7 @@
             <div class="recipe-color-wrapper">
                 <div class="recipe-info-inner">
                     <!-- Link to autor -->
-                    <a href="#" class="card__recipe-autor ">
+                    <a href="{{ recipe.user.author.get_absolute_url }}" class="card__recipe-autor ">
                         <img src="{{ recipe.user.author.photo.url }}" alt="Autor" class="card__recipe-autor-avatar">
                         <div class="card__recipe-inner">
                             <h3 class="card__recipe-autor-name card__recipe-autor-name_light">{{ recipe.user.username|title }}</h3>

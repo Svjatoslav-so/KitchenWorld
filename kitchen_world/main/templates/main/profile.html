@@ -1,0 +1,58 @@
+{% extends "main/base_generic.html" %}
+{% block title %} <title>Профиль - {{author.user.username|title}}</title> {% endblock %}
+
+{% load static %}
+{% load main_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'main/css/edit_profile_style.css' %}">
+{% endblock %}
+
+
+{% block main_content %}
+    <section class="section profile-section">
+        <div class="profile__content">
+            <div class="profile__wrapper">
+                <img src="{% if author.photo %} {{ author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
+                <div class="profile__info">
+                    <h2 class="profile-title">
+                        {{ author.user.username|title }}
+                    </h2>
+                    <h3>
+                        О себе
+                    </h3>
+                    <p class="profile-about">
+                        {{ author.description }}
+                    <p>
+                </div>
+            </div>
+
+            <div class="order_by">
+                <div class="order">
+                    <p class="order-title">Сортировать по:</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <select name="sort" id="order-list" class="order__list" onchange="this.form.submit()">
+                            <option class="order__item" name="sort" value="-date_of_creation" {% if selected_sort == "-date_of_creation" %} selected {%endif%}>
+                                    Дате
+                            </option>
+                            <option class="order__item" name="sort" value="-num_of_stars" {% if selected_sort == "-num_of_stars" %} selected {%endif%}>
+                                    Популярности
+                            </option>
+                            <option class="order__item" name="sort" value="title" {% if selected_sort == "title" %} selected {%endif%}>
+                                    Алфавиту
+                            </option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+             <div class="cards-wrapper">
+                <!-- Insert cards -->
+                {% for recipe, r_photo in recipes %}
+                    {% show_recipe_cart recipe r_photo request %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -42,6 +42,9 @@ class Author(models.Model):
     def __str__(self):
         return f"{self.user} {self.slug}"
 
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'author_slug': self.slug})
+
 
 class Recipe(models.Model):
     GRAM = 'G'

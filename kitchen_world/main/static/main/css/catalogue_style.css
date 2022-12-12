@@ -170,30 +170,6 @@ p, span {
   color: #DE8443;
 }
 
-.order {
-  display: flex;
-  align-items: center;
-}
-.order__list {
-  background: none;
-  color: #fff;
-  font-size: 16px;
-  line-height: 1.45em;
-  border: none;
-}
-.order__item {
-  background-color: #3A3333;
-  padding: 3px 0;
-  color: #fff;
-  font-size: 16px;
-  line-height: 1.45em;
-}
-
-.order-title {
-  color: #48B705;
-  margin-right: 10px;
-}
-
 .cards-wrapper {
   display: flex;
   align-items: flex-start;
