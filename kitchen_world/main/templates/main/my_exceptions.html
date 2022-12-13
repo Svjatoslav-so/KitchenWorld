@@ -1,5 +1,12 @@
 {% extends "main/my_profile.html" %}
 
+{%load static%}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'main/css/my_profile_style.css' %}">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+{% endblock %}
+
 {% block my_profile_content %}
 
 <div class="my_exceptions">
@@ -10,7 +17,6 @@
     </div>
     <ul class="exceptions__list">
         {% for i, exception in exceptions %}
-
         <li class="exceptions__item">
             <div>
                 <div class="ingredient-number">{{ i }}</div>
@@ -27,7 +33,30 @@
             </form>
         </li>
         {% endfor %}
+
+        <li class="exceptions__item btn-input-block">
+            <form class="ui-widget" action="{% url 'add_exception'%}" method="post">
+                {% csrf_token %}
+                <input id="tags" class="autocomplete-input" name="prod_name" required placeholder="Введите название ингредиента">
+                <button type="submit" class="btn active in-input-btn">Добавить</button>
+            </form>
+        </li>
+
     </ul>
 </div>
 
+{% endblock %}
+
+{% block custom_js %}
+      <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+      <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+      <script>
+      $( function() {
+        var availableTags = [ {% for prod in products %} "{{prod.name}}", {% endfor %}
+        ];
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      } );
+      </script>
 {% endblock %}

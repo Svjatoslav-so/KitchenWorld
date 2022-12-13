@@ -95,11 +95,11 @@ p, span {
 }
 
 .recipes {
-  padding-top: 20px;
+      padding: 20px 0;
 }
 
 .recipes-container {
-  max-width: 1790px;
+  max-width: 1800px;
   margin: 0 auto;
 }
 
@@ -114,6 +114,7 @@ p, span {
   border-radius: 25px;
   padding: 20px 30px 230px;
   display: inline-block;
+  margin: 0 20px;
 }
 .menu__list {
   margin-top: 20px;
@@ -153,12 +154,11 @@ p, span {
 /* Menu end */
 .content {
   width: 100%;
-  margin: 0 130px 0 15px;
 }
 .content__info {
-/*  display: flex;*/
+/*  display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;*/
 }
 .content__info h2 {
   color: #DE8443;
@@ -223,11 +223,10 @@ p, span {
 .my_exceptions {
   background: #5a5050;
   width: 100%;
-  height: 500px;
   border-radius: 25px;
 }
 .exceptions__list {
-    width: 600px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     list-style-position: inside;
@@ -250,4 +249,18 @@ p, span {
     background: url("../images/delete.svg") no-repeat center center/contain;
     width: 30px;
     height: 30px;
+}
+form.ui-widget{
+    width: 100%;
+    padding-right: 100px;
+}
+
+.autocomplete-input{
+    width: 100%;
+    background-color: #e4e3e1;
+}
+
+.ui-widget.ui-widget-content {
+    max-height: 300px;
+    overflow: auto;
 }

@@ -19,7 +19,7 @@
             <div class="recipes-wrapper">
                 <div class="menu">
                     <img src="{%if request.user.author.photo%} {{request.user.author.photo.url}}
-                     {% else %} {%static 'main/images/user.png' %} {% endif %}" alt="avatar" class="user-avatar">
+                     {% else %} {%static 'main/images/user.svg' %} {% endif %}" alt="avatar" class="user-avatar">
                     <ul class="menu__list">
                         <li class="menu__item{% if active == 'Профиль' %} active {%endif%}">
                             <img src="{%static 'main/images/pic.svg' %}" alt="pic" class="menu__item-img">

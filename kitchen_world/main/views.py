@@ -282,10 +282,12 @@ def numerate_exceptions(exceptions):
 @login_required(login_url='login')
 def my_exceptions(request):
     exceptions = numerate_exceptions(request.user.author.my_exceptions.all())
+    products = Product.objects.all()
     print(exceptions)
     context = {
         'active': 'Исключения',
-        'exceptions': exceptions
+        'exceptions': exceptions,
+        'products': products,
     }
     return render(request, 'main/my_exceptions.html', context=context)
 
@@ -298,6 +300,20 @@ def delete_exception(request):
         request.user.author.my_exceptions.remove(product)
         # exception = request.user.author.my_exceptions.get(id=exception_id)
         # print(exception)
+
+    return redirect('my_exceptions')
+
+
+@login_required(login_url='login')
+def add_exception(request):
+    if request.method == "POST":
+        try:
+            prod_name = request.POST.get("prod_name", None)
+            product = Product.objects.get(name=prod_name)
+            request.user.author.my_exceptions.add(product)
+        except ObjectDoesNotExist:
+            print("Продукт не найден!")
+            pass
 
     return redirect('my_exceptions')
 

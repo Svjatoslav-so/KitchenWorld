@@ -14,6 +14,7 @@ urlpatterns = [
     path('my_drafts/', views.my_drafts, name="my_drafts"),
     path('my_exceptions/', views.my_exceptions, name="my_exceptions"),
     path('delete_exception/', views.delete_exception, name="delete_exception"),
+    path('add_exception/', views.add_exception, name="add_exception"),
     path('my_liked/', views.my_liked, name="my_liked"),
     path('my_bookmarks/', views.my_bookmarks, name="my_bookmarks"),
     path('recipe/<slug:recipe_slug>', views.recipe, name="recipe"),
