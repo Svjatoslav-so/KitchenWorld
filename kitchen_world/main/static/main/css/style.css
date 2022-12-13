@@ -263,6 +263,12 @@ p, span {
     color: red;
 }
 
+.content-vertical-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .btn-wrapper {
   display: flex;
   align-items: center;

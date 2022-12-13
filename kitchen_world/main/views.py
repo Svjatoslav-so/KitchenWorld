@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q, F
 from django.http import HttpResponse
@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.text import slugify as django_slugify
 
-from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm
+from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm, ChangeUserPasswordForm
 from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType
 
 alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
@@ -66,6 +66,14 @@ class LoginUser(LoginView):
 
     # def get_success_url(self):
     #     return reverse_lazy('home')
+
+
+class ChangeUserPassword(PasswordChangeView):
+    form_class = ChangeUserPasswordForm
+    template_name = 'main/change-password.html'
+
+    def get_success_url(self):
+        return reverse_lazy('my_recipes')
 
 
 def registration(request):

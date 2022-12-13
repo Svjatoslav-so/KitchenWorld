@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.forms import CharField, Textarea, Form, EmailField, ImageField
 
@@ -25,6 +25,13 @@ class LoginUserForm(AuthenticationForm):
             f.widget.attrs.update({'class': 'login-form__input input'})
         self.fields['username'].label = "Логин"
         self.fields['password'].label = "Пароль"
+
+
+class ChangeUserPasswordForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in self.fields.values():
+            f.widget.attrs.update({'class': 'login-form__input input'})
 
 
 class EditProfileForm(Form):
