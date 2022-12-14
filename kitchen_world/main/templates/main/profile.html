@@ -56,3 +56,9 @@
         </div>
     </section>
 {% endblock %}
+
+{% block custom_js %}
+{% if request.user.is_authenticated %}
+<script src="{% static 'main/js/recipe_cart.js' %}"></script>
+{% endif %}
+{% endblock %}
