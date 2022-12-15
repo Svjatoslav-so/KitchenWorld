@@ -25,4 +25,5 @@ urlpatterns = [
     path('stars_on/', views.stars_on, name="stars_on"),
     path('stars_off/', views.stars_off, name="stars_off"),
     path('new_recipe/', views.new_recipe, name="new_recipe"),
+    path('main_search/', views.main_search, name="main_search"),
 ]

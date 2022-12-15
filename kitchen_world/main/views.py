@@ -417,3 +417,37 @@ def stars_off(request):
 @login_required(login_url='login')
 def new_recipe(request):
     return render(request, 'main/new_recipe.html')
+
+
+def main_search(request):
+    search = request.GET.get("main-search", "")
+    if search:
+        recipes = Recipe.objects.filter(title__icontains=search) \
+                  | Recipe.objects.filter(description__icontains=search) \
+                  | Recipe.objects.filter(recipeingredient__product__name__icontains=search) \
+                  | Recipe.objects.filter(categories__name__icontains=search)
+        recipes = recipes.distinct()
+    else:
+        recipes = Recipe.objects.all()
+
+    if len(recipes) == 0:
+        is_data = False
+    else:
+        is_data = True
+    context = {
+        "menu_active": "catalogue",
+        'recipes': combine_recipes_and_photos(recipes),
+        'category': Category.objects.filter(parent_category=None),
+        'sub_category': Category.objects.all(),
+        'selected_categories': [],
+        'categories_hierarchy': Category.get_hierarchy(),
+        'selected_sort': "-num_of_stars",
+        'curr_search': search,
+        'is_data_exist': is_data,
+        'prod_types': ProductType.objects.all(),
+        'products': Product.objects.all(),
+        'selected_products': [],
+        'allergic_on': "false",
+    }
+    return render(request, 'main/catalogue.html', context=context)
+

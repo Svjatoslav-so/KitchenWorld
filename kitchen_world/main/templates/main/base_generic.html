@@ -46,8 +46,8 @@
                         <a href="#">О нас</a>
                     </li>
                 </ul>
-                <form class="search" action="#" method="get">
-                    <input class="input" type="text" name="search-input" placeholder="Найти" id="search-input">
+                <form class="search" action="{% url 'main_search' %}" method="get">
+                    <input class="input" type="text" name="main-search" required placeholder="Найти" id="search-input">
                     <button class="search-btn" type="submit"></button>
                 </form>
 
