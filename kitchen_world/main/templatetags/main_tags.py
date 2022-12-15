@@ -44,10 +44,13 @@ def show_categories(selected_categories, cat_list):
                 menu += ' open '
             menu += f'>' \
                     f'  <summary>' \
+                    f'  <label class="switch">' \
                     f'      <input  name="category" type="checkbox" value="{cat_list[i].name}" '
             if cat_list[i].name in selected_categories:
                 menu += ' checked '
-            menu += f'>{cat_list[i].name}' \
+            menu += f'><span class="switch__slider round"></span>' \
+                    f'  </label>' \
+                    f'{cat_list[i].name}' \
                     f'  </summary>'
         elif type(cat_list[i]) is list:
             menu += f'  {show_categories(selected_categories, cat_list[i])}' \
@@ -55,10 +58,13 @@ def show_categories(selected_categories, cat_list):
                     f'</li>'
         else:
             menu += f'<li class="menu__item">' \
+                    f'<label class="switch">' \
                     f'      <input  name="category" type="checkbox" value="{cat_list[i].name}" '
             if cat_list[i].name in selected_categories:
                 menu += ' checked '
-            menu += f'>{cat_list[i].name}' \
+            menu += f'><span class="switch__slider round"></span>' \
+                    f'</label>' \
+                    f'{cat_list[i].name}' \
                     f'</li>'
     # print(f'\nStart\n{menu}\nEnd\n')
     return menu

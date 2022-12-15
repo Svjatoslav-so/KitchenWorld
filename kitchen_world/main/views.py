@@ -182,7 +182,7 @@ def catalog(request):
         recipes = recipes.filter(title__iregex=search)
         if len(prod) != 0:
             for p in prod:
-                recipes = recipes.filter(recipeingredient__product__name=p)
+                recipes = recipes.filter(recipeingredient__product__name__istartswith=p)
         recipes = recipes.order_by(sort)
         if len(categor) != 0:
             rec = []
@@ -206,7 +206,7 @@ def catalog(request):
         'curr_search': search,
         'is_data_exist': is_data,
         'prod_types': ProductType.objects.all(),
-        'product': Product.objects.all(),
+        'products': Product.objects.all(),
         'selected_products': prod,
         'allergic_on': isAllergic,
     }
@@ -291,7 +291,7 @@ def numerate_exceptions(exceptions):
 def my_exceptions(request):
     exceptions = numerate_exceptions(request.user.author.my_exceptions.all())
     products = Product.objects.all()
-    print(exceptions)
+    # print(exceptions)
     context = {
         'active': 'Исключения',
         'exceptions': exceptions,

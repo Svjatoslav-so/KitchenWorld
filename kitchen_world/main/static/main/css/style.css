@@ -305,7 +305,12 @@ p, span {
 }
 
 .btn.active {
-  background: #48B705;
+  background-color: #48B705;
+}
+
+.plus-btn{
+   height: 100%;
+   background: url("../images/plus.svg") no-repeat center center/contain;
 }
 
 .btn-input-block {
@@ -317,7 +322,7 @@ p, span {
 }
 .in-input-btn{
   top: 0;
-  right: 0;
+  right: -2px;
   position: absolute;
   line-height: inherit;
   border: none;

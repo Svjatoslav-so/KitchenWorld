@@ -104,19 +104,26 @@ function Like(filename, elementName)
     {
         console.log("On");  
         console.log(Request.responseText);
-        let elems = document.getElementsByName(elementName)
-        elems.forEach(element => {
-            // element.innerHTML = Request.responseText;
-            element.firstElementChild.className += " active";
-            // console.log(element.lastElementChild);
-            // console.log(element.lastElementChild.innerHTML);
-            element.lastElementChild.innerHTML = parseInt(element.lastElementChild.innerHTML)+1;
-            // console.log(element.lastElementChild.innerHTML);
-            element.onclick = function(){
-                Like('/stars_off/', elementName);
-            }
-            // console.log("onclick: ", element.onclick);
-        }); 
+        if(Request.responseText != "OK" && Request.responseText != "FAIL"){
+            // var html = document.getElementsByTagName('html')[0];
+            // html.innerHTML = Request.responseText;
+            location.reload();
+        }
+        else{
+            let elems = document.getElementsByName(elementName)
+            elems.forEach(element => {
+                // element.innerHTML = Request.responseText;
+                element.firstElementChild.className += " active";
+                // console.log(element.lastElementChild);
+                // console.log(element.lastElementChild.innerHTML);
+                element.lastElementChild.innerHTML = parseInt(element.lastElementChild.innerHTML)+1;
+                // console.log(element.lastElementChild.innerHTML);
+                element.onclick = function(){
+                    Like('/stars_off/', elementName);
+                }
+                // console.log("onclick: ", element.onclick);
+            });
+        }
 
     }
 
@@ -125,21 +132,28 @@ function Like(filename, elementName)
      {
          console.log("Off");  
          console.log(Request.responseText);
-         let elems = document.getElementsByName(elementName);
-         elems.forEach(element => {
-             // element.innerHTML = Request.responseText;
-             element.firstElementChild.className = element.firstElementChild.className.replace('active', '');
-            //  console.log(element.lastElementChild);
-            //  console.log(element.lastElementChild.innerHTML);
-             element.lastElementChild.innerHTML = parseInt(element.lastElementChild.innerHTML)-1;
-            //  console.log(element.lastElementChild.innerHTML);
-             element.onclick = function(){
-                 Like('/stars_on/', elementName);
-             }
-            //  console.log("onclick: ", element.onclick);
-            if(type=="L")
-            element.closest(".card").style.display="none" 
-         }); 
+         if(Request.responseText != "OK" && Request.responseText != "FAIL"){
+            // var html = document.getElementsByTagName('html')[0];
+            // html.innerHTML = Request.responseText;
+            location.reload();
+        }
+        else{
+             let elems = document.getElementsByName(elementName);
+             elems.forEach(element => {
+                 // element.innerHTML = Request.responseText;
+                 element.firstElementChild.className = element.firstElementChild.className.replace('active', '');
+                //  console.log(element.lastElementChild);
+                //  console.log(element.lastElementChild.innerHTML);
+                 element.lastElementChild.innerHTML = parseInt(element.lastElementChild.innerHTML)-1;
+                //  console.log(element.lastElementChild.innerHTML);
+                 element.onclick = function(){
+                     Like('/stars_on/', elementName);
+                 }
+                //  console.log("onclick: ", element.onclick);
+                if(type=="L")
+                element.closest(".card").style.display="none"
+             });
+        }
  
      }
      let values = elementName.split("_")
