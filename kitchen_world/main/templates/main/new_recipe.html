@@ -1,0 +1,429 @@
+{% extends "main/base_generic.html" %}
+
+{% load static %}
+
+{% block title %}<title>KitchenWorld</title>{% endblock %}
+
+{% block main_content %}
+    <form action="#" class="new_recipe">
+        <!-- Recipe title start -->
+        <section class="section recipe-name" id="recipe-name">
+            <div class="container">
+                <input class="input" type="text" name="title" id="title" placeholder="Название" required>
+            </div>
+        </section>
+        <!-- Recipe title end -->
+
+        <!-- Recipe images start -->
+        <section class="section recipe-images" id="recipe-images">
+            <div class="container">
+                <!-- Swiper -->
+                <div class="recipe-images__swiper">
+                    <div class="swiper-wrapper" id="swiper-wrapper">
+                        <!-- Slides -->
+                        <div class="swiper-slide new-swiper-slide">
+                            <div class="add-new-recipe-img">
+                                <label class="add-new-recipe-img__label">
+                                    <input class="" type="file" name="images" accept="image/png, image/jpeg" id="preview-images"
+                                        multiple>
+                                    <p>Выберите фотографии</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Recipe images end -->
+
+        <!-- Recipe images start -->
+        <section class="section recipe-images-small" id="recipe-images-small">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                    <div class="recipe-images-small-wrapper" id="recipe-images-small-wrapper">
+    
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Recipe images end -->
+
+
+        <!-- Recie info start -->
+        <section class="section recipe-info" id="recipe-info">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                    <div class="recipe-info-inner">
+
+                        <div class="card__info recipe-info__info new-card__info">
+                            <!-- Statistic -->
+                            <div class="card__interaction-wrapper">
+                                <!-- Tags -->
+                                <div class="new-card__categories-wrapper">
+                                    <div class="category-wrapper">
+                                        <button type="button" class="btn-delete" id="delete-step"></button>
+                                        <a href="#" class="category category_light">#тегиблюда</a>
+                                    </div>
+
+                                    <div class="category-wrapper">
+                                        <button type="button" class="btn-delete" id="delete-step"></button>
+                                        <a href="#" class="category category_light">#категории</a>
+                                    </div>
+
+                                    <div class="category-wrapper">
+                                        <button type="button" class="btn-delete" id="delete-step"></button>
+                                        <a href="#" class="category category_light">#категоряи2</a>
+                                    </div>
+                                    <div class="new-category-wpapper">
+                                        <input type="text" class="input" placeholder="категория">
+                                        <button type="button" class="btn-green">Добавить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card__statistics-wrapper">
+                                <div class="card__statistic">
+                                    <button type="button" class="card__time card__time_light"></button>
+                                    999
+                                </div>
+                                <div class="card__statistic">
+                                    <button type="button" class="card__calories card__calories_light"></button>
+                                    999
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Recie info end -->
+
+        <!-- Ingredients start -->
+        <section class="section recipe-desc" id="recipe-desc">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                    <h2 class="section-title section-title_left">Описание</h2>
+                    <div class="recipe-desc-inner">
+
+                        <!-- Ingredients start -->
+                        <div class="ingredients">
+                            <div class="wrapper-flat">
+                                <h2 class="section-title section-title_left">Ингредиенты</h2>
+                                <div class="total-wrapper">
+                                    <!-- Number of servings -->
+                                    <input size="3" type="text" value="5.5" name="c" class="input small-input"
+                                        id="servings">
+                                    <label for="servings">Порций</label>
+                                    <!-- kcal -->
+                                    <input size="3" type="text" value="999" name="kcal" class="input small-input"
+                                        id="kcal">
+                                    <label for="kcal">ккал</label>
+                                    <!-- weight -->
+                                    <input size="3" type="text" value="2.5" name="total-weight"
+                                        class="input small-input" id="total-weight">
+                                    <select name="total-weight-units" id="total-weight-units"
+                                        class="input small-input small-select">
+                                        <option size="1" value="1000">кг</option>
+                                        <option size="2" value="1">г</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- First ingredient (with analogs) start -->
+                            <div class="ingredient-wrapper ingredient-wrapper_bordered">
+                                <!-- Ingredient / analog. If analog, append class analog -->
+                                <div class="ingredient">
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-number">1</div>
+                                        <div class="ingredient-inner">
+                                            <h3 class="ingredient-title">Мука пшеничная</h3>
+                                            <p class="ingredient-desc">
+                                                (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="ingredient-params">
+                                        <div class="ingredient-params__param">
+                                            <p class="info-paragraph required-ing">Обязательный</p>
+                                            <label class="switch">
+                                                <input type="checkbox" name="req" id="1">
+                                                <span class="switch__slider round"></span>
+                                            </label>
+                                            <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
+
+                                        </div>
+                                        <div class="ingredient-params__param">
+                                            <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                            <input type="text" value="кг" name="units" class="input small-input"
+                                                id="units">
+                                        </div>
+                                        <div class="ingredient-params__param">
+                                            <button type="button" class="btn-green" id="add-analog">Добавить
+                                                аналог</button>
+                                        </div>
+                                        <div class="ingredient-params__param">
+                                            <button type="button" class="btn-delete" id="delete-ingredient"></button>
+                                            <button type="button" class="btn-edit" id="edit-ingredient"></button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Edit ingredient start -->
+                                <div class="add-new-ingredient">
+                                    <div class="add-new-ingredient__inner">
+                                        <input class="input input-420" type="text" name="edit"
+                                            placeholder="Название ингредиента" value="Мука пшеничная">
+                                        <div class="ingredient-params__param">
+                                            <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                            <input type="text" value="кг" name="units" class="input small-input"
+                                                id="units">
+                                        </div>
+                                    </div>
+                                    <textarea class="input auto" name="comment" cols="30" rows="4"
+                                        placeholder="Комментарий к ингредиенту">(первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                    </textarea>
+                                    <div class="ingredient-params__param ingredient-params__param-right">
+                                        <button type="button" class="btn-green btn-green-ghost"
+                                            id="add-analog">Отменить</button>
+                                        <button type="button" class="btn-green" id="add-analog">Изменить</button>
+                                    </div>
+                                </div>
+                                <!-- Edit ingredient end -->
+
+                                <!-- Analog start -->
+                                <div class="ingredient ingredient_analog">
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-number">1</div>
+                                        <div class="ingredient-inner">
+                                            <h3 class="ingredient-title">Мука кукурузная</h3>
+                                            <p class="ingredient-desc">
+                                                (первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="ingredient-params">
+                                        <div class="ingredient-params__param">
+                                            <p class="info-paragraph required-ing">Аналог</p>
+                                        </div>
+                                        <div class="ingredient-params__param">
+                                            <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                            <input type="text" value="кг" name="units" class="input small-input"
+                                                id="units">
+                                        </div>
+                                        <div class="ingredient-params__param">
+                                            <button type="button" class="btn-delete" id="delete-ingredient"></button>
+                                            <button type="button" class="btn-edit" id="edit-ingredient"></button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Analog end -->
+
+                                <!-- Edit analog start -->
+                                <div class="add-new-ingredient">
+                                    <div class="add-new-ingredient__inner">
+                                        <input class="input input-420" type="text" name="edit"
+                                            placeholder="Название ингредиента" value="Мука кукурузна">
+                                        <div class="ingredient-params__param">
+                                            <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                            <input type="text" value="кг" name="units" class="input small-input"
+                                                id="units">
+                                        </div>
+                                    </div>
+                                    <textarea class="input auto" name="comment" cols="30" rows="4"
+                                        placeholder="Комментарий к ингредиенту">(первый сорт)(первый сорт)(первый сорт)(первый сорт)(первый сорт)
+                                    </textarea>
+                                    <div class="ingredient-params__param ingredient-params__param-right">
+                                        <button type="button" class="btn-green btn-green-ghost"
+                                            id="add-analog">Отменить</button>
+                                        <button type="button" class="btn-green" id="add-analog">Изменить</button>
+                                    </div>
+                                </div>
+                                <!-- Edit analog end -->
+
+
+                            </div>
+                            <!-- ########################## -->
+
+                            <!-- Ingredients list (with analogs) end -->
+
+                            <!-- First ingredient (with analogs) start -->
+                            <div class="ingredient-wrapper ingredient-wrapper_bordered">
+
+                                <!-- Edit ingredient start -->
+                                <div class="add-new-ingredient">
+                                    <div class="add-new-ingredient__inner">
+                                        <input class="input input-420" type="text" name="edit"
+                                            placeholder="Название ингредиента" value="">
+                                        <div class="ingredient-params__param">
+                                            <input type="text" value="2.5" name="id" class="input small-input" id="id">
+                                            <input type="text" value="кг" name="units" class="input small-input"
+                                                id="units">
+                                        </div>
+                                    </div>
+                                    <textarea class="input auto" name="comment" cols="30" rows="4"
+                                        placeholder="Комментарий к ингредиенту"></textarea>
+                                    <div class="ingredient-params__param ingredient-params__param-right">
+                                        <button type="button" class="btn-green" id="add-analog">Добавить</button>
+                                    </div>
+                                </div>
+                                <!-- Edit ingredient end -->
+
+                            </div>
+                            <!-- ########################## -->
+
+                            <!-- Ingredients list (with analogs) end -->
+
+                        </div>
+                        <!-- Ingredients end -->
+
+
+
+
+                        <textarea class="input recipe-desc__desc paragraph auto" name="comment" placeholder="Описание">Главный секрет идеальных сырников — а точнее творожников, — творог нужно протереть через
+                                        мелкое
+                                        сито и отжать от влаги. Жирность предпочтительна не больше и не меньше 9%. Тесто должно
+                                        получиться эластичным, чтобы при надавливании сырник не треснул на сковородке, а сохранил
+                                        форму.
+                                        Если все сделать правильно, получатся нежные однородные кругляшки под плотной румяной
+                                        корочкой.
+                                        Сырники можно запекать в духовке или готовить на пару. В рецепте не исключаются эксперименты
+                                        с
+                                        начинкой — сухофрукты, орехи, свежие фрукты и даже картофель лишними не будут. Приятного
+                                        аппетита!</textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Ingredients end -->
+
+
+        <!-- Steps start -->
+        <section class="section recipe-steps" id="recipe-steps">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                    <h2 class="section-title section-title_left">
+                        Рецепт приготовления
+                    </h2>
+                    <div class="recipe-steps-wrapper">
+
+                        <!-- Step start -->
+                        <div class="recipe-step">
+                            <div class="recipe-step__desc">
+                                <div class="step-wrapper">
+                                    <h2 class="section-title section-title_left">Шаг 1</h2>
+                                    <button type="button" class="btn-delete" id="delete-step"></button>
+                                </div>
+                                <textarea class="input auto" rows="10">
+                                    Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не
+                                    осталось
+                                    крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте.
+                                    Лучше
+                                    не
+                                    использовать слишком сухой или слишком влажный творог, иначе сырники будут
+                                    разваливаться
+                                    в
+                                    процессе приготовления.
+                                </textarea>
+                            </div>
+                            <div class="new-step-img">
+                                <label><input type="file" accept="image/png, image/jpeg"></label>
+
+
+                            </div>
+
+                        </div>
+                        <!-- Step end -->
+                        <!-- Step start -->
+                        <div class="recipe-step">
+                            <div class="recipe-step__desc">
+                                <div class="step-wrapper">
+                                    <h2 class="section-title section-title_left">Шаг 1</h2>
+                                    <button type="button" class="btn-delete" id="delete-step"></button>
+                                </div>
+                                <textarea class="input auto" rows="10">
+                                    Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не
+                                    осталось
+                                    крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте.
+                                    Лучше
+                                    не
+                                    использовать слишком сухой или слишком влажный творог, иначе сырники будут
+                                    разваливаться
+                                    в
+                                    процессе приготовления.
+                                </textarea>
+                            </div>
+                            <div class="new-step-img">
+                                <label><input type="file" accept="image/png, image/jpeg"></label>
+
+
+                            </div>
+
+                        </div>
+                        <!-- Step end -->
+                        <!-- Step start -->
+                        <div class="recipe-step">
+                            <div class="recipe-step__desc">
+                                <div class="step-wrapper">
+                                    <h2 class="section-title section-title_left">Шаг 1</h2>
+                                    <button type="button" class="btn-delete" id="delete-step"></button>
+                                </div>
+                                <textarea class="input auto" rows="10">
+                                    Положите весь творог в кастрюльку и разомните его вилкой так, чтобы в нем не
+                                    осталось
+                                    крупных комков. Разбейте в него яйца, всыпьте сахар и тщательно все перемешайте.
+                                    Лучше
+                                    не
+                                    использовать слишком сухой или слишком влажный творог, иначе сырники будут
+                                    разваливаться
+                                    в
+                                    процессе приготовления.
+                                </textarea>
+                            </div>
+                            <div class="new-step-img">
+                                <label><input type="file" accept="image/png, image/jpeg"></label>
+
+
+                            </div>
+
+                        </div>
+                        <!-- Step end -->
+
+
+                        <!-- New step start -->
+                        <div class="new-recipe-step">
+                            <button type="button" class="btn-green btn-green-ghost" id="add-analog">Добавить шаг</button>
+                        </div>
+                        <!-- New step end -->
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Steps end -->
+
+        <!-- Save start -->
+        <section class="section recipe-save" id="recipe-save">
+            <div class="container">
+                <div class="recipe-color-wrapper">
+                    <div class="new-recipe-step">
+                        <button type="button" class="btn-green btn-green-ghost" id="add-analog">Сохранить в
+                            черновики</button>
+                        <button type="button" class="btn-green" id="add-analog">Опубликовать</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Save end -->
+
+
+    </form>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{% static 'main/js/new_recipe.js' %}"></script>
+{% endblock %}

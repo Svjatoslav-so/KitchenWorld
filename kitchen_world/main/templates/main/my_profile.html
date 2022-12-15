@@ -67,7 +67,7 @@
                     </div>
                     <div class="cards-wrapper">
                         {% if active == 'Мои рецепты' or active == 'Черновики'%}
-                        <a href="#" class="add-recipe">
+                        <a href="{% url 'new_recipe' %}" class="add-recipe">
                             <div class="add-recipe__plus-img"></div>
                             <h3 class="add-recipe__title">Добавить рецепт</h3>
                         </a>

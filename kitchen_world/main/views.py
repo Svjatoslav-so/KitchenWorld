@@ -412,3 +412,8 @@ def stars_off(request):
         except:
             return HttpResponse("FAIL")
     return HttpResponse("FAIL")
+
+
+@login_required(login_url='login')
+def new_recipe(request):
+    return render(request, 'main/new_recipe.html')
