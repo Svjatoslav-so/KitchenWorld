@@ -422,10 +422,10 @@ def new_recipe(request):
 def main_search(request):
     search = request.GET.get("main-search", "")
     if search:
-        recipes = Recipe.objects.filter(title__icontains=search) \
-                  | Recipe.objects.filter(description__icontains=search) \
-                  | Recipe.objects.filter(recipeingredient__product__name__icontains=search) \
-                  | Recipe.objects.filter(categories__name__icontains=search)
+        recipes = Recipe.objects.filter(Q(title__iregex=search)) \
+                  | Recipe.objects.filter(Q(description__iregex=search)) \
+                  | Recipe.objects.filter(Q(recipeingredient__product__name__iregex=search)) \
+                  | Recipe.objects.filter(Q(categories__name__iregex=search))
         recipes = recipes.distinct()
     else:
         recipes = Recipe.objects.all()
