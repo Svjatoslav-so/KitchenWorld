@@ -1,9 +1,11 @@
+{%load static%}
 <div class="recipe-comment">
-    <img src="{{ comment.user.author.photo.url }}" alt="#" class="recipe-comment__img">
+    <img src="{% if comment.user.author.photo %} {{ comment.user.author.photo.url }}
+                     {% else %} {%static 'main/images/user.svg' %} {% endif %}" alt="#" class="recipe-comment__img">
     <div class="recipe-comment__desc{% if comment.user == request.user %} my_comment {% endif %}">
         <div class="recipe-comment__head">
             <div class="recipe-comment__info">
-                <a class="recipe-comment__author-named" href="#">{{ comment.user.username|title }}</a>
+                <a class="recipe-comment__author-named" href="{{ comment.user.author.get_absolute_url }}">{{ comment.user.username|title }}</a>
                 <span class="recipe-comment__date">{{ comment.date_of_creation }}</span>
             </div>
             <div class="recipe-comment__action">

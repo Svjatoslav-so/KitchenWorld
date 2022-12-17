@@ -13,7 +13,7 @@
     <section class="section profile-section">
         <div class="profile__content">
             <div class="profile__wrapper">
-                <img src="{% if author.photo %} {{ author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
+                <img src="{% if author.photo %} {{ author.photo.url }} {% else %}{% static 'main/images/user.svg' %}{% endif %}" alt="avatar" class="profile__avatar">
                 <div class="profile__info">
                     <h2 class="profile-title">
                         {{ author.user.username|title }}
@@ -22,7 +22,9 @@
                         О себе
                     </h3>
                     <p class="profile-about">
+                        {% if author.description %}
                         {{ author.description }}
+                        {% endif %}
                     <p>
                 </div>
             </div>
