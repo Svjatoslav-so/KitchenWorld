@@ -126,7 +126,7 @@ function fixDimension(){
         }
         if(i>1){
             let rowValue = +ingredients[i].value*get_dimension(ingredients[i]) 
-            if(isShtuky(ingredients[i], "P")){
+            if(isShtuky(ingredients[i], "шт")){
                 let roundValue = Math.round(+ingredients[i].value);
                 // console.log("SHUKY");
                 ingredients[i].value = roundValue > 0 ? roundValue : 1;

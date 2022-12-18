@@ -27,3 +27,71 @@ function resetAllFilters(element){
     }
 
 }
+
+let exceptionFilter = document.getElementById("menu_exception_filter");
+
+if(exceptionFilter){
+    exceptionFilter.getElementsByClassName("filter__item")[0].onclick = closeExceptionFilter;
+
+    function openExceptionFilter(){
+        exceptionFilter.getElementsByClassName("filter-group")[0].className += " active";
+        exceptionFilter.getElementsByClassName("filter__item")[0].className += " active";
+
+        exceptionFilter.getElementsByClassName("filter__item")[0].onclick = closeExceptionFilter;
+    }
+    function closeExceptionFilter(){
+        exceptionFilter.getElementsByClassName("filter-group")[0].className = 
+        exceptionFilter.getElementsByClassName("filter-group")[0].className.replace(" active", '');
+        exceptionFilter.getElementsByClassName("filter__item")[0].className = 
+        exceptionFilter.getElementsByClassName("filter__item")[0].className.replace(" active", '');
+
+        exceptionFilter.getElementsByClassName("filter__item")[0].onclick = openExceptionFilter;
+    }
+}
+let caterogyFilter = document.getElementById("menu_category_filter");
+let productFilter = document.getElementById("menu_product_filter");
+
+caterogyFilter.getElementsByClassName("filter__item")[0].onclick = closeCaterogyFilter;
+productFilter.getElementsByClassName("filter__item")[0].onclick = closeProductFilter;
+
+function openCaterogyFilter(){
+    caterogyFilter.getElementsByClassName("filter-group")[0].className += " active";
+    caterogyFilter.getElementsByClassName("filter__item")[0].className += " active";
+
+    caterogyFilter.getElementsByClassName("filter__item")[0].onclick = closeCaterogyFilter;
+}
+function closeCaterogyFilter(){
+    caterogyFilter.getElementsByClassName("filter-group")[0].className = 
+    caterogyFilter.getElementsByClassName("filter-group")[0].className.replace(" active", '');
+    caterogyFilter.getElementsByClassName("filter__item")[0].className = 
+    caterogyFilter.getElementsByClassName("filter__item")[0].className.replace(" active", '');
+
+    caterogyFilter.getElementsByClassName("filter__item")[0].onclick = openCaterogyFilter;
+}
+function openProductFilter(){
+    productFilter.getElementsByClassName("filter-group")[0].className += " active";
+    productFilter.getElementsByClassName("filter__item")[0].className += " active";
+
+    productFilter.getElementsByClassName("filter__item")[0].onclick = closeProductFilter;
+}
+function closeProductFilter(){
+    productFilter.getElementsByClassName("filter-group")[0].className = 
+    productFilter.getElementsByClassName("filter-group")[0].className.replace(" active", '');
+    productFilter.getElementsByClassName("filter__item")[0].className = 
+    productFilter.getElementsByClassName("filter__item")[0].className.replace(" active", '');
+
+    productFilter.getElementsByClassName("filter__item")[0].onclick = openProductFilter;
+}
+
+
+let filtersMenu = document.getElementById("filters-menu");
+
+function showFiltersMenu(){
+    filtersMenu.className += " active";
+}
+ 
+function closeFiltersMenu() {
+    filtersMenu.className = filtersMenu.className.replace(" active", '');
+}
+
+document.getElementById("close-filters-menu-btn").onclick = closeFiltersMenu;

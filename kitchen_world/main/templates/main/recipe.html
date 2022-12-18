@@ -97,20 +97,26 @@
                         <div class="wrapper-flat">
                             <h2 class="section-title section-title_left">Ингредиенты</h2>
                             <div class="total-wrapper">
-                                <!-- Number of servings -->
-                                <input size="3" type="text" value="{{recipe.num_of_servings}}" name="c" class="input small-input"
-                                    id="servings" data-original_quantity="{{ recipe.num_of_servings }}">
-                                <label for="servings">Порций</label>
-                                <!-- kcal -->
-                                <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input total-input" id="kcal" data-original_quantity="{{ recipe.calories }}" >
-                                <label for="kcal">ккал</label>
-                                <!-- weight -->
-                                <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input total-input"
-                                    id="total-weight" data-original_quantity="{{ recipe.finished_product_weight }}">
-                                <select name="total-weight-units" id="total-weight-units"
-                                    class="input small-input small-select">
-                                    <option value="{{ recipe.dimension }}" name="{{ recipe.get_dimension_display }}" selected >{{ recipe.get_dimension_display }}</option>
-                                </select>
+                                 <div>
+                                    <!-- Number of servings -->
+                                    <input size="3" type="text" value="{{recipe.num_of_servings}}" name="c" class="input small-input"
+                                        id="servings" data-original_quantity="{{ recipe.num_of_servings }}">
+                                    <label for="servings">Порций</label>
+                                </div>
+                                 <div>
+                                    <!-- kcal -->
+                                    <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input total-input" id="kcal" data-original_quantity="{{ recipe.calories }}" >
+                                    <label for="kcal">ккал</label>
+                                 </div>
+                                 <div>
+                                    <!-- weight -->
+                                    <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input total-input"
+                                        id="total-weight" data-original_quantity="{{ recipe.finished_product_weight }}">
+                                    <select name="total-weight-units" id="total-weight-units"
+                                        class="input small-input small-select">
+                                        <option value="{{ recipe.dimension }}" name="{{ recipe.get_dimension_display }}" selected >{{ recipe.get_dimension_display }}</option>
+                                    </select>
+                                 </div>
                             </div>
                         </div>
 
@@ -129,11 +135,13 @@
                                 </div>
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}" data-original_quantity="{{ ingredient.quantity }}">
-                                <select name="id-units" id="{{ ingredient.id }}-{{ ingredient.product.dimension }}" class=" input small-input small-select">
-                                    <option value="{{ ingredient.product.dimension }}" name="{{ ingredient.product.get_dimension_display }}" selected >{{ ingredient.product.get_dimension_display }}</option>
-                                </select>
+                                <div style="display: flex; flex-shrink: 0;">
+                                    <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
+                                    <input type="text" value="{{ ingredient.quantity }}" name="id" class="input small-input" id="{{ ingredient.id }}" data-original_quantity="{{ ingredient.quantity }}">
+                                    <select name="id-units" id="{{ ingredient.id }}-{{ ingredient.product.dimension }}" class=" input small-input small-select">
+                                        <option value="{{ ingredient.product.dimension }}" name="{{ ingredient.product.get_dimension_display }}" selected >{{ ingredient.product.get_dimension_display }}</option>
+                                    </select>
+                                </div>
                             </div>
                             {% for analog in ingredient.recipeingredient_set.all %}
                             <div class="ingredient ingredient_analog">
@@ -146,11 +154,13 @@
                                 </div>
                                 <button type="button" class="list-arrow"></button>
                                 <div class="dashed-line"></div>
-                                <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
-                                <input type="text" value="{{ analog.quantity }}" name="id" class="input small-input" id="{{ analog.id }}" data-original_quantity="{{ analog.quantity }}">
-                                <select name="id-units" id="{{ analog.id }}-{{ analog.product.dimension }}" class=" input small-input small-select">
-                                    <option value="{{ analog.product.dimension }}" name="{{ analog.product.get_dimension_display }}" selected>{{ analog.product.get_dimension_display }}</option>
-                                </select>
+                                <div>
+                                    <!-- weight нужно на стороне сервера менять 'id' на id ингредиента  -->
+                                    <input type="text" value="{{ analog.quantity }}" name="id" class="input small-input" id="{{ analog.id }}" data-original_quantity="{{ analog.quantity }}">
+                                    <select name="id-units" id="{{ analog.id }}-{{ analog.product.dimension }}" class=" input small-input small-select">
+                                        <option value="{{ analog.product.dimension }}" name="{{ analog.product.get_dimension_display }}" selected>{{ analog.product.get_dimension_display }}</option>
+                                    </select>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -182,13 +192,13 @@
                     {% for step in recipe.recipestep_set.all %}
                     <!-- Step start -->
                     <div class="recipe-step">
+                        <img src="{{ step.photo.url }}" alt="#" class="recipe-step__img">
                         <div class="recipe-step__desc">
                             <h2 class="section-title section-title_left">{{ step.title }}</h2>
                             <p class="paragraph recipe-step__text">
                                 {{ step.description }}
                             </p>
                         </div>
-                        <img src="{{ step.photo.url }}" alt="#" class="recipe-step__img">
                     </div>
                     <!-- Step end -->
                     {% endfor %}

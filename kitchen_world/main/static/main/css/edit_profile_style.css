@@ -265,6 +265,7 @@ p, span {
 }
 .profile__form {
   max-width: 420px;
+  margin: 10px 0;
 }
 .profile__form .input {
   margin-bottom: 10px;
@@ -278,6 +279,7 @@ p, span {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 5px;
 }
 
 .content__info {
@@ -337,3 +339,23 @@ p, span {
     flex-wrap: wrap;
     gap: 25px 25px;
 }
+
+    /*Аля адаптив start */
+
+@media screen and (max-width: 680px){
+
+    .edit_profile__wrapper{
+        flex-direction: column;
+        padding: 50px 20px;
+    }
+
+    .profile__wrapper{
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 20px;
+    }
+    .profile__info{
+        padding: 20px;
+    }
+}
+    /*Аля адаптив end */

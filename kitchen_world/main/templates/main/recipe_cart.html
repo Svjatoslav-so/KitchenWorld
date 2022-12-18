@@ -42,8 +42,8 @@
             </div>
         </div>
     </div>
-    <h3 class="card__title"><a href="{{ recipe.get_absolute_url }}" class="card-link">{{ recipe.title }}</a> </h3>
-    <p class="card__description">{{ recipe.description|truncatechars:100 }}<span
+    <h3 class="card__title"><a href="{{ recipe.get_absolute_url }}" class="card-link">{{ recipe.title|truncatechars:75 }}</a> </h3>
+    <p class="card__description">{{ recipe.description|truncatechars:130 }}<span
             class="card__more">ещё</span></p>
     <div class="card__categories-wrapper">
         {% for c in recipe.categories.all %}

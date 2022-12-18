@@ -1,0 +1,38 @@
+@media screen and (max-width:1320px){
+    /* первый уровень сжатия */
+    .card{
+        width: 350px;
+        height: 600px;
+    }
+    .card__img{
+        height: 260px;
+    }
+    .new__swiper {
+        width: 1100px;
+        height: 607px;
+    }
+  }
+
+  @media screen and (max-width:1120px){
+    /* второй уровень сжатия */
+    .card{
+        width: 300px;
+        height: 540px;
+    }
+    .card__img{
+        height: 210px;
+    }
+    .card__description{
+        font-size: 13px;
+    }
+
+    .new__swiper {
+        width: 950px;
+        height: 547px;
+    }
+  }
+  @media screen and (max-width:1120px){
+    .section{
+        padding-top: 20px;
+    }
+  }

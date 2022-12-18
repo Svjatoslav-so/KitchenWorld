@@ -16,10 +16,13 @@ function show(){
     for(let i=div_reply.children.length-2; i>0; i--){
         div_reply.removeChild(div_reply.children[i])
     }
-    div_reply.insertBefore(comment.firstElementChild.firstElementChild.cloneNode(true), div_reply.lastElementChild)
-    div_reply.insertBefore(comment.parentNode.lastElementChild.cloneNode(true), div_reply.lastElementChild)
-    div_reply.classList.remove("hide")
-    div_reply.classList.add("show")
+    div_reply.insertBefore(comment.firstElementChild.firstElementChild.cloneNode(true), div_reply.lastElementChild);
+    let quotedText = document.createElement("p");
+    quotedText.className = "comment-quoted-text";
+    quotedText.innerText =  comment.parentNode.lastElementChild.innerText.slice(0, 20);
+    div_reply.insertBefore(quotedText, div_reply.lastElementChild);
+    div_reply.classList.remove("hide");
+    div_reply.classList.add("show");
     
 
 }

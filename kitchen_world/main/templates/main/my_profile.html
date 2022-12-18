@@ -17,7 +17,8 @@
     <section class="section recipes">
         <div class="recipes-container ">
             <div class="recipes-wrapper">
-                <div class="menu">
+                <div class="menu" id="profile-menu">
+                    <button id="close-profile-menu-btn"></button>
                     <img src="{%if request.user.author.photo%} {{request.user.author.photo.url}}
                      {% else %} {%static 'main/images/user.svg' %} {% endif %}" alt="avatar" class="user-avatar">
                     <ul class="menu__list">
@@ -54,6 +55,11 @@
                 <div class="content">
                     {% block my_profile_content %}
                     <div class="content__info">
+                        <button class="profile-menu-btn" onclick="showProfileMenu()">
+                            <img src="{%if request.user.author.photo%} {{request.user.author.photo.url}}
+                            {% else %} {%static 'main/images/user.svg' %} {% endif %}" alt="avatar" class="profile-img">
+                            <p>Профиль</p>
+                        </button>
                         <h2 class="section-title">
                             {{active}}
                         </h2>

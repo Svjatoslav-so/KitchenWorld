@@ -15,53 +15,72 @@
     <section class="section recipes">
         <div class="recipes-container ">
             <div class="recipes-wrapper">
-                <div class="menu">
-                   <h2 class="menu-title">
-                        Фильтры
-                    </h2>
+                <div class="menu" id="filters-menu">
+                    <div class="menu__head">
+                       <h2 class="menu-title">
+                            Фильтры
+                        </h2>
+                        <button id="close-filters-menu-btn"></button>
+                    </div>
                     <form method="get" id="cat_filt">
                         <div class="filter-submit-btn">
                             <button type="submit" class="btn submit active">Искать</button>
                             <button form="cat_filt" type="reset" class="btn submit" onclick="resetAllFilters(this.form)">Сбросить фильтры</button>
                         </div>
+                        <div class="menu-form-block">
                             {% if request.user.is_authenticated %}
-                            <p class="filter__item">Исключения</p>
-                            <div class="switch-item menu__item filter-group">
-                                 <label class="switch">
-                                        <input  name="allergic" type="checkbox" value="true" {% if allergic_on == "true" %} checked {%endif%}>
-                                     <span class="switch__slider round"></span>
-                                 </label>
-                                <p>Учитывать исключения</p>
+                            <div class="menu_exception_filter" id="menu_exception_filter">
+                                <div class="filter__item active">
+                                    <p>Исключения</p>
+                                     <img class="double-arrow" src="{% static 'main/images/double-arrow-down.png'%}">
+                                </div>
+                                <div class="switch-item menu__item filter-group active">
+                                     <label class="switch">
+                                            <input  name="allergic" type="checkbox" value="true" {% if allergic_on == "true" %} checked {%endif%}>
+                                         <span class="switch__slider round"></span>
+                                     </label>
+                                    <p>Учитывать исключения</p>
+                                </div>
                             </div>
                             {%endif%}
-                        <p class="filter__item">Категории</p>
-                        <div class="filter-group">
-                            <ul id="categories_filters">
-                                {% autoescape off %}
-                                {% show_categories selected_categories categories_hierarchy %}
-                                {% endautoescape %}
-                            </ul>
-                        </div>
-                        <p class="filter__item">Ингредиенты</p>
-                        <div class="filter-group">
-                            <ul id="products_filters" class="products_filters">
-                                {% for select_prod in selected_products %}
-                                 <li class="menu__item">
-                                        <input type="hidden" name="product" value="{{select_prod}}" checked>
-                                        {{select_prod}}
-                                        <button class="delete_cross" onclick="deleteProduct(this)" type="button"></button>
-                                </li>
-                                {% endfor %}
-                            </ul>
+                            <div class="menu_category_filter" id="menu_category_filter">
+                                <div class="filter__item active">
+                                    <p>Категории</p>
+                                    <img class="double-arrow" src="{% static 'main/images/double-arrow-down.png'%}">
+                                </div>
+                                <div class="filter-group active">
+                                    <ul id="categories_filters">
+                                        {% autoescape off %}
+                                        {% show_categories selected_categories categories_hierarchy %}
+                                        {% endautoescape %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="menu_product_filter" id="menu_product_filter">
+                                <div class="filter__item active">
+                                    <p>Ингредиенты</p>
+                                     <img class="double-arrow" src="{% static 'main/images/double-arrow-down.png'%}">
+                                </div>
+                                <div class="filter-group active">
+                                    <ul id="products_filters" class="products_filters">
+                                        {% for select_prod in selected_products %}
+                                         <li class="menu__item">
+                                                <input type="hidden" name="product" value="{{select_prod}}" checked>
+                                                {{select_prod}}
+                                                <button class="delete_cross" onclick="deleteProduct(this)" type="button"></button>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </form>
-                    <div class="product-choose-block btn-input-block filter-group">
+                    <div class="product-choose-block btn-input-block filter-group active">
                         <div class="ui-widget">
                             <input id="tags" class="autocomplete-input" name="prod_name" placeholder="Введите название ингредиента">
                             <button class="plus-btn btn active in-input-btn" onclick="addProduct(this)" type="button"></button>
                         </div>
                     </div>
-
                 </div>
                 <div class="content">
                     <div class="content__info">
@@ -72,19 +91,25 @@
                             <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" {% if curr_search != "" %} value="{{curr_search}}" {%endif%} placeholder="Найти" id="search-input">
                             <button class="search-btn" type="submit" ></button>
                         </div>
-                        <div class="order">
-                            <p class="order-title">Сортировать по:</p>
-                            <select form="cat_filt" name="sort" id="order-list" class="order__list" onchange="this.form.submit()">
-                                <option class="order__item" name="sort" value="-date_of_creation" {% if selected_sort == "-date_of_creation" %} selected {%endif%}>
-                                        Дате
-                                </option>
-                                <option class="order__item" name="sort" value="-num_of_stars" {% if selected_sort == "-num_of_stars" %} selected {%endif%}>
-                                        Популярности
-                                </option>
-                                <option class="order__item" name="sort" value="title" {% if selected_sort == "title" %} selected {%endif%}>
-                                        Алфавиту
-                                </option>
-                            </select>
+                        <div class="filters-block">
+                            <button class="filters-btn" onclick="showFiltersMenu()">
+                                <p class="">Фильтры</p>
+                                <img src="{% static 'main/images/filters-icon-green.png' %}" width="30px" height="30px">
+                            </button>
+                            <div class="order">
+                                <p class="order-title">Сортировать по:</p>
+                                <select form="cat_filt" name="sort" id="order-list" class="order__list" onchange="this.form.submit()">
+                                    <option class="order__item" name="sort" value="-date_of_creation" {% if selected_sort == "-date_of_creation" %} selected {%endif%}>
+                                            Дате
+                                    </option>
+                                    <option class="order__item" name="sort" value="-num_of_stars" {% if selected_sort == "-num_of_stars" %} selected {%endif%}>
+                                            Популярности
+                                    </option>
+                                    <option class="order__item" name="sort" value="title" {% if selected_sort == "title" %} selected {%endif%}>
+                                            Алфавиту
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     {% if is_data_exist %}
