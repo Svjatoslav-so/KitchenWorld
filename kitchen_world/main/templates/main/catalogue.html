@@ -22,7 +22,7 @@
                         </h2>
                         <button id="close-filters-menu-btn"></button>
                     </div>
-                    <form method="get" id="cat_filt">
+                    <form method="get" id="cat_filt" action="{% url 'catalogue' %}">
                         <div class="filter-submit-btn">
                             <button type="submit" class="btn submit active">Искать</button>
                             <button form="cat_filt" type="reset" class="btn submit" onclick="resetAllFilters(this.form)">Сбросить фильтры</button>
@@ -88,7 +88,7 @@
                             Каталог
                         </h2>
                         <div class="search">
-                            <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" {% if curr_search != "" %} value="{{curr_search}}" {%endif%} placeholder="Найти" id="search-input">
+                            <input class="input" form="cat_filt" onchange="this.form.submit()" type="text" name="search-input" placeholder="Найти по заголовку" id="search-input">
                             <button class="search-btn" type="submit" ></button>
                         </div>
                         <div class="filters-block">
@@ -119,6 +119,11 @@
                                 {% show_recipe_cart recipe r_photo request %}
                             {% endfor %}
                         </div>
+                        {% if page_obj.has_next %}
+                        <button class="load-next-page-btn" id="load-next-page-btn" onclick="loadNextPage({{ request.path }})" data-next_page="{{page_obj.next_page_number}}" data-request_args="{{ request.GET.urlencode }}">
+                            Загрузить еще...
+                        </button>
+                        {% endif %}
                     {% else %}
                          <div class="recipe-not-found">
                              <img src="{% static 'main/images/recipe_icon.png' %}">

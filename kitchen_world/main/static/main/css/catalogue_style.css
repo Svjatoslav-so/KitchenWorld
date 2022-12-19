@@ -328,7 +328,6 @@ div.ui-widget{
 
 .recipe-not-found a{
     color: #48B705;
-
 }
 
 .recipe-not-found a:hover  {
@@ -342,6 +341,17 @@ div.ui-widget{
     font-size: 30px;
     line-height: 1.45em;
     color: #48B705;
+}
+
+.load-next-page-btn{
+    max-width: 300px;
+    padding: 10px;
+    border-radius: 25px;
+    margin: 20px auto;
+    background: none;
+    color: #D9D9D9;
+    border: 1px solid #48B705;
+    display: block;
 }
 
 /*Аля адаптив start */
