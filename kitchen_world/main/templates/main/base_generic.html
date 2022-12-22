@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="{% static 'main/images/favicon.svg"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
-   {% block css %} <!--== Title ==--> {% endblock %}
+   {% block css %} <!--== CSS  ==--> {% endblock %}
 </head>
 
 <body>
@@ -47,22 +47,48 @@
                     </li>
                 </ul>
                 <form class="search" action="{% url 'main_search' %}" method="get">
-                    <input class="input" type="text" name="main-search" required placeholder="Найти" id="search-input">
+                    <input class="input" type="text" name="main-search" required placeholder="Найти" id="main-search">
                     <button class="search-btn" type="submit"></button>
                 </form>
-
-                {% if request.user.is_authenticated %}
-                <a href="{% url 'my_recipes' %}">
-                    <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.svg' %} {% endif %}">
-                </a>
-                <a href="{% url 'logout' %}" class="login-btn active">Выйти</a>
-                {% else %}
-                <a href="{% url 'login' %}" class="login-btn active">Войти</a>
-                {% endif %}
-
+                <div class="nav_profile_block">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'my_recipes' %}">
+                        <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.svg' %} {% endif %}">
+                    </a>
+                    <a href="{% url 'logout' %}" class="login-btn active">Выйти</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="login-btn active">Войти</a>
+                    {% endif %}
+                    <button class="nav-menu-btn" onclick="showNavMenu()"></button>
+                </div>
             </div>
         </div>
 </nav>
+<menu id="nav-menu">
+    <li class="close-nav-menu nav__item"><button id="close-nav-menu-btn"></button></li>
+    {% if request.user.is_authenticated %}
+        <li class="nav__item profile-block">
+            <a href="{% url 'my_recipes' %}">
+                <img class="profile" src="{% if user.author.photo %} {{user.author.photo.url}} {% else %} {% static 'main/images/user.svg' %} {% endif %}">
+            </a>
+            <a href="{% url 'logout' %}" class="login-btn active">Выйти</a>
+        </li>
+    {% else %}
+        <li class="nav__item profile-block">
+            <a href="{% url 'login' %}" class="login-btn active">Войти</a>
+        </li>
+    {% endif %}
+    <li class="nav__item {% if menu_active == 'home' %}active{% endif %}">
+        <a href="{% url 'home'%}">Главная</a>
+    </li>
+    <li class="nav__item {% if menu_active == 'catalogue' %}active{% endif %}">
+        <a href="{% url 'catalogue'%}">Каталог</a>
+    </li>
+    <li class="nav__item">
+        <a href="#">О нас</a>
+    </li>
+</menu>
+
 <div class="main-wrapper">
     {% block extends_header %} <!--== ExtendsHeader ==--> {% endblock %}
 

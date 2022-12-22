@@ -141,6 +141,13 @@ p, span {
   margin-right: 10px;
 }
 
+#close-profile-menu-btn{
+    width: 30px;
+    height: 30px;
+    background: url(../images/cross.svg) no-repeat 50% 50% / 30px;
+    display: none;
+}
+
 .user-avatar {
   display: block;
   width: 260px;
@@ -155,13 +162,40 @@ p, span {
 .content {
   width: 100%;
 }
-.content__info {
-/*  display: flex;
-  align-items: center;
-  justify-content: space-between;*/
+
+.content__info{
+    display: flex;
+    margin: 0 20px;
+    align-items: center;
+    margin-bottom: 30px;
 }
 .content__info h2 {
-  color: #DE8443;
+    display: flex;
+    color: #DE8443;
+    justify-content: center;
+    flex-grow: 2;
+    margin: 0;
+}
+
+.content__info .profile-menu-btn {
+    background: #00000000;
+    display: none;
+    align-items: center;
+    gap: 20px;
+
+}
+.content__info .profile-menu-btn p{
+    color: #48b705;
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.content__info .profile-menu-btn .profile-img{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: solid 2px #48b705;
 }
 
 .order {
@@ -206,6 +240,7 @@ p, span {
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  margin: auto;
 }
 .add-recipe__plus-img {
   width: 83px;
@@ -224,6 +259,8 @@ p, span {
   background: #5a5050;
   width: 100%;
   border-radius: 25px;
+  padding-top: 20px;
+  margin-bottom: 300px;
 }
 .exceptions__list {
     max-width: 600px;
@@ -263,4 +300,161 @@ form.ui-widget{
 .ui-widget.ui-widget-content {
     max-height: 300px;
     overflow: auto;
+}
+
+/*Аля адаптив start */
+@media screen and (max-width:1640px){
+    /* первый уровень сжатия карточек */
+    .card, .add-recipe{
+        width: 350px;
+        height: 600px;
+    }
+    .card__img{
+        height: 260px;
+    }
+}
+
+@media screen and (max-width:1490px){
+    /* второй уровень сжатия карточек */
+    .card, .add-recipe{
+        width: 300px;
+        height: 540px;
+    }
+    .card__img{
+        height: 210px;
+    }
+    .card__description{
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width:1335px){
+    /*откат к начальному размеру карточек */
+    .card, .add-recipe{
+        width: 400px;
+        height: 640px;
+    }
+    .card__img{
+        height: 300px;
+    }
+    .card__description{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:1210px){
+    /* первый уровень сжатия карточек */
+     .card, .add-recipe{
+        width: 350px;
+        height: 600px;
+    }
+    .card__img{
+        height: 260px;
+    }
+}
+
+@media screen and (max-width: 1111px){
+    /* второй уровень сжатия карточек */
+    .card, .add-recipe{
+        width: 300px;
+        height: 540px;
+    }
+    .card__img{
+        height: 210px;
+    }
+    .card__description{
+        font-size: 13px;
+    }
+
+    /* панель меню профиля всплывает по клику на кнопку */
+    .content__info .profile-menu-btn {
+        display: flex;
+    }
+    .menu{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 2;
+        border-radius: 0;
+        display: none;
+        overflow: auto;
+        margin: 0;
+    }
+     .menu.active{
+        display: block;
+    }
+
+    #close-profile-menu-btn{
+        display: block;
+        margin-left: 225px;
+    }
+}
+
+@media screen and (max-width: 997px){
+    /*откат к начальному размеру карточек */
+    .card, .add-recipe{
+        width: 400px;
+        height: 640px;
+    }
+    .card__img{
+        height: 300px;
+    }
+    .card__description{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 875px){
+     /* первый уровень сжатия карточек */
+     .card, .add-recipe{
+        width: 350px;
+        height: 600px;
+    }
+    .card__img{
+        height: 260px;
+    }
+}
+
+@media screen and (max-width: 775px){
+    /* второй уровень сжатия карточек */
+    .card, .add-recipe{
+        width: 300px;
+        height: 540px;
+    }
+    .card__img{
+        height: 210px;
+    }
+    .card__description{
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 675px){
+     /*откат к начальному размеру карточек */
+    .card, .add-recipe{
+        width: 400px;
+        height: 640px;
+    }
+    .card__img{
+        height: 300px;
+    }
+    .card__description{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 455px){
+    /* первый уровень сжатия карточек */
+    .card, .add-recipe{
+        width: 350px;
+        height: 600px;
+    }
+    .card__img{
+        height: 260px;
+    }
+
+    .content__info{
+        flex-wrap: wrap;
+    }
 }

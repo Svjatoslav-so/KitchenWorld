@@ -59,7 +59,7 @@ class EditProfileForm(Form):
         self.fields['description'].label = ""
         self.fields['description'].widget.attrs.update({'class': 'input big-input', 'placeholder': 'О себе'})
 
-        self.fields['photo'].label = ""
+        self.fields['photo'].label = "Фото профиля"
         self.fields['photo'].widget.attrs.update({'class': 'input'})
 
     class Meta:

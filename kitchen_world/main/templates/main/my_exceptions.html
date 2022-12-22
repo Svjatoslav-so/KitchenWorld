@@ -11,6 +11,11 @@
 
 <div class="my_exceptions">
     <div class="content__info">
+        <button class="profile-menu-btn" onclick="showProfileMenu()">
+            <img src="{%if request.user.author.photo%} {{request.user.author.photo.url}}
+            {% else %} {%static 'main/images/user.svg' %} {% endif %}" alt="avatar" class="profile-img">
+            <p>Профиль</p>
+        </button>
         <h2 class="section-title">
             Мои {{active}}
         </h2>

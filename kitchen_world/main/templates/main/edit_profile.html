@@ -17,19 +17,22 @@
             </h2>
         </div>
         <div class="edit_profile__wrapper">
-            <img src="{% if request.user.author.photo %} {{ request.user.author.photo.url }} {% else %}{% static 'main/images/user.png' %}{% endif %}" alt="avatar" class="profile__avatar">
+            <img src="{% if request.user.author.photo %} {{ request.user.author.photo.url }} {% else %}{% static 'main/images/user.svg' %}{% endif %}" alt="avatar" class="profile__avatar">
             <form action="{% url 'edit_profile'%}" class="profile__form" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
                 <div class="login-form__errors">{{ form.non_field_errors }}</div>
                 {% for field in form%}
-                {{field}}
-                {% if field.errors %}
-                    <ul>
-                        {% for error in field.errors %}
-                        <li class="login-form__errors">{{ error|escape }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% if field.label%}
+                    <p class="login-form__label">{{field.label}}</p>
                     {% endif %}
+                    {{field}}
+                    {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                            <li class="login-form__errors">{{ error|escape }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                 {% endfor %}
 
                 <div class="btns-wrapper">

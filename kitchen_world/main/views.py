@@ -3,16 +3,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, InvalidPage
 from django.db.models import Max, Q, F
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.text import slugify as django_slugify
 
 from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm, ChangeUserPasswordForm
 from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType
+
+CART_ON_PAGE = 9
 
 alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
             'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
@@ -25,6 +29,10 @@ def slugify(s):
     Overriding django slugify that allows to use russian words as well.
     """
     return django_slugify(''.join(alphabet.get(w, w) for w in s.lower()))
+
+
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 
 def combine_recipes_and_photos(recipes):
@@ -114,9 +122,7 @@ def profile(request, author_slug):
 @login_required(login_url='login')
 def edit_profile(request):
     if request.method == "POST":
-        print("POST", request.POST)
         form = EditProfileForm(request.POST, request.FILES)
-        print('form', form)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -147,8 +153,6 @@ def edit_profile(request):
             else:
                 form.add_error('username', 'Пользователь с таким именем уже существует.')
     else:
-        print("GET", request)
-        print("photo", request.user.author.photo)
         form = EditProfileForm(
             {'first_name': request.user.first_name,
              'username': request.user.username,
@@ -164,7 +168,6 @@ def edit_profile(request):
 
 def catalog(request):
     if request.method == "GET":
-        print(request.GET)
         categor = request.GET.getlist("category")
         sort = request.GET.get("sort", "-num_of_stars")
         search = request.GET.get("search-input", "")
@@ -173,7 +176,7 @@ def catalog(request):
 
         recipes = Recipe.objects.all()
 
-        print("allerg", isAllergic)
+        # print("allerg", isAllergic)
 
         if isAllergic == "true":
             allerg = request.user.author.my_exceptions.all()
@@ -191,13 +194,31 @@ def catalog(request):
             recipes = rec
     else:
         recipes = Recipe.objects.all().order_by("-num_of_stars")
+
+    paginator = Paginator(recipes, CART_ON_PAGE)
+    page_num = request.GET.get('page_num')
+    print("page_num: ", page_num)
+    page_obj = paginator.get_page(page_num)
+
+    if is_ajax(request):
+        print("Ajax-request")
+        cart_list = ""
+        for r, r_photo in combine_recipes_and_photos(page_obj.object_list):
+            cart_list += render_to_string("main/recipe_cart.html", {"recipe": r, "r_photo": r_photo}, request)
+        next_page = None
+        try:
+            next_page = page_obj.next_page_number()
+        except InvalidPage:
+            pass
+        return JsonResponse({"cart_list": cart_list, "next_page": next_page}, encoder=None)
+
     if len(recipes) == 0:
         is_data = False
     else:
         is_data = True
     context = {
         "menu_active": "catalogue",
-        'recipes': combine_recipes_and_photos(recipes),
+        'recipes': combine_recipes_and_photos(page_obj.object_list),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': categor,
@@ -209,6 +230,7 @@ def catalog(request):
         'products': Product.objects.all(),
         'selected_products': prod,
         'allergic_on': isAllergic,
+        'page_obj': page_obj,
     }
     return render(request, 'main/catalogue.html', context=context)
 
@@ -422,13 +444,30 @@ def new_recipe(request):
 def main_search(request):
     search = request.GET.get("main-search", "")
     if search:
-        recipes = Recipe.objects.filter(title__icontains=search) \
-                  | Recipe.objects.filter(description__icontains=search) \
-                  | Recipe.objects.filter(recipeingredient__product__name__icontains=search) \
-                  | Recipe.objects.filter(categories__name__icontains=search)
+        recipes = Recipe.objects.filter(Q(title__iregex=search)) \
+                  | Recipe.objects.filter(Q(description__iregex=search)) \
+                  | Recipe.objects.filter(Q(recipeingredient__product__name__iregex=search)) \
+                  | Recipe.objects.filter(Q(categories__name__iregex=search))
         recipes = recipes.distinct()
     else:
         recipes = Recipe.objects.all()
+
+    paginator = Paginator(recipes, CART_ON_PAGE)
+    page_num = request.GET.get('page_num')
+    print("page_num: ", page_num)
+    page_obj = paginator.get_page(page_num)
+
+    if is_ajax(request):
+        print("Ajax-request")
+        cart_list = ""
+        for r, r_photo in combine_recipes_and_photos(page_obj.object_list):
+            cart_list += render_to_string("main/recipe_cart.html", {"recipe": r, "r_photo": r_photo}, request)
+        next_page = None
+        try:
+            next_page = page_obj.next_page_number()
+        except InvalidPage:
+            pass
+        return JsonResponse({"cart_list": cart_list, "next_page": next_page}, encoder=None)
 
     if len(recipes) == 0:
         is_data = False
@@ -436,7 +475,7 @@ def main_search(request):
         is_data = True
     context = {
         "menu_active": "catalogue",
-        'recipes': combine_recipes_and_photos(recipes),
+        'recipes': combine_recipes_and_photos(page_obj.object_list),
         'category': Category.objects.filter(parent_category=None),
         'sub_category': Category.objects.all(),
         'selected_categories': [],
@@ -448,6 +487,6 @@ def main_search(request):
         'products': Product.objects.all(),
         'selected_products': [],
         'allergic_on': "false",
+        'page_obj': page_obj,
     }
     return render(request, 'main/catalogue.html', context=context)
-

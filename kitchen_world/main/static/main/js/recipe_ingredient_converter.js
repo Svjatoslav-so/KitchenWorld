@@ -126,18 +126,17 @@ function fixDimension(){
         }
         if(i>1){
             let rowValue = +ingredients[i].value*get_dimension(ingredients[i]) 
-
-            if(isShtuky(ingredients[i], "P")){
+            if(isShtuky(ingredients[i], "шт")){
                 let roundValue = Math.round(+ingredients[i].value);
                 // console.log("SHUKY");
                 ingredients[i].value = roundValue > 0 ? roundValue : 1;
             }
             else if(rowValue/1000 >= 1){
                 // console.log("SECOND");
-                if(isShtuky(ingredients[i], "ML")){
+                if(isShtuky(ingredients[i], "мл")){
                     addOption(ingredients[i], 1000, "л");
                 }
-                else{
+                else if(isShtuky(ingredients[i], "г")){
                     addOption(ingredients[i], 1000, "кг");
                 }
                 ingredients[i].value = rowValue/1000;
@@ -157,47 +156,3 @@ function fixDimension(){
     }
 
 }
-
-
-// function calculate() {
-//     console.log("Value :", this.value);
-//     console.log("Dimension", get_dimension(this));
-//     console.log("Data :", this.dataset.original_quantity);
-//     let k = (+this.value)*get_dimension(this)/(+this.dataset.original_quantity);
-//     console.log("K :", k);
-
-//     for(var i = 0; i < ingredients.length; i++){
-//         if(ingredients[i] != this){
-//             let newValue = k * (+ingredients[i].getAttribute("data-original_quantity"));
-//             console.log("V ", i, " :", newValue, ingredients[i].getAttribute("data-original_quantity"));
-//             if(i>1){
-//                 if(isShtuky(ingredients[i], "P")){
-//                     newValue = Math.round(newValue)
-//                     console.log("SHUKY")
-//                     ingredients[i].value = newValue > 0 ? newValue : 1;
-//                 }
-//                 else if(newValue/1000 >= 1){
-//                     if(isShtuky(ingredients[i], "ML")){
-//                         addOption(ingredients[i], 1000, "л")
-//                     }
-//                     else{
-//                         addOption(ingredients[i], 1000, "кг")
-//                     }
-//                     ingredients[i].value = newValue/1000;
-//                 }
-//                 else{
-//                     if(isShtuky(ingredients[i], "л")){
-//                         addOption(ingredients[i], "ML", "мл")
-//                     }else if(isShtuky(ingredients[i], "кг")){
-
-//                         addOption(ingredients[i], "G", "г")
-//                     }
-//                     ingredients[i].value = newValue;
-//                 }
-//             }
-//             else{
-//                 ingredients[i].value = newValue;
-//             }
-//         }
-//     }
-// }

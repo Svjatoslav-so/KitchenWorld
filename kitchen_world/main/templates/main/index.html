@@ -5,6 +5,8 @@
 
 {% block title %}<title>Kitchen World Соцсеть для кулинаров</title>{% endblock %}
 
+{% block css %} <link rel="stylesheet" href="{% static 'main/css/index-media.css' %}"> {% endblock %}
+
 {% block extends_header %}
 <!--== Start Header ==-->
 <header class="header" id="header">
@@ -14,7 +16,7 @@
             <img src="{% static 'main/images/welcome.svg' %}" alt="" class="header__img">
         <!--== End Welcome ==-->
         <div>
-            <p>
+            <p id="tagline">
                 Готовить может каждый!
             </p>
         </div>
