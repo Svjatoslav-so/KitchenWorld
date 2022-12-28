@@ -64,3 +64,17 @@ class EditProfileForm(Form):
 
     class Meta:
         fields = ('first_name', 'last_name', 'username', 'email', 'description', 'photo')
+
+
+class LoadMainPhotoForm(Form):
+    main_photo = ImageField()
+
+    class Meta:
+        fields = ('main_photo',)
+
+
+class LoadStepPhotoForm(Form):
+    step_photo = ImageField(required=False)
+
+    class Meta:
+        fields = ('step_photo',)

@@ -14,6 +14,7 @@ class LikedRecipe(models.Model):
     date = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
 
     class Meta:
+        unique_together = ('user', 'recipe', 'liked_type')
         verbose_name = 'понравившийся рецепт'
         verbose_name_plural = 'понравившиеся рецепты'
         ordering = ['user', 'recipe']

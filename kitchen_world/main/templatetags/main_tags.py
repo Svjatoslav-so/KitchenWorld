@@ -7,14 +7,19 @@ register = template.Library()
 
 
 @register.inclusion_tag('main/recipe_cart.html')
-def show_recipe_cart(recipe, r_photo, request):
+def show_recipe_cart(recipe, r_photo, request, current_page=None):
     is_liked = False
     is_bookmark = False
     if request.user.is_authenticated:
         liked_recipe = request.user.author.likedrecipe_set.filter(recipe=recipe)
         is_liked = liked_recipe.filter(liked_type="L").count() > 0
         is_bookmark = liked_recipe.filter(liked_type="B").count() > 0
-    return {"request": request, "recipe": recipe, "r_photo": r_photo, "is_liked": is_liked, "is_bookmark": is_bookmark}
+    return {"request": request,
+            "recipe": recipe,
+            "r_photo": r_photo,
+            "is_liked": is_liked,
+            "is_bookmark": is_bookmark,
+            "current_page": current_page}
 
 
 def is_details_open(selected, hierarchy):

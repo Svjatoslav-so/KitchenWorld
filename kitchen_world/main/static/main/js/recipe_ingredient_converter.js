@@ -82,7 +82,7 @@ function addOption(element, value, showValue){
 
 function toSi(){
     // console.log("toSi");
-    for(var i = 0; i < ingredients.length; i++){
+    for(var i = 2; i < ingredients.length; i++){
         if(isShtuky(ingredients[i], "л")){
             ingredients[i].value = +ingredients[i].value*1000;
             addOption(ingredients[i], "ML", "мл");

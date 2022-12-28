@@ -1,3 +1,6 @@
+import datetime
+
+from PIL import Image
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -12,9 +15,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.text import slugify as django_slugify
+from django.views.defaults import page_not_found
 
-from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm, ChangeUserPasswordForm
-from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType
+from .forms import RegistrationUserForm, LoginUserForm, EditProfileForm, ChangeUserPasswordForm, LoadMainPhotoForm, \
+    LoadStepPhotoForm
+from .models import Recipe, RecipePhoto, Category, Author, RecipeComment, LikedRecipe, Product, ProductType, \
+    RecipeStep, RecipeIngredient
 
 CART_ON_PAGE = 9
 
@@ -47,15 +53,15 @@ def combine_recipes_and_photos(recipes):
 
 
 def index(request):
-    new_recipe = Recipe.objects.all().order_by("-date_of_creation")[:5]
-    print(new_recipe)
+    _new_recipe = Recipe.objects.all().order_by("-date_of_creation").filter(status=True)[:5]
+    print(_new_recipe)
 
-    best_recipe = Recipe.objects.all().order_by("-num_of_stars")[:5]
+    best_recipe = Recipe.objects.all().order_by("-num_of_stars").filter(status=True)[:5]
     print(best_recipe)
 
     context = {
         "sections": [
-            ("NEW", combine_recipes_and_photos(new_recipe)),
+            ("NEW", combine_recipes_and_photos(_new_recipe)),
             ("BEST", combine_recipes_and_photos(best_recipe))
         ],
         "menu_active": "home",
@@ -110,7 +116,7 @@ def logout_user(request):
 def profile(request, author_slug):
     order_by = request.POST.get("sort", "-date_of_creation")
     author = get_object_or_404(Author, slug=author_slug)
-    recipes = Recipe.objects.filter(user=author.user).order_by(order_by)
+    recipes = Recipe.objects.filter(user=author.user).filter(status=True).order_by(order_by)
     context = {
         "author": author,
         "recipes": combine_recipes_and_photos(recipes),
@@ -174,7 +180,7 @@ def catalog(request):
         prod = request.GET.getlist("product", "")
         isAllergic = request.GET.get("allergic", "false")
 
-        recipes = Recipe.objects.all()
+        recipes = Recipe.objects.filter(status=True)
 
         # print("allerg", isAllergic)
 
@@ -389,22 +395,24 @@ def delete_comment(request, recipe_slug, comment_id):
 
 @login_required(login_url='login')
 def stars_on(request):
-    print("ON_STARS_Request: ", request)
+    # print("ON_STARS_Request: ", request)
     if request.method == "GET":
         try:
             like_type = request.GET.get("type")
             recipe_id = request.GET.get("id")
-            print("type: ", like_type, "id: ", recipe_id)
+            # print("type: ", like_type, "id: ", recipe_id)
             user = request.user.author
             _recipe = Recipe.objects.get(id=recipe_id)
+
+            like = LikedRecipe(user=user, recipe=_recipe, liked_type=like_type)
+            like.save()
+
             if like_type == 'L':
                 _recipe.num_of_stars = F('num_of_stars') + 1
                 _recipe.save(update_fields=["num_of_stars"])
             else:
                 _recipe.num_of_bookmarks = F('num_of_bookmarks') + 1
                 _recipe.save(update_fields=["num_of_bookmarks"])
-            like = LikedRecipe(user=user, recipe=_recipe, liked_type=like_type)
-            like.save()
 
             return HttpResponse("OK")
         except:
@@ -414,21 +422,22 @@ def stars_on(request):
 
 @login_required(login_url='login')
 def stars_off(request):
-    print("OFF_STARS_Request: ", request)
+    # print("OFF_STARS_Request: ", request)
     if request.method == "GET":
         try:
             like_type = request.GET.get("type")
             recipe_id = request.GET.get("id")
-            print("type: ", like_type, "id: ", recipe_id)
+            # print("type: ", like_type, "id: ", recipe_id)
             user = request.user.author
             _recipe = Recipe.objects.get(id=recipe_id)
+            LikedRecipe.objects.get(user=user, recipe=_recipe, liked_type=like_type).delete()
+
             if like_type == 'L':
                 _recipe.num_of_stars = F('num_of_stars') - 1
                 _recipe.save(update_fields=["num_of_stars"])
             else:
                 _recipe.num_of_bookmarks = F('num_of_bookmarks') - 1
                 _recipe.save(update_fields=["num_of_bookmarks"])
-            LikedRecipe.objects.get(user=user, recipe=_recipe, liked_type=like_type).delete()
 
             return HttpResponse("OK")
         except:
@@ -490,3 +499,138 @@ def main_search(request):
         'page_obj': page_obj,
     }
     return render(request, 'main/catalogue.html', context=context)
+
+
+@login_required(login_url='login')
+def add_recipe(request):
+    print(request)
+    print("POST: ", request.POST)
+    print("FILES: ", request.FILES)
+    if request.method == "POST":
+        try:
+            title = request.POST.get("title", "Новый Рецепт")
+            max_recipe_id = Recipe.objects.aggregate(max_recipe_id=Max('id'))['max_recipe_id']
+            slug = slugify(f'{title}-{max_recipe_id + 1}')
+            description = request.POST.get("recipe_description", "Описание Рецепта")
+            time_list = request.POST.get("cooking_time", "00:00").split(":")
+            cooking_time = datetime.timedelta(hours=int(time_list[0]), minutes=int(time_list[1]))
+            calories = 0  # calculated
+            num_of_servings = int(request.POST.get("num_of_servings", 1))
+            finished_product_weight = int(request.POST.get("total-weight", 500))
+            dimension = request.POST.get("total-weight-units", 'G')
+            status = True if request.POST.get("status", 'to_drafts') == 'publish' else False
+            user = request.user
+
+            _new_recipe = Recipe.objects.create(title=title, slug=slug, description=description,
+                                                cooking_time=cooking_time, calories=calories,
+                                                num_of_servings=num_of_servings,
+                                                finished_product_weight=finished_product_weight, dimension=dimension,
+                                                status=status, user=user)
+
+            categories = request.POST.getlist("category", [])
+            for cat in categories:
+                try:
+                    category = Category.objects.get(name=cat)
+                    while True:
+                        _new_recipe.categories.add(category)
+                        if category.parent_category is None:
+                            break
+                        else:
+                            category = category.parent_category
+                except Exception as e:
+                    print(e)
+            i = 0
+            for m_p in request.FILES.getlist("main_photo", ''):
+                try:
+                    img_form = LoadMainPhotoForm(request.POST, {"main_photo": m_p})
+                    if img_form.is_valid():
+                        main_photo = img_form.cleaned_data['main_photo']
+                        dot_index = main_photo.name.rfind(".")
+                        main_photo.name = slugify(main_photo.name[:dot_index]) + main_photo.name[dot_index:]
+                        RecipePhoto.objects.create(photo=main_photo, index=i, recipe=_new_recipe)
+                        print("MAIN: ", main_photo.name)
+                        i += 1
+                    else:
+                        print("PROBLEMS WITH PHOTOS")
+                except Exception as e:
+                    print(e)
+            i = 0
+            step_title = request.POST.getlist('step-title', [])
+            step_description = request.POST.getlist('step-description', [])
+            for s_p in request.FILES.getlist("step_photo", ''):
+                try:
+                    img_form = LoadStepPhotoForm(request.POST, {"step_photo": s_p})
+                    if img_form.is_valid():
+                        step_photo = img_form.cleaned_data['step_photo']
+                        dot_index = step_photo.name.rfind(".")
+                        step_photo.name = slugify(step_photo.name[:dot_index]) + step_photo.name[dot_index:]
+                        RecipeStep.objects.create(title=step_title[i], index=i, photo=step_photo,
+                                                  description=step_description[i], recipe=_new_recipe)
+                        print("STEP: ", step_photo.name)
+                        i += 1
+                    else:
+                        print("PROBLEMS WITH PHOTOS")
+                except:
+                    pass
+            i = 0
+            product_names = request.POST.getlist('product_name', [])
+            product_comments = request.POST.getlist('product_comment', [])
+            quantities = request.POST.getlist('quantity', [])
+            is_essential_list = request.POST.getlist('is_essential', [])
+            all_ingredients_count = len(product_names)
+            for p in product_names:
+                try:
+                    prod = Product.objects.get(name=p)
+                    is_essential = True if is_essential_list[i] == "True" else False
+                    ingredient = RecipeIngredient.objects.create(comment=product_comments[i], is_essential=is_essential,
+                                                                 quantity=quantities[i], index=i+1,
+                                                                 main_ingredient=None, recipe=_new_recipe, product=prod)
+                    calories += (float(quantities[i]) / 100) * prod.calories
+                    analog_names = request.POST.getlist(f'analog-{i+1}-product_name', [])
+                    analog_comments = request.POST.getlist(f'analog-{i+1}-product_comment', [])
+                    analog_quantities = request.POST.getlist(f'analog-{i+1}-quantity', [])
+                    i += 1
+                    j = 0
+                    for a in analog_names:
+                        try:
+                            analog = Product.objects.get(name=a)
+                            RecipeIngredient.objects.create(comment=analog_comments[j], is_essential=False,
+                                                            quantity=analog_quantities[j],
+                                                            index=all_ingredients_count,
+                                                            main_ingredient=ingredient, recipe=_new_recipe,
+                                                            product=analog)
+                            all_ingredients_count += 1
+                            j += 1
+                        except Exception as e:
+                            print(e)
+                except Exception as e:
+                    print(e)
+            calories = int((calories * 100) / finished_product_weight) if not(finished_product_weight == 0) else 0
+            _new_recipe.calories = calories
+            _new_recipe.save()
+
+        except Exception as e:
+            print(e)
+
+    return redirect('my_recipes')
+
+
+def get_products_with_dimension(request):
+    if is_ajax(request):
+        print("Ajax-request")
+        products_dimension = []
+        products = Product.objects.all()
+        for p in products:
+            products_dimension.append((p.name, p.get_dimension_display()))
+        return JsonResponse(products_dimension, safe=False)
+    return page_not_found()
+
+
+def get_all_categories(request):
+    if is_ajax(request):
+        print("Ajax-request")
+        categories = []
+        for c in Category.objects.all():
+            categories.append(c.name)
+        return JsonResponse(categories, safe=False)
+    return page_not_found()

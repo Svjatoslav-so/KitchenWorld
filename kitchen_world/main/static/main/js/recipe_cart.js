@@ -56,7 +56,10 @@ function SendRequest(r_method, r_path, r_args, r_handler)
         {
             //Передаем управление обработчику пользователя
             // alert("Передаем управление обработчику пользователя")
-            r_handler(Request);
+            let argsList = r_args.split("&")
+            let type = argsList[0].split("=")[1]
+            let currentPage = argsList[2].split("=")[1]
+            r_handler(Request, type, currentPage);
         }
         else
         {
@@ -97,14 +100,14 @@ function SendRequest(r_method, r_path, r_args, r_handler)
 } 
 
 
-function Like(filename, elementName)
+function Like(filename, elementName,myProfileCurrentPage)
 {
     //Создаем функцию обработчик для установки лайка
-    var On = function(Request)
+    var On = function(Request, type, myProfileCurrentPage)
     {
         console.log("On");  
         console.log(Request.responseText);
-        if(Request.responseText != "OK" && Request.responseText != "FAIL"){
+        if(Request.responseText != "OK"){
             // var html = document.getElementsByTagName('html')[0];
             // html.innerHTML = Request.responseText;
             location.reload();
@@ -128,11 +131,11 @@ function Like(filename, elementName)
     }
 
      //Создаем функцию обработчик для удаления лайка
-     var Off = function(Request)
+     var Off = function(Request, type, myProfileCurrentPage)
      {
-         console.log("Off");  
-         console.log(Request.responseText);
-         if(Request.responseText != "OK" && Request.responseText != "FAIL"){
+        console.log("Off");  
+        console.log(Request.responseText);
+        if(Request.responseText != "OK"){
             // var html = document.getElementsByTagName('html')[0];
             // html.innerHTML = Request.responseText;
             location.reload();
@@ -149,14 +152,21 @@ function Like(filename, elementName)
                 element.onclick = function(){
                     Like('/stars_on/', elementName);
                 }
-                //  console.log("onclick: ", element.onclick); 
+                //  console.log("onclick: ", element.onclick);
+                if(type=="B" && myProfileCurrentPage=="Закладки"){
+                    element.closest(".card").style.display="none" 
+                }
+                if(type=="L" && myProfileCurrentPage=="Понравившиеся"){
+                    element.closest(".card").style.display="none" 
+                }
+
             }); 
         }
  
      }
      let values = elementName.split("_")
      console.log(values)
-     let args = `type=${values[0]}&id=${values[1]}`
+     let args = `type=${values[0]}&id=${values[1]}&currentPage=${myProfileCurrentPage}`
     
     //Отправляем запрос
     if(filename == '/stars_off/'){

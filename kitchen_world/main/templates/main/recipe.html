@@ -99,17 +99,18 @@
                             <div class="total-wrapper">
                                  <div>
                                     <!-- Number of servings -->
+                                    <label for="servings">Порций</label>
                                     <input size="3" type="text" value="{{recipe.num_of_servings}}" name="c" class="input small-input"
                                         id="servings" data-original_quantity="{{ recipe.num_of_servings }}">
-                                    <label for="servings">Порций</label>
                                 </div>
                                  <div>
                                     <!-- kcal -->
-                                    <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input total-input" id="kcal" data-original_quantity="{{ recipe.calories }}" >
                                     <label for="kcal">ккал</label>
+                                    <input size="3" type="text" value="{{recipe.calories}}" name="kcal" class="input small-input total-input" id="kcal" data-original_quantity="{{ recipe.calories }}" >
                                  </div>
                                  <div>
                                     <!-- weight -->
+                                    <label for="total-weight">Всего</label>
                                     <input size="3" type="text" value="{{recipe.finished_product_weight}}" name="total-weight" class="input small-input total-input"
                                         id="total-weight" data-original_quantity="{{ recipe.finished_product_weight }}">
                                     <select name="total-weight-units" id="total-weight-units"
@@ -243,6 +244,7 @@
 {% endblock %}
 
 {% block custom_js %}
+<script src="{% static 'main/js/main-swiper.js' %}"></script>
 <script src="{% static 'main/js/comment.js' %}"></script>
 <script src="{% static 'main/js/recipe_ingredient_converter.js' %}"></script>
 {% if request.user.is_authenticated %}

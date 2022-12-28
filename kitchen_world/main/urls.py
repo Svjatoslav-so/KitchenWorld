@@ -25,5 +25,9 @@ urlpatterns = [
     path('stars_on/', views.stars_on, name="stars_on"),
     path('stars_off/', views.stars_off, name="stars_off"),
     path('new_recipe/', views.new_recipe, name="new_recipe"),
+    path('add_recipe/', views.add_recipe, name="add_recipe"),
     path('main_search/', views.main_search, name="main_search"),
+    path('get_products_with_dimension/', views.get_products_with_dimension, name="get_products_with_dimension"),
+    path('get_all_categories/', views.get_all_categories, name="get_all_categories"),
+
 ]
